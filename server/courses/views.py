@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 
-from server.courses.models import Course
+from .models import Course
 from .serializers import CourseSerializer
 
 
