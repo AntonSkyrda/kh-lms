@@ -8,4 +8,10 @@ User = get_user_model()
 class Course(models.Model):
     name = models.CharField(max_length=55)
     description = models.TextField()
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name="courses")
+    teacher = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="courses",
+        null=True,
+        blank=True,
+    )
