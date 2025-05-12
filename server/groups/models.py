@@ -2,8 +2,6 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-from server.courses.models import Course
-
 
 User = get_user_model()
 
@@ -17,7 +15,7 @@ class Group(models.Model):
         )
     )
     courses = models.ManyToManyField(
-        Course,
+        "courses.Course",
         related_name="groups",
         blank=True,
         null=True,
