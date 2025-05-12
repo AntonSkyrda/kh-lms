@@ -5,6 +5,8 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 
+from server.groups.models import Group
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -41,3 +43,24 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Student(models.Model):
+    user = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, related_name="student_profile"
+    )
+    group = models.ForeignKey(
+        Group, on_delete=models.SET_NULL, null=True, blank=True, related_name="students"
+    )
+
+    def __str__(self):
+        return f"Student: {self.user.first_name} {self.user.last_name}"
+
+
+class Teacher(models.Model):
+    user = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, related_name="teacher_profile"
+    )
+
+    def __str__(self):
+        return f"Teacher: {self.user.first_name} {self.user.last_name}"
