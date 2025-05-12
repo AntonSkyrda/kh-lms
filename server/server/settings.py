@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework",
     # custom apps
     "courses",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,5 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,
 }
+
+AUTH_USER_MODEL = "users.CustomUser"
