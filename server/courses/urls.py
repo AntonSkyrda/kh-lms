@@ -6,4 +6,6 @@ from .views import CourseViewSet
 
 router = DefaultRouter()
 router.register("courses", CourseViewSet)
-urlpatterns = [path("", include(router.urls))]
+urlpatterns = [
+    path("", include(router.urls)),
+]

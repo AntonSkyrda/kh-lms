@@ -15,3 +15,8 @@ class Course(models.Model):
         null=True,
         blank=True,
     )
+    groups = models.ManyToManyField(
+        "groups.Group",
+        related_name="courses",
+        blank=True,
+    )
