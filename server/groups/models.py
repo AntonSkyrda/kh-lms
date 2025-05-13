@@ -14,9 +14,6 @@ class Group(models.Model):
             MaxValueValidator(4),
         )
     )
-    courses = models.ManyToManyField(
-        "courses.Course",
-        related_name="groups",
-        blank=True,
-        null=True,
-    )
+
+    def __str__(self):
+        return self.name
