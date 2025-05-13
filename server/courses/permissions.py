@@ -9,11 +9,11 @@ class CoursePermission(BasePermission):
             return True
 
         if hasattr(user, "student_profile"):
-            student = user.student_profile
-
+            group = user.student_profile.group
             return (
                 request.method in SAFE_METHODS
-                and obj.groups.filter(id=student.group_id).exists()
+                and group
+                and obj.groups.filter(id=group.id).exists()
             )
 
         if hasattr(user, "teacher_profile"):
