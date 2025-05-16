@@ -39,3 +39,29 @@ class UserListSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, obj):
         return f"{obj.last_name} {obj.first_name} {obj.father_name}"
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "email",
+            "password",
+            "first_name",
+            "last_name",
+            "father_name",
+            "is_teacher",
+            "is_student",
+        )
+        extra_kwargs = {
+            "password": {
+                "write_only": True,
+            },
+        }
+
+        def create(self, validated_data):
+            password = validated_data.pop("password")
+            user = User.objects.create(**validated_data)
+            user.set_password(password)
+            user.save()
+            return user
