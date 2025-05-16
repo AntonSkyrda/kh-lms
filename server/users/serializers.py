@@ -1,13 +1,15 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from .models import CustomUser
+
+User = get_user_model()
 
 
 class UserMeSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField()
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = (
             "id",
             "email",
@@ -26,3 +28,14 @@ class UserMeSerializer(serializers.ModelSerializer):
             return "admin"
 
         return "user"
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ("id", "email", "full_name")
+
+    def get_full_name(self, obj):
+        return f"{obj.last_name} {obj.first_name} {obj.father_name}"
