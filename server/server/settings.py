@@ -25,7 +25,10 @@ SECRET_KEY = "django-insecure-rl+22)eh10%tl1hs1e!2ti-h1-v)4ky%_^!9!xt&(hl1)aq4t_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 
 # Application definition
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # installed django libs
     "rest_framework",
+    "corsheaders",
     # custom apps
     "courses",
     "users",
@@ -47,6 +51,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
