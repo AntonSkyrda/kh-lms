@@ -2,18 +2,19 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Course
-from .serializers import CourseSerializer
+from .serializers import CourseSerializer, CourseDetailSerializer
 from .permissions import CoursePermission
 
 
 class CourseViewSet(ModelViewSet):
-    serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated, CoursePermission]
 
     def get_queryset(self):
         user = self.request.user
 
-        queryset = Course.objects.select_related("teacher").prefetch_related("groups")
+        queryset = Course.objects.select_related("teacher").prefetch_related(
+            "groups", "programs"
+        )
 
         if user.is_superuser:
             return queryset
@@ -28,3 +29,8 @@ class CourseViewSet(ModelViewSet):
             return Course.objects.none()
 
         return Course.objects.none()
+
+    def get_serializer_class(self):
+        if self.action in ("list", "create"):
+            return CourseSerializer
+        return CourseDetailSerializer
