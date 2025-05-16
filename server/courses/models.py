@@ -20,3 +20,22 @@ class Course(models.Model):
         related_name="courses",
         blank=True,
     )
+
+
+class CourseProgram(models.Model):
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name="programs",
+    )
+    topic = models.CharField(max_length=255)
+    hours = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.course.name} - {self.topic}"
+
+    class Meta:
+        ordering = [
+            "course_id",
+            "topic",
+        ]
