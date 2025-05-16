@@ -30,5 +30,7 @@ class StudentListView(ListAPIView):
 
 class UserCreateView(CreateAPIView):
     serializer_class = UserCreateSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [
+        IsAdminUser,
+    ]
     queryset = User.objects.all()
