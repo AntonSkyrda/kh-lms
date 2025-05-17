@@ -8,6 +8,12 @@ export const saveToken = (token: AuthResponse) => {
     secure: true,
     sameSite: "strict",
   });
+  Cookies.set("_auth_refresh", token.refresh, {
+    type: "Bearer",
+    expires: 7,
+    secure: true,
+    sameSite: "strict",
+  });
 };
 
 type returnObjType = { access: string; refresh: string, token_type: "bearer" };

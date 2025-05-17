@@ -12,7 +12,7 @@ export default class ApiBase {
   }
 
   private getConfig(): AxiosRequestConfig {
-    const token = Cookies.get("_auth");
+    const token = Cookies.get("_auth_access");
 
     return {
       headers: token ? { Authorization: `Bearer ${token}` } : {},

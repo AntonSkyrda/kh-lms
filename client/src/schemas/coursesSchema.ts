@@ -1,18 +1,32 @@
 import { z } from "zod";
 import { teacherSchema } from "./usersSchema";
 import {
-  coursePlainSchema,
   groupPlainSchema,
   programPlainSchema,
 } from "./plainShemas";
-import { backendResponseForListsSchema } from "./backendResponseForListsSchema";
+import { BaseResponseWithListSchema } from "./backendResponseSchema";
+
+
+
+export const coursePlainSchema = z.object({
+   name: z.string(),
+   desctiption: z.string(),
+})
+
+export type CoursePlain = z.infer<typeof coursePlainSchema>
+
+export const coursesListResponseSchema = BaseResponseWithListSchema.extend({
+  results: z.array(coursePlainSchema)
+})
+
+export type CoursesListResponse = z.infer<typeof coursesListResponseSchema>
 
 export const coursePlainPartialSchema = coursePlainSchema.partial();
 
 export const coursesArrayShema = z.array(coursePlainSchema);
 
 // Courses scheme from backend with get /courses
-export const coursesSchema = backendResponseForListsSchema.extend({
+export const coursesSchema = BaseResponseWithListSchema.extend({
   items: coursesArrayShema,
 });
 

@@ -23,8 +23,9 @@ import {
   SidebarSeparator,
 } from "./sidebar";
 import { NavLink } from "react-router-dom";
+import { useCurrentUser } from "../features/users/useCurrentUser";
+import ShortUser from "../features/users/ShortUser";
 // import ShortUser from "../features/account/ShortUser";
-// import { useAuth } from "../contexts/Auth/useAuth";
 
 const items = [
   {
@@ -68,7 +69,7 @@ const adminItems = [
 ];
 
 export default function AppSidebar() {
-  // const { user } = useAuth();
+  const { user } = useCurrentUser();
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>LMS</SidebarHeader>
@@ -95,7 +96,7 @@ export default function AppSidebar() {
                   </NavLink>
                 </SidebarMenuItem>
               ))}
-              {/* {user?.is_superuser && (
+              {user?.role === 'admin' && (
                 <>
                   <SidebarSeparator />
                   {adminItems.map((item) => (
@@ -117,14 +118,14 @@ export default function AppSidebar() {
                     </SidebarMenuItem>
                   ))}
                 </>
-              )} */}
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
       <SidebarRail />
       <SidebarFooter>
-        {/* <ShortUser /> */}
+        {user && <ShortUser user={user} />}
       </SidebarFooter>
     </Sidebar>
   );

@@ -9,3 +9,11 @@ import { z } from "zod";
 export const BaseResponseSchema = z.any()
 
 export type BaseResponse = z.infer<typeof BaseResponseSchema>;
+
+export const BaseResponseWithListSchema = z.object({
+  count: z.number(),
+  next: z.number(),
+  previous: z.number()
+})
+
+export type BaseResponseWithList = z.infer<typeof BaseResponseWithListSchema>;
