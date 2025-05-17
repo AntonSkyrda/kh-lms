@@ -53,7 +53,12 @@ class CourseSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
 
-    groups = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), many=True)
+    groups = serializers.PrimaryKeyRelatedField(
+        queryset=Group.objects.all(),
+        many=True,
+        required=False,
+        allow_null=True,
+    )
     programs = CourseProgramWriteSerializer(many=True, required=False)
 
     class Meta:
@@ -106,7 +111,12 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
 
-    groups = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), many=True)
+    groups = serializers.PrimaryKeyRelatedField(
+        queryset=Group.objects.all(),
+        many=True,
+        allow_null=True,
+        required=False,
+    )
     programs = CourseProgramWriteSerializer(many=True)
 
     class Meta:

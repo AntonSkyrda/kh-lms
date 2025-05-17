@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "courses",
     "users",
     "groups",
+    "auth",
 ]
 
 MIDDLEWARE = [
