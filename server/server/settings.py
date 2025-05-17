@@ -10,18 +10,24 @@ SECRET_KEY = "django-insecure-rl+22)eh10%tl1hs1e!2ti-h1-v)4ky%_^!9!xt&(hl1)aq4t_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    # "http://localhost:5173",
+    "localhost:5173",
+    # "http://127.0.0.1:5173",
     "127.0.0.1",
+    "127.0.0.1:5173",
 ]
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    # "localhost:5173",
     "http://127.0.0.1:5173",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -31,6 +37,7 @@ CORS_ALLOW_METHODS = [
     "POST",
     "PUT",
 ]
+
 
 CORS_ALLOW_HEADERS = [
     "accept",
@@ -43,6 +50,13 @@ CORS_ALLOW_HEADERS = [
     "x-csrftoken",
     "x-requested-with",
 ]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
 
 INSTALLED_APPS = [
     # django apps
@@ -61,6 +75,7 @@ INSTALLED_APPS = [
     "groups",
     "authentication",
 ]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -147,7 +162,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication"
+        "authentication.backends.CookieJWTAuthentication"
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,

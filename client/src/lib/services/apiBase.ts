@@ -2,7 +2,6 @@ import axios, { type AxiosRequestConfig } from "axios";
 import { z } from "zod";
 import { BASE_URL } from "../consts";
 import { type BaseResponse } from "../../schemas/backendResponseSchema";
-import { getToken } from "../utils/manageCookie";
 
 export default class ApiBase {
   private readonly baseUrl: string;
@@ -12,11 +11,7 @@ export default class ApiBase {
   }
 
   private getConfig(): AxiosRequestConfig {
-    const token = getToken();
-    console.log(token?.access);
-
     return {
-      // headers: token ? { Authorization: `Bearer ${token}` } : {},
       withCredentials: true,
     };
   }
