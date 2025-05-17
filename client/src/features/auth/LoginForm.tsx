@@ -11,7 +11,10 @@ import { Button } from "../../ui/button";
 
 import { type FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginFormSchema, type LoginFormValues } from "../../schemas/authSchema";
+import {
+  loginFormSchema,
+  type LoginFormValues,
+} from "../../schemas/authSchema";
 import { useLogin } from "./useLogin";
 
 export default function LoginForm() {
@@ -27,9 +30,33 @@ export default function LoginForm() {
 
   function onSubmit(data: FieldValues) {
     const { email, password } = data;
-    console.log(email, password)
-    login({email, password});
+    console.log(email, password);
+    login({ email, password });
   }
+
+  // const onSubmit = async (formData: FieldValues) => {
+  //   const { email, password } = formData;
+
+  //   const response = await fetch("http://127.0.0.1:8000/api_v1/auth/login/", {
+  //     method: "POST",
+  //     credentials: "include", // 🔥 ОБОВ'ЯЗКОВО! дозволяє куки
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ email, password }),
+  //   });
+
+  //   const data = await response.json();
+
+  //   console.log(data);
+
+  //   if (response.ok) {
+  //     // setMessage("Успішний вхід");
+  //     navigate("/home");
+  //   } else {
+  //     // setMessage(data.detail || "Помилка входу");
+  //   }
+  // };
 
   return (
     <Form {...form}>

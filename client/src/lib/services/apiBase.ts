@@ -1,8 +1,8 @@
 import axios, { type AxiosRequestConfig } from "axios";
 import { z } from "zod";
-import Cookies from "js-cookie";
 import { BASE_URL } from "../consts";
 import { type BaseResponse } from "../../schemas/backendResponseSchema";
+import { getToken } from "../utils/manageCookie";
 
 export default class ApiBase {
   private readonly baseUrl: string;
@@ -12,10 +12,11 @@ export default class ApiBase {
   }
 
   private getConfig(): AxiosRequestConfig {
-    const token = Cookies.get("_auth_access");
+    const token = getToken();
+    console.log(token?.access);
 
     return {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      // headers: token ? { Authorization: `Bearer ${token}` } : {},
       withCredentials: true,
     };
   }
@@ -23,11 +24,12 @@ export default class ApiBase {
   protected async get<T extends BaseResponse>(
     url: string,
     schema: z.ZodType<T>,
-    errorMessage: string = "GET request failed"
+    errorMessage: string = "GET request failed",
   ): Promise<T> {
     const response = await axios
       .get(`${this.baseUrl}${url}`, this.getConfig())
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         throw new Error(errorMessage);
       });
 
@@ -42,7 +44,7 @@ export default class ApiBase {
     url: string,
     body: D,
     schema: z.ZodType<T>,
-    errorMessage: string = "POST request failed"
+    errorMessage: string = "POST request failed",
   ): Promise<T> {
     const response = await axios
       .post(`${this.baseUrl}${url}`, body, this.getConfig())
@@ -61,7 +63,7 @@ export default class ApiBase {
     url: string,
     body: D,
     schema: z.ZodType<T>,
-    errorMessage: string = "PUT request failed"
+    errorMessage: string = "PUT request failed",
   ): Promise<T> {
     const response = await axios
       .put(`${this.baseUrl}${url}`, body, this.getConfig())
@@ -83,7 +85,7 @@ export default class ApiBase {
     url: string,
     body: D,
     schema: z.ZodType<T>,
-    errorMessage: string = "PATCH request failed"
+    errorMessage: string = "PATCH request failed",
   ): Promise<T> {
     const response = await axios
       .patch(`${this.baseUrl}${url}`, body, this.getConfig())
@@ -100,7 +102,7 @@ export default class ApiBase {
 
   protected async delete(
     url: string,
-    errorMessage: string = "DELETE request failed"
+    errorMessage: string = "DELETE request failed",
   ): Promise<void> {
     const response = await axios
       .delete(`${this.baseUrl}${url}`, this.getConfig())

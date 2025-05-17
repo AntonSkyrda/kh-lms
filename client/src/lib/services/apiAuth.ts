@@ -1,6 +1,10 @@
 import { ZodSchema } from "zod";
 import ApiBase from "./apiBase";
-import { authResponseSchema, type AuthResponse, type LoginFormValues } from "../../schemas/authSchema";
+import {
+  authResponseSchema,
+  type AuthResponse,
+  type LoginFormValues,
+} from "../../schemas/authSchema";
 
 class ApiAuth extends ApiBase {
   private readonly BASE_PATH = "/auth";
@@ -20,8 +24,9 @@ class ApiAuth extends ApiBase {
       `${this.BASE_PATH}/login/`,
       credentials,
       authResponseSchema as ZodSchema,
-      "Не вдалося авторизуватися"
+      "Не вдалося авторизуватися",
     );
+
 
     return res;
   }

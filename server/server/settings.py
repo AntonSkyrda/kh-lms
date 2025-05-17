@@ -44,34 +44,6 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with",
 ]
 
-CORS_ORIGIN_ALLOW_ORIGINS = {"http://127.0.0.1:5173", "http://localhost:5173"}
-
-
-CORS_ALLOW_CREDENTIALS = True
-
-
-CORS_ORIGIN_METHODS = [
-    "DELETE",
-    "GET",
-    "PATCH",
-    "POST",
-    "PUT",
-]
-
-
-CORS_ALLOW_HEADERS = [
-    "accept",
-    "accept-encoding",
-    "authorization",
-    "content-type",
-    "dnt",
-    "origins",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-]
-
-
 INSTALLED_APPS = [
     # django apps
     "django.contrib.admin",
