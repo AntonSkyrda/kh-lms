@@ -71,3 +71,6 @@ class CookieLogoutView(APIView):
         response.delete_cookie("access_token", path="/")
         response.delete_cookie("refresh_token", path="/")
         return response
+
+
+"authentication"

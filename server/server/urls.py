@@ -7,5 +7,5 @@ urlpatterns = [
     path("api_v1/courses/", include("courses.urls")),
     path("api_v1/groups/", include("groups.urls")),
     path("api_v1/users/", include("users.urls")),
-    path("api_v1/auth/", include("auth.urls")),
+    path("api_v1/auth/", include("authentication.urls")),
 ]
