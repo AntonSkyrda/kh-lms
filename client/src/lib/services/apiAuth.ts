@@ -17,7 +17,7 @@ class ApiAuth extends ApiBase {
 
   public async login(credentials: LoginFormValues) {
     const res = await this.post<AuthResponse, LoginFormValues>(
-      `${this.BASE_PATH}/login`,
+      `${this.BASE_PATH}/login/`,
       credentials,
       authResponseSchema as ZodSchema,
       "Не вдалося авторизуватися"

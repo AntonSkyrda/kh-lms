@@ -28,7 +28,7 @@ export default function LoginForm() {
   function onSubmit(data: FieldValues) {
     const { email, password } = data;
     console.log(email, password)
-    login(email, password);
+    login({email, password});
   }
 
   return (
