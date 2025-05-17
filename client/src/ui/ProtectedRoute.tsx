@@ -19,15 +19,19 @@ function ProtectedRoute({
   const [isVerifying, setIsVerifying] = useState(true);
   const [isTokenValid, setIsTokenValid] = useState(false);
 
+  console.log("protected");
+
   useEffect(() => {
-    const token = getToken()
-    if (!token) {
-      setIsVerifying(false);
-      return;
-    }
+    // const token = getToken();
+    // console.log(token);
+    // if (!token) {
+    //   setIsVerifying(false);
+    //   return;
+    // }
 
     const verifyToken = async () => {
       try {
+        // await new Promise((res) => setTimeout(res, 2000));
         await ApiUser.getCurrentUser();
         setIsTokenValid(true);
       } catch (error) {
