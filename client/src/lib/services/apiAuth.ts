@@ -3,7 +3,7 @@ import ApiBase from "./apiBase";
 import { authResponseSchema, type AuthResponse, type LoginFormValues } from "../../schemas/authSchema";
 
 class ApiAuth extends ApiBase {
-  private readonly BASE_PATH = "/users";
+  private readonly BASE_PATH = "/auth";
 
   // public signup = async (userData: CreateUserInput) => {
   //   const res = await this.post(

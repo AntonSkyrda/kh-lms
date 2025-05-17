@@ -11,12 +11,11 @@ import { Button } from "../../ui/button";
 
 import { type FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginFormSchema } from "../../schemas/formsSchemas";
-import { z } from "zod";
-// import { useAuth } from "../../contexts/Auth/useAuth";
+import { loginFormSchema, type LoginFormValues } from "../../schemas/authSchema";
+import { useLogin } from "./useLogin";
 
 export default function LoginForm() {
-  const form = useForm<z.infer<typeof loginFormSchema>>({
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "admin@admin.com",
@@ -24,12 +23,12 @@ export default function LoginForm() {
     },
   });
 
-  // const { login, isLoading, loginError } = useAuth();
+  const { login, isPending, error } = useLogin();
 
   function onSubmit(data: FieldValues) {
     const { email, password } = data;
     console.log(email, password)
-    // login(email, password);
+    login(email, password);
   }
 
   return (
@@ -45,7 +44,7 @@ export default function LoginForm() {
                   type="email"
                   id="email"
                   autoComplete="email"
-                  // disabled={isLoading}
+                  disabled={isPending}
                   {...field}
                 />
               </FormControl>
@@ -63,7 +62,7 @@ export default function LoginForm() {
                   type="password"
                   id="password"
                   autoComplete="password"
-                  // disabled={isLoading}
+                  disabled={isPending}
                   {...field}
                 />
               </FormControl>
@@ -72,12 +71,10 @@ export default function LoginForm() {
           )}
         />
         <div className="flex flex-col items-center justify-center gap-5">
-          {/* <Button disabled={isLoading} size="lg" type="submit"> */}
-          <Button size="lg" type="submit">
-            {/* {isLoading ? "Вхід..." : "Увійти"} */}
-            Увійти
+          <Button disabled={isPending} size="lg" type="submit">
+            {isPending ? "Вхід..." : "Увійти"}
           </Button>
-          {/* {loginError && <p className="text-destructive">{loginError}</p>} */}
+          {error && <p className="text-destructive">{error.message}</p>}
         </div>
       </form>
     </Form>
