@@ -24,7 +24,7 @@ class ApiAuth extends ApiBase {
       `${this.BASE_PATH}/login/`,
       credentials,
       authResponseSchema as ZodSchema,
-      "Не вдалося авторизуватися",
+      "Не правильний email чи пароль",
     );
 
     return res;
