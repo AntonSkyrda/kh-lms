@@ -10,10 +10,10 @@ function CourseCardActions({ course }: { course?: CoursePlain }) {
 
   return (
     <div className="flex flex-col gap-5">
-      {user?.role === "admin" && course?.id && (
+      {user && course?.id && (
         <>
-          <UpdateCourse course={course} />
-          <DeleteCourse course={course} />
+          <UpdateCourse course={course} user={user} />
+          <DeleteCourse course={course} user={user} />
         </>
       )}
       <Button variant="outline">

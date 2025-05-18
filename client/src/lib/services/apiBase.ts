@@ -54,7 +54,11 @@ export default class ApiBase {
         throw new Error(errorMessage);
       });
 
+    // console.log(response);
+
     const { success, data } = await schema.safeParseAsync(response.data);
+
+    // console.log(success);
 
     if (!success) throw new Error(errorMessage);
 

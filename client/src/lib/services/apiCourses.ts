@@ -67,6 +67,8 @@ class ApiCourses extends ApiBase {
       courseDetailedSchema,
       "Не вдалось видалити викладача з курсу",
     );
+
+  public addProgram = async();
 }
 
 export default new ApiCourses();
