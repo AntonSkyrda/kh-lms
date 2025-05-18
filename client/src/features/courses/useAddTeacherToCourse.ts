@@ -1,5 +1,5 @@
 import { useRecourceRelatedMutation } from "../../hooks/useResourceRelatedMutation";
-import { addTeacherToCourse as addTeacherToCourseApi } from "../../lib/services/apiCourses";
+import ApiCourses from "../../lib/services/apiCourses";
 
 export function useAddTeacherToCourse() {
   const {
@@ -9,7 +9,7 @@ export function useAddTeacherToCourse() {
   } = useRecourceRelatedMutation({
     paramName: "courseId",
     mutationFn: (courseId, teacherId: number) =>
-      addTeacherToCourseApi(courseId, teacherId),
+      ApiCourses.addTeacher(courseId, teacherId),
     successMessage: (course) =>
       `До курсу ${course.name} успішно додано студента`,
   });

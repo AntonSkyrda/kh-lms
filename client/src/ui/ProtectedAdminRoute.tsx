@@ -1,13 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../contexts/Auth/useAuth";
 import Spinner from "./Spinner";
+import { useCurrentUser } from "../features/users/useCurrentUser";
 
 export default function ProtectedAdminRoute() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading } = useCurrentUser();
 
   if (isLoading) return <Spinner />;
   if (!user) return <Navigate to="/login" replace />;
-  if (!user.is_superuser) return <Navigate to="/home" replace />;
+  if (user.role !== "admin") return <Navigate to="/home" replace />;
 
   return <Outlet />;
 }

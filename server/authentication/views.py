@@ -83,7 +83,7 @@ class CookieTokenRefreshView(APIView):
 
 
 class CookieLogoutView(APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         response = Response({"message": "Log out"})
         response.delete_cookie("access_token", path="/")
         response.delete_cookie("refresh_token", path="/")

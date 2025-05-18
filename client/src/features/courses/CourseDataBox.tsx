@@ -1,15 +1,15 @@
 import Heading from "../../ui/Heading";
-import { useAuth } from "../../contexts/Auth/useAuth";
-import CourseGroups from "./CourseGroups";
-import { CourseDetailed } from "../../types/dataTypes";
-import CourseProgramsList from "../coursePrograms/CourseProgramsList";
+// import CourseGroups from "./CourseGroups";
+// import CourseProgramsList from "../coursePrograms/CourseProgramsList";
+import { useCurrentUser } from "../users/useCurrentUser";
+import type { CourseDetailed } from "../../schemas/coursesSchema";
 
 interface CourseDataBoxProps {
   course: CourseDetailed;
 }
 
 function CourseTeacher({ course }: CourseDataBoxProps) {
-  const { user } = useAuth();
+  const { user } = useCurrentUser();
   if (typeof course.teacher === "object" && !course.teacher?.id)
     return <span>У курса ще немає викладача...</span>;
   if (user?.id === course.teacher?.id) return <p>Ваш курс</p>;
@@ -39,11 +39,11 @@ function CourseDataBox({ course }: CourseDataBoxProps) {
           <p>{course.description}</p>
         </div>
 
-        <CourseGroups groupsFromCourse={course.groups} />
+        {/* <CourseGroups groupsFromCourse={course.groups} /> */}
 
         <div className="flex flex-row items-baseline gap-8">
           <Heading as="h4">Програма:</Heading>
-          <CourseProgramsList course={course} />
+          {/* <CourseProgramsList course={course} /> */}
         </div>
       </section>
       <footer className="bg-goldenrod-200 gap-5 px-16 py-7 text-right"></footer>

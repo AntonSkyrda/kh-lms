@@ -1,7 +1,7 @@
 import React, {
   createContext,
-  KeyboardEvent,
-  ReactNode,
+  type KeyboardEvent,
+  type ReactNode,
   useCallback,
   useContext,
   useRef,

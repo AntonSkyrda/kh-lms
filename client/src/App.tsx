@@ -12,7 +12,7 @@ import Courses from "./pages/Courses";
 // import Lessons from "./pages/Lessons";
 // import Tasks from "./pages/Tasks";
 // import Users from "./pages/Users";
-// import Course from "./pages/Course";
+import Course from "./pages/Course";
 // import { AuthProvider } from "./contexts/Auth/AuthProvider";
 // import Account from "./pages/Account";
 // import ProtectedAdminRoute from "./ui/ProtectedAdminRoute";
@@ -44,7 +44,7 @@ function App() {
             <Route index element={<Navigate replace to="home" />} />
             <Route path="home" element={<Home />} />
             <Route path="courses" element={<Courses />} />
-            {/* <Route path="courses/:courseId" element={<Course />} /> */}
+            <Route path="courses/:courseId" element={<Course />} />
             {/* <Route path="groups" element={<Groups />} /> */}
             {/* <Route path="lessons" element={<Lessons />} /> */}
             {/* <Route path="tasks" element={<Tasks />} /> */}

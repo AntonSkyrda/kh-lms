@@ -1,8 +1,8 @@
 import React, {
   cloneElement,
   isValidElement,
-  ReactElement,
-  ReactNode,
+  type ReactElement,
+  type ReactNode,
   useState,
 } from "react";
 import { buttonVariants } from "./button";
