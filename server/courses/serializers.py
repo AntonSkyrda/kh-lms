@@ -12,7 +12,7 @@ User = get_user_model()
 
 
 class CourseProgramWriteSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=False)
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = CourseProgram
@@ -150,7 +150,7 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         groups = validated_data.pop("groups", None)
-        programs = validated_data.pop("programs", None)
+        programs_data = validated_data.pop("programs", None)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -159,23 +159,33 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         if groups is not None:
             instance.groups.set(groups)
 
-        if programs is not None:
+        if programs_data is not None:
             existing_ids = []
 
-            for program_data in programs:
-                program_id = program_data.get("id")
+            for program in programs_data:
+                program_id = program.get("id")
                 if program_id:
                     try:
-                        program = instance.programs.get(id=program_id)
-                        program.topic = program_data["topic"]
-                        program.hours = program_data["hours"]
-                        program.save()
+                        program_instance = CourseProgram.objects.get(
+                            id=program_id, course=instance
+                        )
+                        program_instance.topic = program["topic"]
+                        program_instance.hours = program["hours"]
+                        program_instance.save()
                         existing_ids.append(program_id)
                     except CourseProgram.DoesNotExist:
-                        continue
+                        # Якщо раптом не знайшли — створити
+                        new_program = CourseProgram.objects.create(
+                            course=instance, **program
+                        )
+                        existing_ids.append(new_program.id)
                 else:
-                    CourseProgram.objects.create(course=instance, **program_data)
+                    new_program = CourseProgram.objects.create(
+                        course=instance, **program
+                    )
+                    existing_ids.append(new_program.id)
 
+            # Видалити ті, що не входять у оновлений список
             instance.programs.exclude(id__in=existing_ids).delete()
 
         return instance
