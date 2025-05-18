@@ -11,7 +11,10 @@ import { Button } from "../../ui/button";
 
 import { type FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginFormSchema, type LoginFormValues } from "../../schemas/authSchema";
+import {
+  loginFormSchema,
+  type LoginFormValues,
+} from "../../schemas/authSchema";
 import { useLogin } from "./useLogin";
 
 export default function LoginForm() {
@@ -27,8 +30,7 @@ export default function LoginForm() {
 
   function onSubmit(data: FieldValues) {
     const { email, password } = data;
-    console.log(email, password)
-    login({email, password});
+    login({ email, password });
   }
 
   return (

@@ -20,6 +20,8 @@ class CookieTokenObtainPairView(TokenObtainPairView):
         response = Response(
             {
                 "message": "Login successful",
+                "access_token": f"{access}",
+                "refresh_token": f"{refresh}"
             }
         )
 
