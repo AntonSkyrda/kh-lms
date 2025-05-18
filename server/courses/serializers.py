@@ -161,17 +161,31 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
         if programs_data is not None:
             existing_ids = []
-            for program in programs_data:
-                program_id = program.get("id", None)
-                if program_id is not None:
-                    existing_ids.append(program_id)
-                    CourseProgram.objects.filter(id=program_id, course=instance).update(
-                        topic=program["topic"],
-                        hours=program["hours"],
-                    )
-                else:
-                    CourseProgram.objects.create(course=instance, **program)
 
+            for program in programs_data:
+                program_id = program.get("id")
+                if program_id:
+                    try:
+                        program_instance = CourseProgram.objects.get(
+                            id=program_id, course=instance
+                        )
+                        program_instance.topic = program["topic"]
+                        program_instance.hours = program["hours"]
+                        program_instance.save()
+                        existing_ids.append(program_id)
+                    except CourseProgram.DoesNotExist:
+                        # Якщо раптом не знайшли — створити
+                        new_program = CourseProgram.objects.create(
+                            course=instance, **program
+                        )
+                        existing_ids.append(new_program.id)
+                else:
+                    new_program = CourseProgram.objects.create(
+                        course=instance, **program
+                    )
+                    existing_ids.append(new_program.id)
+
+            # Видалити ті, що не входять у оновлений список
             instance.programs.exclude(id__in=existing_ids).delete()
 
         return instance
