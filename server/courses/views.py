@@ -1,5 +1,6 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import SearchFilter
 
 from .models import Course
 from .serializers import CourseSerializer, CourseDetailSerializer
@@ -8,6 +9,11 @@ from .permissions import CoursePermission
 
 class CourseViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, CoursePermission]
+    filter_backends = [SearchFilter]
+    search_fields = [
+        "name",
+        "description",
+    ]
 
     def get_queryset(self):
         user = self.request.user
