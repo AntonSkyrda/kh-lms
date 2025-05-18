@@ -1,12 +1,13 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { ITEMS_PER_PAGE } from "../lib/consts";
+import type { BaseResponseWithList } from "../schemas/backendResponseSchema";
 
-interface IuseRecources<T> {
+interface IuseResources<T> {
   resourceName: string;
-  fetchFn: (page: number) => Promise<{ total: number; items: T[] }>;
+  fetchFn: () => Promise<BaseResponseWithList<T>>;
   enableCondition?: boolean | string | null;
-  queryParams?: Record<string, unknown>;
+  queryParams?: Record<string, string | number | boolean>;
 }
 
 export function useResources<T>({
@@ -14,7 +15,7 @@ export function useResources<T>({
   fetchFn,
   enableCondition,
   queryParams = {},
-}: IuseRecources<T>) {
+}: IuseResources<T>) {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
 
@@ -24,11 +25,16 @@ export function useResources<T>({
 
   const {
     isLoading,
-    data: { total: totalItems, items } = { total: 0, items: [] },
+    data: { count: totalItems, next, previous, results } = {
+      count: 0,
+      next: 0,
+      previous: 0,
+      results: [],
+    },
     error,
   } = useQuery({
     queryKey: [resourceName, page, ...Object.values(queryParams)],
-    queryFn: () => fetchFn(page),
+    queryFn: () => fetchFn(),
     enabled:
       typeof enableCondition === "string"
         ? searchParams.get("type") === enableCondition
@@ -40,14 +46,14 @@ export function useResources<T>({
   if (page < pageCount)
     queryClient.prefetchQuery({
       queryKey: [resourceName, page + 1, ...Object.values(queryParams)],
-      queryFn: () => fetchFn(page + 1),
+      queryFn: () => fetchFn(),
     });
 
   if (page > 1)
     queryClient.prefetchQuery({
       queryKey: [resourceName, page - 1, ...Object.values(queryParams)],
-      queryFn: () => fetchFn(page - 1),
+      queryFn: () => fetchFn(),
     });
 
-  return { isLoading, totalItems, items, error };
+  return { isLoading, totalItems, next, previous, results, error };
 }

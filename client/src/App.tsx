@@ -7,7 +7,7 @@ import AppLayout from "./ui/AppLayout";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import Home from "./pages/Home";
-// import Courses from "./pages/Courses";
+import Courses from "./pages/Courses";
 // import Groups from "./pages/Groups";
 // import Lessons from "./pages/Lessons";
 // import Tasks from "./pages/Tasks";
@@ -32,32 +32,32 @@ function App() {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         {/* <AuthProvider> */}
-          <ReactQueryDevtools />
-          <Routes>
-            <Route
-              element={
-                <ProtectedRoute>
-                  <AppLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Navigate replace to="home" />} />
-              <Route path="home" element={<Home />} />
-              {/* <Route path="courses" element={<Courses />} /> */}
-              {/* <Route path="courses/:courseId" element={<Course />} /> */}
-              {/* <Route path="groups" element={<Groups />} /> */}
-              {/* <Route path="lessons" element={<Lessons />} /> */}
-              {/* <Route path="tasks" element={<Tasks />} /> */}
-              {/* <Route path="account" element={<Account />} /> */}
-              {/* <Route path="lms-admin-route" element={<ProtectedAdminRoute />}> */}
-                {/* <Route path="users" element={<Users />} /> */}
-                {/* <Route path="settings" element={<Settings />} /> */}
-              {/* </Route> */}
-            </Route>
+        <ReactQueryDevtools />
+        <Routes>
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Navigate replace to="home" />} />
+            <Route path="home" element={<Home />} />
+            <Route path="courses" element={<Courses />} />
+            {/* <Route path="courses/:courseId" element={<Course />} /> */}
+            {/* <Route path="groups" element={<Groups />} /> */}
+            {/* <Route path="lessons" element={<Lessons />} /> */}
+            {/* <Route path="tasks" element={<Tasks />} /> */}
+            {/* <Route path="account" element={<Account />} /> */}
+            {/* <Route path="lms-admin-route" element={<ProtectedAdminRoute />}> */}
+            {/* <Route path="users" element={<Users />} /> */}
+            {/* <Route path="settings" element={<Settings />} /> */}
+            {/* </Route> */}
+          </Route>
 
-            <Route path="login" element={<Login />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
+          <Route path="login" element={<Login />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
         {/* </AuthProvider> */}
       </QueryClientProvider>
     </BrowserRouter>

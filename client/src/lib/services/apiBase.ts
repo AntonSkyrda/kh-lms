@@ -16,15 +16,14 @@ export default class ApiBase {
     };
   }
 
-  protected async get<T extends BaseResponse>(
+  protected async get<T>(
     url: string,
     schema: z.ZodType<T>,
     errorMessage: string = "GET request failed",
   ): Promise<T> {
     const response = await axios
       .get(`${this.baseUrl}${url}`, this.getConfig())
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         throw new Error(errorMessage);
       });
 
@@ -32,7 +31,7 @@ export default class ApiBase {
 
     if (!success) throw new Error(errorMessage);
 
-    return data;
+    return data as T;
   }
 
   protected async post<T extends BaseResponse, D extends object>(

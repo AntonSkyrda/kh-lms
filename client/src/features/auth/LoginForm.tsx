@@ -30,33 +30,8 @@ export default function LoginForm() {
 
   function onSubmit(data: FieldValues) {
     const { email, password } = data;
-    console.log(email, password);
     login({ email, password });
   }
-
-  // const onSubmit = async (formData: FieldValues) => {
-  //   const { email, password } = formData;
-
-  //   const response = await fetch("http://127.0.0.1:8000/api_v1/auth/login/", {
-  //     method: "POST",
-  //     credentials: "include", // 🔥 ОБОВ'ЯЗКОВО! дозволяє куки
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ email, password }),
-  //   });
-
-  //   const data = await response.json();
-
-  //   console.log(data);
-
-  //   if (response.ok) {
-  //     // setMessage("Успішний вхід");
-  //     navigate("/home");
-  //   } else {
-  //     // setMessage(data.detail || "Помилка входу");
-  //   }
-  // };
 
   return (
     <Form {...form}>

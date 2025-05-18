@@ -1,20 +1,43 @@
+import { ZodSchema } from "zod";
 import {
-  coursesListResponseSchema, type CoursesListResponse
+  courseCreateFormSchema,
+  coursesListResponseSchema,
+  courseUpdateFormSchema,
+  type CourseCreateFormValues,
+  type CourseDetailed,
+  type CoursesListResponse,
+  type CourseUpdateFormValues,
 } from "../../schemas/coursesSchema";
 import ApiBase from "./apiBase";
 
 class ApiCourses extends ApiBase {
-  private readonly BASE_PATH = "/courses";
+  private readonly BASE_PATH = "/courses/";
 
-  public async getCourses() {
-    return await this.get<CoursesListResponse>(
+  public getCourses = async (): Promise<CoursesListResponse> =>
+    await this.get<CoursesListResponse>(
       this.BASE_PATH,
-      coursesListResponseSchema
-    )
-  }
+      coursesListResponseSchema as ZodSchema,
+    );
+
+  public add = async (data: CourseCreateFormValues): Promise<CourseDetailed> =>
+    await this.post<CourseDetailed, CourseCreateFormValues>(
+      this.BASE_PATH,
+      data,
+      courseCreateFormSchema as ZodSchema,
+    );
+
+  public update = async (
+    data: CourseUpdateFormValues,
+    id: number,
+  ): Promise<CourseDetailed> =>
+    await this.patch<CourseDetailed, CourseUpdateFormValues>(
+      `${this.BASE_PATH}${id}`,
+      data,
+      courseUpdateFormSchema as ZodSchema,
+    );
 }
 
-export default new ApiCourses()
+export default new ApiCourses();
 
 // export const getCourses = (offset: number = 0) =>
 //   interactWithAPI<typeof coursesSchema, object>({

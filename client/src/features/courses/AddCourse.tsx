@@ -1,0 +1,21 @@
+import CurseForm from "./CurseForm";
+import AddRecourceButton from "../../ui/AddRecourceButton";
+import { useCurrentUser } from "../users/useCurrentUser";
+
+function AddCourse() {
+  const { user } = useCurrentUser();
+
+  if (user?.role !== "admin") return null;
+
+  return (
+    <AddRecourceButton
+      triggerTitle="Додати курс"
+      title="Додавання курсу"
+      description="Тут ви можете додати новий курс."
+    >
+      <CurseForm />
+    </AddRecourceButton>
+  );
+}
+
+export default AddCourse;

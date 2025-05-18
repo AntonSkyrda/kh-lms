@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 
 import ApiUser from "../lib/services/apiUsers";
 import Spinner from "./Spinner";
-import { getToken, removeToken } from "../lib/utils/manageCookie";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -19,26 +18,16 @@ function ProtectedRoute({
   const [isVerifying, setIsVerifying] = useState(true);
   const [isTokenValid, setIsTokenValid] = useState(false);
 
-  console.log("protected");
-
   useEffect(() => {
-    // const token = getToken();
-    // console.log(token);
-    // if (!token) {
-    //   setIsVerifying(false);
-    //   return;
-    // }
-
     const verifyToken = async () => {
       try {
-        // await new Promise((res) => setTimeout(res, 2000));
+        await new Promise((res) => setTimeout(res, 100));
         await ApiUser.getCurrentUser();
         setIsTokenValid(true);
       } catch (error) {
         if (error instanceof Error) {
           toast.error("Ваша сесія закінчилася. Будь ласка, увійдіть знову.");
         }
-        removeToken();
         setIsTokenValid(false);
       } finally {
         setIsVerifying(false);

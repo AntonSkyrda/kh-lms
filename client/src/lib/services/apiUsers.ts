@@ -6,14 +6,7 @@ class ApiUsers extends ApiBase {
   private readonly BASE_PATH = "/users";
 
   public async getCurrentUser() {
-    const res = await this.get<User>(`${this.BASE_PATH}/me/`, userSchema);
-
-    // const res = await fetch("http://127.0.0.1:8000/api_v1/users/me/", {
-    //   credentials: "include",
-    // });
-
-    console.log(res);
-    return res;
+    return await this.get<User>(`${this.BASE_PATH}/me/`, userSchema);
   }
 }
 
