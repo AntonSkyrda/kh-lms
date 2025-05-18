@@ -12,8 +12,10 @@ import UpdateCourse from "./UpdateCourse";
 import AddTeacherToCourse from "./AddTeacherToCourse";
 import { useEffect } from "react";
 import RemoveTeacherFromCourse from "./RemoveTeacherFromCourse";
+import { useCurrentUser } from "../users/useCurrentUser";
 
 function CourseDetail() {
+  const { user } = useCurrentUser();
   const { isLoading, course, courseError } = useCourse();
 
   useEffect(
@@ -24,7 +26,7 @@ function CourseDetail() {
   );
 
   if (isLoading) return <Spinner />;
-  if (!course) return <Empty resourceName="Курс" />;
+  if (!course || !user) return <Empty resourceName="Курс" />;
 
   return (
     <div className="flex flex-col gap-10 px-10 py-4">
@@ -40,14 +42,15 @@ function CourseDetail() {
           <div className="flex flex-row items-center gap-5">
             <AddTeacherToCourse />
             <RemoveTeacherFromCourse />
-            <UpdateCourse course={course} />
+            <UpdateCourse course={course} user={user} />
           </div>
         </div>
       </header>
-      <CourseDataBox course={course} />
+
+      <CourseDataBox course={course} user={user} />
 
       <div className="flex flex-row justify-end gap-5">
-        <DeleteCourse course={course} />
+        <DeleteCourse course={course} user={user} />
         <Button variant="outline">
           <span>
             <Plus />

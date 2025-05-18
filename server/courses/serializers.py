@@ -12,6 +12,8 @@ User = get_user_model()
 
 
 class CourseProgramWriteSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = CourseProgram
         fields = ("id", "topic", "hours")
@@ -148,7 +150,7 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         groups = validated_data.pop("groups", None)
-        programs = validated_data.pop("programs", None)
+        programs_data = validated_data.pop("programs", None)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -157,9 +159,19 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         if groups is not None:
             instance.groups.set(groups)
 
-        if programs is not None:
-            instance.programs.all().delete()
-            for program_data in programs:
-                CourseProgram.objects.create(course=instance, **program_data)
+        if programs_data is not None:
+            existing_ids = []
+            for program in programs_data:
+                program_id = program.get("id", None)
+                if program_id is not None:
+                    existing_ids.append(program_id)
+                    CourseProgram.objects.filter(id=program_id, course=instance).update(
+                        topic=program["topic"],
+                        hours=program["hours"],
+                    )
+                else:
+                    CourseProgram.objects.create(course=instance, **program)
+
+            instance.programs.exclude(id__in=existing_ids).delete()
 
         return instance

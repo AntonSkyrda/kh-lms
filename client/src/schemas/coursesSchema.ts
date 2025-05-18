@@ -46,21 +46,19 @@ export const courseProgramSchema = z.object({
 
 export type CourseProgram = z.infer<typeof courseProgramSchema>;
 
-export const courseProgramCreateFormSchema = courseProgramSchema.omit({
+export const courseProgramFormSchema = courseProgramSchema.omit({
   id: true,
 });
 
-export type CourseProgramCreateFormValues = z.infer<
-  typeof courseProgramCreateFormSchema
->;
+export type CourseProgramFormValues = z.infer<typeof courseProgramFormSchema>;
 
-export const courseProgramUpdateFormSchema = courseProgramSchema
-  .omit({ id: true })
-  .partial();
+// export const courseProgramUpdateFormSchema = courseProgramSchema
+//   .omit({ id: true })
+//   .partial();
 
-export type CourseProgramUpdateFormValues = z.infer<
-  typeof courseProgramUpdateFormSchema
->;
+// export type CourseProgramUpdateFormValues = z.infer<
+//   typeof courseProgramUpdateFormSchema
+// >;
 
 export const courseDetailedSchema = coursePlainSchema.extend({
   teacher: z.union([userPlainSchema, z.null()]),
