@@ -1,28 +1,44 @@
-import axios, { type AxiosRequestConfig } from "axios";
+import axios, { type AxiosInstance } from "axios";
 import { z } from "zod";
 import { BASE_URL } from "../consts";
 import { type BaseResponse } from "../../schemas/backendResponseSchema";
 
 export default class ApiBase {
   private readonly baseUrl: string;
+  private axiosInstance: AxiosInstance;
 
   constructor(baseUrl: string = BASE_URL) {
     this.baseUrl = baseUrl;
+    this.axiosInstance = axios.create({
+      baseURL: this.baseUrl,
+      withCredentials: true,
+    });
+
+    this.axiosInstance.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (error.response?.status === 499) {
+          const originalRequest = error.config;
+          return this.axiosInstance(originalRequest);
+        }
+        return Promise.reject(error);
+      },
+    );
   }
 
-  private getConfig(): AxiosRequestConfig {
-    return {
-      withCredentials: true,
-    };
-  }
+  // private getConfig(): AxiosRequestConfig {
+  //   return {
+  //     withCredentials: true,
+  //   };
+  // }
 
   protected async get<T>(
     url: string,
     schema: z.ZodType<T>,
     errorMessage: string = "GET request failed",
   ): Promise<T> {
-    const response = await axios
-      .get(`${this.baseUrl}${url}`, this.getConfig())
+    const response = await this.axiosInstance
+      .get(`${this.baseUrl}${url}`)
       .catch(() => {
         throw new Error(errorMessage);
       });
@@ -40,8 +56,8 @@ export default class ApiBase {
     schema: z.ZodType<T>,
     errorMessage: string = "POST request failed",
   ): Promise<T> {
-    const response = await axios
-      .post(`${this.baseUrl}${url}`, body, this.getConfig())
+    const response = await this.axiosInstance
+      .post(`${this.baseUrl}${url}`, body)
       .catch(() => {
         throw new Error(errorMessage);
       });
@@ -59,8 +75,8 @@ export default class ApiBase {
     schema: z.ZodType<T>,
     errorMessage: string = "PUT request failed",
   ): Promise<T> {
-    const response = await axios
-      .put(`${this.baseUrl}${url}`, body, this.getConfig())
+    const response = await this.axiosInstance
+      .put(`${this.baseUrl}${url}`, body)
       .catch(() => {
         throw new Error(errorMessage);
       });
@@ -81,8 +97,8 @@ export default class ApiBase {
     schema: z.ZodType<T>,
     errorMessage: string = "PATCH request failed",
   ): Promise<T> {
-    const response = await axios
-      .patch(`${this.baseUrl}${url}`, body, this.getConfig())
+    const response = await this.axiosInstance
+      .patch(`${this.baseUrl}${url}`, body)
       .catch(() => {
         throw new Error(errorMessage);
       });
@@ -98,8 +114,8 @@ export default class ApiBase {
     url: string,
     errorMessage: string = "DELETE request failed",
   ): Promise<void> {
-    const response = await axios
-      .delete(`${this.baseUrl}${url}`, this.getConfig())
+    const response = await this.axiosInstance
+      .delete(`${this.baseUrl}${url}`)
       .catch(() => {
         throw new Error(errorMessage);
       });

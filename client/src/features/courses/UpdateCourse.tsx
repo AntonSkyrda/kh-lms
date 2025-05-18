@@ -10,7 +10,7 @@ import {
 } from "../../ui/dialog";
 import CurseForm from "./CurseForm";
 import { Pencil } from "lucide-react";
-import { CoursePlain } from "../../types/dataTypes";
+import type { CoursePlain } from "../../schemas/coursesSchema";
 
 function UpdateCourse({ course }: { course: CoursePlain }) {
   const [isOpen, setIsOpen] = useState(false);

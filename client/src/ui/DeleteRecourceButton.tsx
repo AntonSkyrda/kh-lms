@@ -8,10 +8,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogContent,
-} from "./alertDialog";
+} from "./AlertDialog";
 import { Trash } from "lucide-react";
 import { buttonVariants } from "./button";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 interface DeleteRecourceButtonProps<T> {
   tiggerTitle?: string;

@@ -1,5 +1,5 @@
 import { useDeleteResource } from "../../hooks/useDeleteResource";
-import { deleteCourse as deleteCourseApi } from "../../lib/services/apiCourses";
+import ApiCourses from "../../lib/services/apiCourses";
 
 export function useDeleteCourse() {
   const {
@@ -7,7 +7,7 @@ export function useDeleteCourse() {
     isPending,
     error: deleteCourseError,
   } = useDeleteResource({
-    mutationFn: (courseId: number) => deleteCourseApi(courseId),
+    mutationFn: (courseId: number) => ApiCourses.deleteCourse(courseId),
     paramName: "courses",
     successMessage: `Курс була успішно видалена`,
   });

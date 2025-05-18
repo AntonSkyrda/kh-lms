@@ -1,5 +1,5 @@
 import { useResource } from "../../hooks/useResource";
-import { getCourseById } from "../../lib/services/apiCourses";
+import ApiCourses from "../../lib/services/apiCourses";
 
 export function useCourse() {
   const {
@@ -8,7 +8,7 @@ export function useCourse() {
     error: courseError,
   } = useResource({
     resourceName: "course",
-    fetchFn: getCourseById,
+    fetchFn: ApiCourses.getCourse,
     paramName: "courseId",
   });
 

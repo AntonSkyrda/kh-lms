@@ -1,6 +1,7 @@
 import { ZodSchema } from "zod";
 import {
   courseCreateFormSchema,
+  courseDetailedSchema,
   coursesListResponseSchema,
   courseUpdateFormSchema,
   type CourseCreateFormValues,
@@ -19,6 +20,12 @@ class ApiCourses extends ApiBase {
       coursesListResponseSchema as ZodSchema,
     );
 
+  public getCourse = async (id: number): Promise<CourseDetailed> =>
+    await this.get<CourseDetailed>(
+      `${this.BASE_PATH}${id}/`,
+      courseDetailedSchema as ZodSchema,
+    );
+
   public add = async (data: CourseCreateFormValues): Promise<CourseDetailed> =>
     await this.post<CourseDetailed, CourseCreateFormValues>(
       this.BASE_PATH,
@@ -31,10 +38,13 @@ class ApiCourses extends ApiBase {
     id: number,
   ): Promise<CourseDetailed> =>
     await this.patch<CourseDetailed, CourseUpdateFormValues>(
-      `${this.BASE_PATH}${id}`,
+      `${this.BASE_PATH}${id}/`,
       data,
       courseUpdateFormSchema as ZodSchema,
     );
+
+  public deleteCourse = async (id: number): Promise<void> =>
+    await this.delete(`${this.BASE_PATH}${id}/`);
 }
 
 export default new ApiCourses();
