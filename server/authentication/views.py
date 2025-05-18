@@ -7,6 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
+from server.settings import SIMPLE_JWT
+
+
 class CookieTokenObtainPairView(TokenObtainPairView):
     serializer_class = TokenObtainPairSerializer
 
@@ -21,15 +24,27 @@ class CookieTokenObtainPairView(TokenObtainPairView):
             {
                 "message": "Login successful",
                 "access_token": f"{access}",
-                "refresh_token": f"{refresh}"
+                "refresh_token": f"{refresh}",
             }
         )
 
         response.set_cookie(
-            "access_token", access, httponly=True, samesite="Lax", path="/"
+            "access_token",
+            access,
+            httponly=True,
+            samesite="Lax",
+            path="/",
+            max_age=SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
+            secure=False,
         )
         response.set_cookie(
-            "refresh_token", refresh, httponly=True, samesite="Lax", path="/"
+            "refresh_token",
+            refresh,
+            httponly=True,
+            samesite="Lax",
+            path="/",
+            max_age=SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"],
+            secure=False,
         )
 
         return response
