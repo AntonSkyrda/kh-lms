@@ -61,7 +61,7 @@ export default class ApiBase {
     return data as T;
   }
 
-  protected async post<T extends BaseResponse, D extends object>(
+  protected async post<T extends BaseResponse, D extends object | null>(
     url: string,
     body: D,
     schema: z.ZodType<T>,
@@ -72,6 +72,7 @@ export default class ApiBase {
       .catch(() => {
         throw new Error(errorMessage);
       });
+
     const { success, data } = await schema.safeParseAsync(response.data);
 
     if (!success || !data || typeof data === "undefined")

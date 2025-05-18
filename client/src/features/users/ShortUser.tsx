@@ -9,15 +9,18 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "../../ui/sidebar";
+} from "../../ui/Sidebar";
 import { NavLink } from "react-router-dom";
 import type { User } from "../../schemas/userSchemas";
+import { useLogout } from "./useLogout";
 
 interface ShortUserProps {
-  user: User
+  user: User;
 }
 
-function ShortUser({user}: ShortUserProps) {
+function ShortUser({ user }: ShortUserProps) {
+  const { logout } = useLogout();
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -37,7 +40,10 @@ function ShortUser({user}: ShortUserProps) {
                 Профіль
               </DropdownMenuItem>
             </NavLink>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => logout()}
+            >
               <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

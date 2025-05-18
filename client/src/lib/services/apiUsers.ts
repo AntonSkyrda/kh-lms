@@ -6,7 +6,9 @@ class ApiUsers extends ApiBase {
   private readonly BASE_PATH = "/users";
 
   public async getCurrentUser() {
-    return await this.get<User>(`${this.BASE_PATH}/me/`, userSchema);
+    const res = await this.get<User>(`${this.BASE_PATH}/me/`, userSchema);
+
+    return res;
   }
 }
 

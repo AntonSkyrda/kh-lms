@@ -21,7 +21,7 @@ function ProtectedRoute({
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        await new Promise((res) => setTimeout(res, 100));
+        await new Promise((res) => setTimeout(res, 1000));
         await ApiUser.getCurrentUser();
         setIsTokenValid(true);
       } catch (error) {

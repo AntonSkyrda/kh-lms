@@ -21,7 +21,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarSeparator,
-} from "./sidebar";
+} from "./Sidebar";
 import { NavLink } from "react-router-dom";
 import { useCurrentUser } from "../features/users/useCurrentUser";
 import ShortUser from "../features/users/ShortUser";
@@ -96,7 +96,7 @@ export default function AppSidebar() {
                   </NavLink>
                 </SidebarMenuItem>
               ))}
-              {user?.role === 'admin' && (
+              {user?.role === "admin" && (
                 <>
                   <SidebarSeparator />
                   {adminItems.map((item) => (
@@ -124,9 +124,7 @@ export default function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarRail />
-      <SidebarFooter>
-        {user && <ShortUser user={user} />}
-      </SidebarFooter>
+      <SidebarFooter>{user && <ShortUser user={user} />}</SidebarFooter>
     </Sidebar>
   );
 }

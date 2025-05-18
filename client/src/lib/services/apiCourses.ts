@@ -18,12 +18,14 @@ class ApiCourses extends ApiBase {
     await this.get<CoursesListResponse>(
       this.BASE_PATH,
       coursesListResponseSchema as ZodSchema,
+      "Не вдалось отримати курси",
     );
 
   public getCourse = async (id: number): Promise<CourseDetailed> =>
     await this.get<CourseDetailed>(
       `${this.BASE_PATH}${id}/`,
       courseDetailedSchema as ZodSchema,
+      "Такого курсу не існує",
     );
 
   public add = async (data: CourseCreateFormValues): Promise<CourseDetailed> =>
@@ -31,6 +33,7 @@ class ApiCourses extends ApiBase {
       this.BASE_PATH,
       data,
       courseCreateFormSchema as ZodSchema,
+      "Не вдалось створити курс",
     );
 
   public update = async (
@@ -41,10 +44,29 @@ class ApiCourses extends ApiBase {
       `${this.BASE_PATH}${id}/`,
       data,
       courseUpdateFormSchema as ZodSchema,
+      "Не вдалось оновити курс",
     );
 
   public deleteCourse = async (id: number): Promise<void> =>
-    await this.delete(`${this.BASE_PATH}${id}/`);
+    await this.delete(`${this.BASE_PATH}${id}/`, "Не вдалось видалити курс");
+
+  public addTeacher = async (
+    courseId: number,
+    teacherId: number,
+  ): Promise<CourseDetailed> =>
+    await this.patch(
+      `${this.BASE_PATH}${courseId}/`,
+      { teacher_id: teacherId },
+      courseDetailedSchema,
+      "Не вдалось додати викладача до курсу",
+    );
+  public removeTeacher = async (courseId: number): Promise<CourseDetailed> =>
+    await this.patch(
+      `${this.BASE_PATH}${courseId}/`,
+      { teacher_id: null },
+      courseDetailedSchema,
+      "Не вдалось видалити викладача з курсу",
+    );
 }
 
 export default new ApiCourses();

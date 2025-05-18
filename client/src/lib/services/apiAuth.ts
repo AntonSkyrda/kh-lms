@@ -1,9 +1,11 @@
-import { z, ZodSchema } from "zod";
+import { ZodSchema } from "zod";
 import ApiBase from "./apiBase";
 import {
   authResponseSchema,
+  logoutResponseSchema,
   type AuthResponse,
   type LoginFormValues,
+  type LogoutResponse,
 } from "../../schemas/authSchema";
 
 class ApiAuth extends ApiBase {
@@ -19,26 +21,24 @@ class ApiAuth extends ApiBase {
   //   return res;
   // };
 
-  public async login(credentials: LoginFormValues) {
-    const res = await this.post<AuthResponse, LoginFormValues>(
+  public login = async (credentials: LoginFormValues): Promise<AuthResponse> =>
+    await this.post<AuthResponse, LoginFormValues>(
       `${this.BASE_PATH}/login/`,
       credentials,
       authResponseSchema as ZodSchema,
       "Не правильний email чи пароль",
     );
 
-    return res;
-  }
-
-  public async logout(): Promise<{ message: string }> {
-    const logoutResponseSchema = z.object({ message: z.string() });
-
-    return this.get<{ message: string }>(
+  public logout = async (): Promise<null> => {
+    await this.post<LogoutResponse, null>(
       `${this.BASE_PATH}/logout/`,
-      logoutResponseSchema,
+      null,
+      logoutResponseSchema as ZodSchema,
       "Не вдалося вийти з системи",
     );
-  }
+
+    return null;
+  };
 }
 
 export default new ApiAuth();

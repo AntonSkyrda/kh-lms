@@ -2,11 +2,13 @@ import { z } from "zod";
 import { teacherSchema } from "./usersSchema";
 import { groupPlainSchema, programPlainSchema } from "./plainShemas";
 import { createBaseResponseWithListSchema } from "./backendResponseSchema";
+import { userPlainSchema } from "./userSchemas";
 
 export const coursePlainSchema = z.object({
   id: z.number(),
   name: z.string(),
   description: z.string(),
+  teacher: z.union([userPlainSchema, z.null()]),
 });
 
 export type CoursePlain = z.infer<typeof coursePlainSchema>;

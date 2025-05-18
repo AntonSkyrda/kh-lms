@@ -1,7 +1,7 @@
 import React, {
   cloneElement,
   isValidElement,
-  ReactElement,
+  type ReactElement,
   useEffect,
   useMemo,
   useState,

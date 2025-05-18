@@ -14,3 +14,7 @@ export const loginFormSchema = z.object({
 });
 
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
+
+export const logoutResponseSchema = z.object({ message: z.string() });
+
+export type LogoutResponse = z.infer<typeof logoutResponseSchema>;
