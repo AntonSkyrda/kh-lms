@@ -37,11 +37,11 @@ export const courseDetailedSchema = coursePlainSchema.extend({
   programs: z.union([z.array(programPlainSchema), z.tuple([])]),
 });
 
+export type CourseDetailed = z.infer<typeof courseDetailedSchema>;
+
 export const courseUpdateFormSchema = courseCreateFormSchema.partial();
 
 export type CourseUpdateFormValues = z.infer<typeof courseUpdateFormSchema>;
-
-export type CourseDetailed = z.infer<typeof courseDetailedSchema>;
 
 export const coursePlainPartialSchema = coursePlainSchema.partial();
 

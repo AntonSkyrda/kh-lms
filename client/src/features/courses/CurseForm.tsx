@@ -53,8 +53,6 @@ function CurseForm({ isOpen, handleClose, courseToEdit }: CourseFormProps) {
     if (isEditSession && typeof editId === "number") {
       const changedData = getChangedFields(courseData, editValues);
 
-      console.log(changedData);
-
       if (Object.keys(changedData).length === 0) return;
 
       updateCourse(
