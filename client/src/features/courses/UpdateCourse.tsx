@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Pencil } from "lucide-react";
+
 import { buttonVariants } from "../../ui/button";
 import {
   Dialog,
@@ -9,11 +11,20 @@ import {
   DialogTrigger,
 } from "../../ui/dialog";
 import CurseForm from "./CurseForm";
-import { Pencil } from "lucide-react";
-import type { CoursePlain } from "../../schemas/coursesSchema";
+import type { CourseDetailed, CoursePlain } from "../../schemas/coursesSchema";
+import type { User } from "../../schemas/userSchemas";
 
-function UpdateCourse({ course }: { course: CoursePlain }) {
+interface UpdateCourseProps {
+  course: CourseDetailed | CoursePlain;
+  user: User;
+}
+
+function UpdateCourse({ course, user }: UpdateCourseProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const allowedUsers = ["admin", "teacher"];
+
+  if (!user || !allowedUsers.includes(user?.role)) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -33,7 +44,7 @@ function UpdateCourse({ course }: { course: CoursePlain }) {
         <CurseForm
           isOpen={isOpen}
           handleClose={setIsOpen}
-          courseToEdit={course}
+          courseToEdit={course as CoursePlain}
         />
       </DialogContent>
     </Dialog>

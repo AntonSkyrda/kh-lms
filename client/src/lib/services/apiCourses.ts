@@ -6,6 +6,8 @@ import {
   courseUpdateFormSchema,
   type CourseCreateFormValues,
   type CourseDetailed,
+  type CourseProgram,
+  type CourseProgramFormValues,
   type CoursesListResponse,
   type CourseUpdateFormValues,
 } from "../../schemas/coursesSchema";
@@ -60,6 +62,7 @@ class ApiCourses extends ApiBase {
       courseDetailedSchema,
       "Не вдалось додати викладача до курсу",
     );
+
   public removeTeacher = async (courseId: number): Promise<CourseDetailed> =>
     await this.patch(
       `${this.BASE_PATH}${courseId}/`,
@@ -67,6 +70,57 @@ class ApiCourses extends ApiBase {
       courseDetailedSchema,
       "Не вдалось видалити викладача з курсу",
     );
+
+  public addProgram = async (
+    courseId: number,
+    programs: CourseProgram[],
+    newProgram: CourseProgramFormValues,
+  ): Promise<CourseDetailed> => {
+    const newPrograms = { programs: [...programs, newProgram] };
+
+    const res = await this.patch(
+      `${this.BASE_PATH}${courseId}`,
+      newPrograms,
+      courseDetailedSchema,
+      "Не вдалось додати нову програму до курсу",
+    );
+
+    return res;
+  };
+
+  public editProgram = async (
+    courseId: number,
+    programs: CourseProgram[],
+    updatedProgram: CourseProgramFormValues,
+  ): Promise<CourseDetailed> => {
+    const updatedPrograms = { programs: [...programs, updatedProgram] };
+
+    const res = await this.patch(
+      `${this.BASE_PATH}${courseId}`,
+      updatedPrograms,
+      courseDetailedSchema,
+      "Не вдалось оновити програму для курсу",
+    );
+
+    return res;
+  };
+
+  public deleteProgram = async (
+    courseId: number,
+    programs: CourseProgram[],
+    programToDeleteId: number,
+  ) => {
+    const updatedPrograms = {
+      programs: programs.filter((program) => program.id !== programToDeleteId),
+    };
+
+    return await this.patch(
+      `${this.BASE_PATH}${courseId}`,
+      updatedPrograms,
+      courseDetailedSchema,
+      "Не вдалось видалити програму для курсу",
+    );
+  };
 }
 
 export default new ApiCourses();

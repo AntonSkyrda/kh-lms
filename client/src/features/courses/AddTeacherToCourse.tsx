@@ -52,7 +52,7 @@ function AddTeacherToCourse() {
     [clear, isOpen],
   );
 
-  // if (!user?.is_superuser || course?.teacher?.id) return null;
+  if (user?.role !== "admin" || course?.teacher?.id) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

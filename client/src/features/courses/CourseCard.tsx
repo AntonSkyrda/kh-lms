@@ -26,9 +26,7 @@ function CourseCard({ course }: CourseCardProps) {
         <CardTitle className="truncate">{course.name}</CardTitle>
         {course.teacher && (
           <CardDescription>
-            {course.teacher?.id === user?.id
-              ? "Мій курс"
-              : `Курс викладача ${course.teacher?.full_name}`}
+            {course.teacher === user?.id ? "Мій курс" : ""}
           </CardDescription>
         )}
       </CardHeader>

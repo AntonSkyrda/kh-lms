@@ -18,6 +18,8 @@ export function useRecourceRelatedMutation<T, D>({
   const [searchParams] = useSearchParams();
   const resourceId = params[paramName] || searchParams.get(paramName);
 
+  console.log(resourceId, params);
+
   const {
     mutate: mutateFn,
     isPending,
