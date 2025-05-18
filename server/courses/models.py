@@ -10,7 +10,7 @@ class Course(models.Model):
     description = models.TextField()
     teacher = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name="courses",
         null=True,
         blank=True,

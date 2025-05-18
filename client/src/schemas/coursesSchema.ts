@@ -21,7 +21,7 @@ export const courseCreateFormSchema = z.object({
     .string()
     .trim()
     .min(5, "Курс має містити щонайменше 5 символів у назві")
-    .max(90, "Курс має містити не більше ніж 90 символів у назві"),
+    .max(55, "Курс має містити не більше ніж 90 символів у назві"),
   description: z
     .string()
     .trim()

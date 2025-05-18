@@ -114,10 +114,10 @@ class CourseDetailSerializer(serializers.ModelSerializer):
     groups = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(),
         many=True,
-        allow_null=True,
+        # allow_null=True,
         required=False,
     )
-    programs = CourseProgramWriteSerializer(many=True)
+    programs = CourseProgramWriteSerializer(many=True, required=False)
 
     class Meta:
         model = Course
@@ -147,17 +147,19 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         raise serializers.ValidationError("You have not permission to edit this course")
 
     def update(self, instance, validated_data):
-        programs_data = validated_data.pop("programs", [])
-        groups_data = validated_data.pop("groups", [])
+        groups = validated_data.pop("groups", None)
+        programs = validated_data.pop("programs", None)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
-        instance.groups.set(groups_data)
+        if groups is not None:
+            instance.groups.set(groups)
 
-        instance.programs.all().delete()
-        for program in programs_data:
-            CourseProgram.objects.create(course=instance, **program)
+        if programs is not None:
+            instance.programs.all().delete()
+            for program_data in programs:
+                CourseProgram.objects.create(course=instance, **program_data)
 
         return instance
