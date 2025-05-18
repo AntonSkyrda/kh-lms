@@ -12,6 +12,8 @@ User = get_user_model()
 
 
 class CourseProgramWriteSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=False)
+
     class Meta:
         model = CourseProgram
         fields = ("id", "topic", "hours")
@@ -158,8 +160,22 @@ class CourseDetailSerializer(serializers.ModelSerializer):
             instance.groups.set(groups)
 
         if programs is not None:
-            instance.programs.all().delete()
+            existing_ids = []
+
             for program_data in programs:
-                CourseProgram.objects.create(course=instance, **program_data)
+                program_id = program_data.get("id")
+                if program_id:
+                    try:
+                        program = instance.programs.get(id=program_id)
+                        program.topic = program_data["topic"]
+                        program.hours = program_data["hours"]
+                        program.save()
+                        existing_ids.append(program_id)
+                    except CourseProgram.DoesNotExist:
+                        continue
+                else:
+                    CourseProgram.objects.create(course=instance, **program_data)
+
+            instance.programs.exclude(id__in=existing_ids).delete()
 
         return instance
