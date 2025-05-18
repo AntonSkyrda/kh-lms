@@ -76,7 +76,7 @@ class CookieTokenRefreshView(APIView):
         response = Response({"message": "Token refreshed"})
 
         response.set_cookie(
-            "access_token", access, httponly=True, samesite="Lax", path="/"
+            "access_token", access, httponly=True, samesite="Lax", path="/", max_age=SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"]
         )
 
         return response

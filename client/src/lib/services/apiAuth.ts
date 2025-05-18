@@ -1,4 +1,4 @@
-import { ZodSchema } from "zod";
+import { z, ZodSchema } from "zod";
 import ApiBase from "./apiBase";
 import {
   authResponseSchema,
@@ -27,18 +27,18 @@ class ApiAuth extends ApiBase {
       "Не вдалося авторизуватися",
     );
 
-
     return res;
   }
 
-  // public async logout() {
-  //   return this.post<LogoutResponse, Record<string, never>>(
-  //     `${this.BASE_PATH}/logout`,
-  //     {},
-  //     LogoutResponseSchema,
-  //     "Не вдалося вийти з системи"
-  //   );
-  // }
+  public async logout(): Promise<{ message: string }> {
+    const logoutResponseSchema = z.object({ message: z.string() });
+
+    return this.get<{ message: string }>(
+      `${this.BASE_PATH}/logout/`,
+      logoutResponseSchema,
+      "Не вдалося вийти з системи",
+    );
+  }
 }
 
 export default new ApiAuth();

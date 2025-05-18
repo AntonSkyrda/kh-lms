@@ -17,20 +17,31 @@ export default class ApiBase {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       async (error) => {
-        if (error.response?.status === 499) {
-          const originalRequest = error.config;
-          return this.axiosInstance(originalRequest);
+        const originalRequest = error.config;
+
+        if (
+          error.response?.status === 401 &&
+          !originalRequest._retry &&
+          !originalRequest.url.includes("/auth/login")
+        ) {
+          originalRequest._retry = true;
+
+          try {
+            await this.axiosInstance.post(
+              `${this.baseUrl}/auth/refresh/`,
+              null,
+            );
+
+            return this.axiosInstance(originalRequest);
+          } catch (refreshError) {
+            return Promise.reject(refreshError);
+          }
         }
+
         return Promise.reject(error);
       },
     );
   }
-
-  // private getConfig(): AxiosRequestConfig {
-  //   return {
-  //     withCredentials: true,
-  //   };
-  // }
 
   protected async get<T>(
     url: string,
