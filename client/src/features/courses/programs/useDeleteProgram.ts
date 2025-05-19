@@ -7,20 +7,24 @@ import { useRecourceRelatedMutation } from "../../../hooks/useResourceRelatedMut
 
 interface MutateParams {
   programs: CourseProgram[];
-  updatedProgram: CourseProgram;
+  programToDeleteId: number;
 }
 
-export function useEditProgram() {
+export function useDeleteProgram() {
   const {
-    mutate: editProgram,
+    mutate: deleteProgram,
     isPending,
     error,
   } = useRecourceRelatedMutation<MutateParams, CourseDetailed>({
     paramName: "courseId",
     mutationFn: (courseId: number, params: MutateParams) =>
-      ApiCourses.editProgram(courseId, params.programs, params.updatedProgram),
-    successMessage: (course) => `Тему курсу ${course.name} успішно оновлено`,
+      ApiCourses.deleteProgram(
+        courseId,
+        params.programs,
+        params.programToDeleteId,
+      ),
+    successMessage: (course) => `Тему курсу ${course.name} успішно видалено`,
   });
 
-  return { editProgram, isPending, error };
+  return { deleteProgram, isPending, error };
 }

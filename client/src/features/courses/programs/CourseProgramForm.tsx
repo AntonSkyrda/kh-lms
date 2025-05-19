@@ -1,69 +1,68 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm, type FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
 
-import { Button } from "../../../ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../../ui/form";
+import { Button, buttonVariants } from "../../../ui/button";
+import { Form, FormField, FormItem, FormMessage } from "../../../ui/form";
 import {
   courseProgramFormSchema,
   type CourseProgram,
   type CourseProgramFormValues,
 } from "../../../schemas/coursesSchema";
-import type { User } from "../../../schemas/userSchemas";
 import { useAddProgram } from "./useAddProgram";
 import { useEditProgram } from "./useEditProgram";
 import { Input } from "../../../ui/input";
-import { X } from "lucide-react";
 import SpinnerMini from "../../../ui/SpinnerMini";
+import { cn } from "../../../lib/utils/cn";
+import { TableCell, TableRow } from "../../../ui/table";
+import type { User } from "../../../schemas/userSchemas";
+import { useOutsideClick } from "../../../hooks/useOutsideClick";
 
 interface AddProgramToCourseProps {
-  user: User;
   programs: CourseProgram[];
   programToEdit?: CourseProgram;
+  user: User;
+  isOpen: boolean;
+  setIsOpen: (open: boolean | number | null) => void;
 }
 
 function CourseProgramForm({
-  user,
   programs,
   programToEdit,
+  user,
+  isOpen,
+  setIsOpen,
 }: AddProgramToCourseProps) {
   const { id: editId, ...editValues } = programToEdit ?? {};
 
   const isEditSession = Boolean(editId);
 
-  const {
-    addProgram,
-    isPending: isAdding,
-    error: addingError,
-  } = useAddProgram();
+  const { addProgram, isPending: isAdding } = useAddProgram();
 
-  const {
-    editProgram,
-    isPending: isEditing,
-    error: editingError,
-  } = useEditProgram();
+  const { editProgram, isPending: isEditing } = useEditProgram();
 
   const isLoading = isAdding || isEditing;
 
-  const error = addingError || editingError;
-
-  const [isOpen, setIsOpen] = useState(false);
-
   const form = useForm<CourseProgramFormValues>({
     resolver: zodResolver(courseProgramFormSchema),
-    defaultValues: isEditSession ? editValues : { topic: "", hours: 0 },
+    defaultValues: isEditSession ? editValues : { topic: "", hours: 1 },
   });
+
+  const handleOutsideClick = () => {
+    if (isOpen) {
+      setIsOpen(false);
+      form.reset();
+    }
+  };
+
+  const formRef = useOutsideClick<HTMLTableRowElement>(handleOutsideClick);
 
   useEffect(
     function () {
-      if (isOpen === false) return () => form.reset();
+      if (!isOpen) {
+        form.reset();
+      }
     },
     [isOpen, form],
   );
@@ -71,6 +70,8 @@ function CourseProgramForm({
   function onSubmit(data: FieldValues) {
     const { topic, hours } = data;
     if (isEditSession && typeof editId === "number") {
+      if (topic === programToEdit?.topic && hours === programToEdit?.hours)
+        return;
       editProgram({ programs, updatedProgram: { id: editId, topic, hours } });
     } else {
       addProgram({ programs, newProgram: { topic, hours } });
@@ -80,93 +81,94 @@ function CourseProgramForm({
   }
 
   const allowedUsers = ["admin", "teacher"];
+  const canEdit = user && allowedUsers.includes(user.role);
 
-  if (!user || !allowedUsers.includes(user?.role)) return null;
-
-  if (!isOpen)
-    return (
-      <Button
-        variant="secondary"
-        className="ml-auto"
-        onClick={() => setIsOpen((open) => !open)}
-      >
-        Додати Тему
-      </Button>
-    );
+  if (!canEdit || !isOpen) return null;
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="border-sandy-beach-400 grid w-full grid-cols-2 items-center gap-10 rounded-2xl border-4 px-8 py-4"
-      >
-        <fieldset className="flex flex-row gap-18">
+      <TableRow ref={formRef}>
+        <TableCell className="w-4/6">
           <FormField
+            control={form.control}
             name="topic"
             render={({ field: { onChange, onBlur, name, value, ref } }) => (
-              <FormItem>
-                <FormLabel htmlFor="topic">Назва курсу</FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    id="topic"
-                    disabled={isLoading}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    ref={ref}
-                  />
-                </FormControl>
-                <FormMessage />
+              <FormItem className="flex flex-row items-center gap-5">
+                <Input
+                  className="w-2/3"
+                  type="text"
+                  id="topic"
+                  placeholder="Назва теми"
+                  autoFocus
+                  disabled={isLoading}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  ref={ref}
+                />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
+        </TableCell>
 
+        <TableCell className="w-1/6">
           <FormField
             name="hours"
             render={({ field: { onChange, onBlur, name, value, ref } }) => (
-              <FormItem>
-                <FormLabel htmlFor="hours">Назва курсу</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    id="hours"
-                    disabled={isLoading}
-                    name={name}
-                    ref={ref}
-                    value={value}
-                    step="0.5"
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      onChange(val ? parseFloat(val) : 0);
-                    }}
-                    onBlur={onBlur}
-                  />
-                </FormControl>
-                <FormMessage />
+              <FormItem className="flex flex-row items-center justify-start gap-5">
+                <Input
+                  className="w-1/3"
+                  type="number"
+                  id="hours"
+                  disabled={isLoading}
+                  name={name}
+                  ref={ref}
+                  value={value}
+                  step="1"
+                  min="1"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    onChange(val ? parseFloat(val) : 0);
+                  }}
+                  onBlur={onBlur}
+                />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
-        </fieldset>
-        <div className="ml-auto flex flex-row gap-9">
-          <Button type="submit" variant="secondary">
-            {isLoading ? <SpinnerMini /> : isEditSession ? "Оновити" : "Додати"}
-          </Button>
-          <Button
-            variant="outline"
-            type="button"
-            onClick={() => setIsOpen(false)}
-          >
-            <X />
-          </Button>
-        </div>
-        {error && (
-          <div>
-            <p className="text-destructive">{error.message}</p>
+        </TableCell>
+
+        <TableCell className="w-1/6 p-0 text-center">
+          <div className="flex h-full items-center justify-center gap-5">
+            <Button
+              type="button"
+              onClick={form.handleSubmit(onSubmit)}
+              variant="secondary"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <SpinnerMini />
+              ) : isEditSession ? (
+                "Оновити"
+              ) : (
+                "Додати"
+              )}
+            </Button>
+            <button
+              type="button"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "cursor-pointer",
+              )}
+              onClick={() => setIsOpen(false)}
+            >
+              <X />
+            </button>
           </div>
-        )}
-      </form>
+        </TableCell>
+      </TableRow>
     </Form>
   );
 }

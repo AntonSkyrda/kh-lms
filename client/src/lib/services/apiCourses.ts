@@ -79,7 +79,7 @@ class ApiCourses extends ApiBase {
     const newPrograms = { programs: [...programs, newProgram] };
 
     const res = await this.patch(
-      `${this.BASE_PATH}${courseId}`,
+      `${this.BASE_PATH}${courseId}/`,
       newPrograms,
       courseDetailedSchema,
       "Не вдалось додати нову програму до курсу",
@@ -91,12 +91,16 @@ class ApiCourses extends ApiBase {
   public editProgram = async (
     courseId: number,
     programs: CourseProgram[],
-    updatedProgram: CourseProgramFormValues,
+    updatedProgram: CourseProgram,
   ): Promise<CourseDetailed> => {
-    const updatedPrograms = { programs: [...programs, updatedProgram] };
+    const updatedPrograms = {
+      programs: programs.map((program: CourseProgram) =>
+        program.id === updatedProgram.id ? updatedProgram : program,
+      ),
+    };
 
     const res = await this.patch(
-      `${this.BASE_PATH}${courseId}`,
+      `${this.BASE_PATH}${courseId}/`,
       updatedPrograms,
       courseDetailedSchema,
       "Не вдалось оновити програму для курсу",
@@ -115,7 +119,7 @@ class ApiCourses extends ApiBase {
     };
 
     return await this.patch(
-      `${this.BASE_PATH}${courseId}`,
+      `${this.BASE_PATH}${courseId}/`,
       updatedPrograms,
       courseDetailedSchema,
       "Не вдалось видалити програму для курсу",
