@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { useForm, type FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button } from "../../../ui/button";
+import { Button, buttonVariants } from "../../../ui/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "../../../ui/form";
 import {
@@ -16,23 +15,25 @@ import {
   type CourseProgram,
   type CourseProgramFormValues,
 } from "../../../schemas/coursesSchema";
-import type { User } from "../../../schemas/userSchemas";
 import { useAddProgram } from "./useAddProgram";
 import { useEditProgram } from "./useEditProgram";
 import { Input } from "../../../ui/input";
 import { X } from "lucide-react";
 import SpinnerMini from "../../../ui/SpinnerMini";
+import { cn } from "../../../lib/utils/cn";
+import { TableCell, TableRow } from "../../../ui/table";
+import type { User } from "../../../schemas/userSchemas";
 
 interface AddProgramToCourseProps {
-  user: User;
   programs: CourseProgram[];
   programToEdit?: CourseProgram;
+  user: User;
 }
 
 function CourseProgramForm({
-  user,
   programs,
   programToEdit,
+  user,
 }: AddProgramToCourseProps) {
   const { id: editId, ...editValues } = programToEdit ?? {};
 
@@ -41,29 +42,30 @@ function CourseProgramForm({
   const {
     addProgram,
     isPending: isAdding,
-    error: addingError,
+    // error: addingError,
   } = useAddProgram();
 
   const {
     editProgram,
     isPending: isEditing,
-    error: editingError,
+    // error: editingError,
   } = useEditProgram();
 
   const isLoading = isAdding || isEditing;
 
-  const error = addingError || editingError;
+  // let error = addingError || editingError;
 
   const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm<CourseProgramFormValues>({
     resolver: zodResolver(courseProgramFormSchema),
-    defaultValues: isEditSession ? editValues : { topic: "", hours: 0 },
+    defaultValues: isEditSession ? editValues : { topic: "", hours: 0.5 },
   });
 
   useEffect(
     function () {
       if (isOpen === false) return () => form.reset();
+      return () => {};
     },
     [isOpen, form],
   );
@@ -80,93 +82,93 @@ function CourseProgramForm({
   }
 
   const allowedUsers = ["admin", "teacher"];
+  const canEdit = user && allowedUsers.includes(user.role);
 
-  if (!user || !allowedUsers.includes(user?.role)) return null;
-
-  if (!isOpen)
-    return (
-      <Button
-        variant="secondary"
-        className="ml-auto"
-        onClick={() => setIsOpen((open) => !open)}
-      >
-        Додати Тему
-      </Button>
-    );
+  if (!canEdit) return null;
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="border-sandy-beach-400 grid w-full grid-cols-2 items-center gap-10 rounded-2xl border-4 px-8 py-4"
-      >
-        <fieldset className="flex flex-row gap-18">
+      <TableRow className="h-[70px]">
+        <TableCell className="w-4/6">
           <FormField
+            control={form.control}
             name="topic"
             render={({ field: { onChange, onBlur, name, value, ref } }) => (
-              <FormItem>
-                <FormLabel htmlFor="topic">Назва курсу</FormLabel>
+              <FormItem className="space-y-0">
                 <FormControl>
-                  <Input
-                    type="text"
-                    id="topic"
-                    disabled={isLoading}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    ref={ref}
-                  />
+                  <FormItem className="space-y-0">
+                    <Input
+                      type="text"
+                      id="topic"
+                      disabled={isLoading}
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      ref={ref}
+                    />
+                    <FormMessage className="text-xs" />
+                  </FormItem>
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />
+        </TableCell>
 
+        <TableCell className="w-1/6 text-center">
           <FormField
             name="hours"
             render={({ field: { onChange, onBlur, name, value, ref } }) => (
-              <FormItem>
-                <FormLabel htmlFor="hours">Назва курсу</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    id="hours"
-                    disabled={isLoading}
-                    name={name}
-                    ref={ref}
-                    value={value}
-                    step="0.5"
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      onChange(val ? parseFloat(val) : 0);
-                    }}
-                    onBlur={onBlur}
-                  />
-                </FormControl>
+              <FormItem className="space-y-0">
+                <Input
+                  type="number"
+                  id="hours"
+                  disabled={isLoading}
+                  name={name}
+                  ref={ref}
+                  value={value}
+                  step="0.5"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    onChange(val ? parseFloat(val) : 0);
+                  }}
+                  onBlur={onBlur}
+                />
                 <FormMessage />
               </FormItem>
             )}
           />
-        </fieldset>
-        <div className="ml-auto flex flex-row gap-9">
-          <Button type="submit" variant="secondary">
-            {isLoading ? <SpinnerMini /> : isEditSession ? "Оновити" : "Додати"}
-          </Button>
-          <Button
-            variant="outline"
-            type="button"
-            onClick={() => setIsOpen(false)}
-          >
-            <X />
-          </Button>
-        </div>
-        {error && (
-          <div>
-            <p className="text-destructive">{error.message}</p>
+        </TableCell>
+
+        <TableCell className="w-1/6 p-0 text-center">
+          <div className="flex h-full items-center justify-center gap-5">
+            <Button
+              type="button"
+              onClick={form.handleSubmit(onSubmit)}
+              variant="secondary"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <SpinnerMini />
+              ) : isEditSession ? (
+                "Оновити"
+              ) : (
+                "Додати"
+              )}
+            </Button>
+            <button
+              type="button"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "cursor-pointer",
+              )}
+              onClick={() => setIsOpen(false)}
+            >
+              <X />
+            </button>
           </div>
-        )}
-      </form>
+        </TableCell>
+      </TableRow>
     </Form>
   );
 }

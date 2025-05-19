@@ -79,7 +79,7 @@ class ApiCourses extends ApiBase {
     const newPrograms = { programs: [...programs, newProgram] };
 
     const res = await this.patch(
-      `${this.BASE_PATH}${courseId}`,
+      `${this.BASE_PATH}${courseId}/`,
       newPrograms,
       courseDetailedSchema,
       "Не вдалось додати нову програму до курсу",
@@ -96,7 +96,7 @@ class ApiCourses extends ApiBase {
     const updatedPrograms = { programs: [...programs, updatedProgram] };
 
     const res = await this.patch(
-      `${this.BASE_PATH}${courseId}`,
+      `${this.BASE_PATH}${courseId}/`,
       updatedPrograms,
       courseDetailedSchema,
       "Не вдалось оновити програму для курсу",
@@ -115,7 +115,7 @@ class ApiCourses extends ApiBase {
     };
 
     return await this.patch(
-      `${this.BASE_PATH}${courseId}`,
+      `${this.BASE_PATH}${courseId}/`,
       updatedPrograms,
       courseDetailedSchema,
       "Не вдалось видалити програму для курсу",
