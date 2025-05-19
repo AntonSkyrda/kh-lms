@@ -91,9 +91,13 @@ class ApiCourses extends ApiBase {
   public editProgram = async (
     courseId: number,
     programs: CourseProgram[],
-    updatedProgram: CourseProgramFormValues,
+    updatedProgram: CourseProgram,
   ): Promise<CourseDetailed> => {
-    const updatedPrograms = { programs: [...programs, updatedProgram] };
+    const updatedPrograms = {
+      programs: programs.map((program: CourseProgram) =>
+        program.id === updatedProgram.id ? updatedProgram : program,
+      ),
+    };
 
     const res = await this.patch(
       `${this.BASE_PATH}${courseId}/`,

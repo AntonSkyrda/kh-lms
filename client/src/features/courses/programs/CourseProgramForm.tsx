@@ -1,15 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm, type FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
 
 import { Button, buttonVariants } from "../../../ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../../../ui/form";
+import { Form, FormField, FormItem, FormMessage } from "../../../ui/form";
 import {
   courseProgramFormSchema,
   type CourseProgram,
@@ -18,54 +13,56 @@ import {
 import { useAddProgram } from "./useAddProgram";
 import { useEditProgram } from "./useEditProgram";
 import { Input } from "../../../ui/input";
-import { X } from "lucide-react";
 import SpinnerMini from "../../../ui/SpinnerMini";
 import { cn } from "../../../lib/utils/cn";
 import { TableCell, TableRow } from "../../../ui/table";
 import type { User } from "../../../schemas/userSchemas";
+import { useOutsideClick } from "../../../hooks/useOutsideClick";
 
 interface AddProgramToCourseProps {
   programs: CourseProgram[];
   programToEdit?: CourseProgram;
   user: User;
+  isOpen: boolean;
+  setIsOpen: (open: boolean | number | null) => void;
 }
 
 function CourseProgramForm({
   programs,
   programToEdit,
   user,
+  isOpen,
+  setIsOpen,
 }: AddProgramToCourseProps) {
   const { id: editId, ...editValues } = programToEdit ?? {};
 
   const isEditSession = Boolean(editId);
 
-  const {
-    addProgram,
-    isPending: isAdding,
-    // error: addingError,
-  } = useAddProgram();
+  const { addProgram, isPending: isAdding } = useAddProgram();
 
-  const {
-    editProgram,
-    isPending: isEditing,
-    // error: editingError,
-  } = useEditProgram();
+  const { editProgram, isPending: isEditing } = useEditProgram();
 
   const isLoading = isAdding || isEditing;
 
-  // let error = addingError || editingError;
-
-  const [isOpen, setIsOpen] = useState(false);
-
   const form = useForm<CourseProgramFormValues>({
     resolver: zodResolver(courseProgramFormSchema),
-    defaultValues: isEditSession ? editValues : { topic: "", hours: 0.5 },
+    defaultValues: isEditSession ? editValues : { topic: "", hours: 1 },
   });
+
+  const handleOutsideClick = () => {
+    if (isOpen) {
+      setIsOpen(false);
+      form.reset();
+    }
+  };
+
+  const formRef = useOutsideClick<HTMLTableRowElement>(handleOutsideClick);
 
   useEffect(
     function () {
-      if (isOpen === false) return () => form.reset();
-      return () => {};
+      if (!isOpen) {
+        form.reset();
+      }
     },
     [isOpen, form],
   );
@@ -73,6 +70,8 @@ function CourseProgramForm({
   function onSubmit(data: FieldValues) {
     const { topic, hours } = data;
     if (isEditSession && typeof editId === "number") {
+      if (topic === programToEdit?.topic && hours === programToEdit?.hours)
+        return;
       editProgram({ programs, updatedProgram: { id: editId, topic, hours } });
     } else {
       addProgram({ programs, newProgram: { topic, hours } });
@@ -84,57 +83,58 @@ function CourseProgramForm({
   const allowedUsers = ["admin", "teacher"];
   const canEdit = user && allowedUsers.includes(user.role);
 
-  if (!canEdit) return null;
+  if (!canEdit || !isOpen) return null;
 
   return (
     <Form {...form}>
-      <TableRow className="h-[70px]">
+      <TableRow ref={formRef}>
         <TableCell className="w-4/6">
           <FormField
             control={form.control}
             name="topic"
             render={({ field: { onChange, onBlur, name, value, ref } }) => (
-              <FormItem className="space-y-0">
-                <FormControl>
-                  <FormItem className="space-y-0">
-                    <Input
-                      type="text"
-                      id="topic"
-                      disabled={isLoading}
-                      name={name}
-                      value={value}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      ref={ref}
-                    />
-                    <FormMessage className="text-xs" />
-                  </FormItem>
-                </FormControl>
+              <FormItem className="flex flex-row items-center gap-5">
+                <Input
+                  className="w-2/3"
+                  type="text"
+                  id="topic"
+                  placeholder="Назва теми"
+                  autoFocus
+                  disabled={isLoading}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  ref={ref}
+                />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
         </TableCell>
 
-        <TableCell className="w-1/6 text-center">
+        <TableCell className="w-1/6">
           <FormField
             name="hours"
             render={({ field: { onChange, onBlur, name, value, ref } }) => (
-              <FormItem className="space-y-0">
+              <FormItem className="flex flex-row items-center justify-start gap-5">
                 <Input
+                  className="w-1/3"
                   type="number"
                   id="hours"
                   disabled={isLoading}
                   name={name}
                   ref={ref}
                   value={value}
-                  step="0.5"
+                  step="1"
+                  min="1"
                   onChange={(e) => {
                     const val = e.target.value;
                     onChange(val ? parseFloat(val) : 0);
                   }}
                   onBlur={onBlur}
                 />
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
