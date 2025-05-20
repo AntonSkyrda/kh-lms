@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter
 
 from .models import Group
-from .serializers import GroupSerializer
+from .serializers import GroupSerializer, GroupDetailSerializer
 from .permissions import GroupsPermission
 
 
@@ -32,3 +32,8 @@ class GroupViewSet(ModelViewSet):
             return queryset.filter(id=group.id) if group else Group.objects.none()
 
         return Group.objects.none()
+
+    def get_serializer_class(self):
+        if self.action in ("list", "create"):
+            return GroupSerializer
+        return GroupDetailSerializer
