@@ -185,7 +185,15 @@ class CourseDetailSerializer(serializers.ModelSerializer):
                     )
                     existing_ids.append(new_program.id)
 
-            # Видалити ті, що не входять у оновлений список
             instance.programs.exclude(id__in=existing_ids).delete()
 
         return instance
+
+
+class CourseSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = (
+            "id",
+            "name",
+        )
