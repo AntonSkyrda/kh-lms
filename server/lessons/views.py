@@ -1,3 +1,11 @@
-from django.shortcuts import render
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+from .models import Lesson
+from .serializers import LessonSerializer
+
+
+class LessonViewSet(ModelViewSet):
+    queryset = Lesson.objects.select_related("program", "group")
+    serializer_class = LessonSerializer
+    permission_classes = [IsAuthenticated]
