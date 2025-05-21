@@ -1,7 +1,5 @@
 from rest_framework import serializers
 
-from courses.models import CourseProgram
-from groups.models import Group
 from .models import Lesson
 
 
