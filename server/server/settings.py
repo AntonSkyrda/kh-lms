@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "users",
     "groups",
     "authentication",
+    "lessons",
 ]
 
 
