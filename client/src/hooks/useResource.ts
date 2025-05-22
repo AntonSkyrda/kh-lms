@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 
 interface IuseResource<T> {
   resourceName: string;
-  fetchFn: (id: string) => Promise<T>;
+  fetchFn: (id: number) => Promise<T>;
   paramName?: string;
 }
 
@@ -14,17 +14,17 @@ export function useResource<T>({
 }: IuseResource<T>) {
   const params = useParams();
   const [searchParams] = useSearchParams();
-  const resourceId = params[paramName] || searchParams.get(paramName);
+  const resourceId = params[paramName] || searchParams.get(paramName) || 0;
 
   const {
     isLoading,
     data: resource,
     error,
   } = useQuery({
-    queryKey: [resourceName, resourceId],
+    queryKey: [resourceName, +resourceId],
     queryFn: () => {
       if (!resourceId) return null;
-      return fetchFn(resourceId);
+      return fetchFn(+resourceId);
     },
     enabled: !!resourceId,
     retry: false,

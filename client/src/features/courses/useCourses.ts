@@ -9,7 +9,7 @@ export function useCourses(searchStr: string = "") {
     results: courses,
     error: coursesError,
   } = useResources<CoursePlain>({
-    searchStr: searchStr,
+    searchStr,
     resourceName: "courses",
     fetchFn: ApiCourses.getCourses,
   });

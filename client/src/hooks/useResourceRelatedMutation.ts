@@ -1,3 +1,4 @@
+// useResourceRelatedMutation.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useParams, useSearchParams } from "react-router-dom";
@@ -23,12 +24,18 @@ export function useRecourceRelatedMutation<T, D>({
     isPending,
     error,
   } = useMutation({
-    mutationFn: (variables: T) => {
-      if (!resourceId)
+    mutationFn: ({ id, data }: { id?: number; data: T }) => {
+      const identifier = id ?? (resourceId ? +resourceId : null);
+
+      console.log(identifier);
+
+      if (!identifier) {
         throw new Error(
-          `There is an error with this ${paramName.replace("Id", "")}`,
+          `No ${paramName.replace("Id", "")} ID provided. Pass it explicitly or ensure it's in the URL.`,
         );
-      return mutationFn(+resourceId, variables);
+      }
+
+      return mutationFn(identifier, data);
     },
     onSuccess: (data) => {
       const message =
@@ -37,8 +44,13 @@ export function useRecourceRelatedMutation<T, D>({
           : successMessage;
 
       toast.success(message);
+
       queryClient.invalidateQueries({
-        queryKey: [paramName.replace("Id", ""), resourceId],
+        queryKey: [paramName.replace("Id", ""), +(resourceId as string)],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: [paramName.replace("Id", "s")],
       });
     },
     onError: (err: Error) => {

@@ -10,59 +10,63 @@ import {
   FormLabel,
   FormMessage,
 } from "../../ui/form";
+import { groupFormSchema } from "../../schemas/formsSchemas";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
-import { useAddCourse } from "./useAddCourse";
-import { useUpdateCourse } from "./useUpdateCourse";
+import { useAddGroup } from "./useAddGroup";
+import Spinner from "../../ui/Spinner";
+import { useUpdateGroup } from "./useUpdateGroup";
 import { getChangedFields } from "../../lib/utils/getChangedFields";
-import SpinnerMini from "../../ui/SpinnerMini";
-import {
-  courseFormSchema,
-  type CourseFormValues,
-  type CoursePlain,
-} from "../../schemas/coursesSchema";
+import type { GroupFormValues, GroupPlain } from "../../schemas/groupsSchema";
 
 interface CourseFormProps {
   isOpen?: boolean;
   handleClose?: (isOpen: boolean) => void;
-  courseToEdit?: CoursePlain;
+  groupToEdit?: GroupPlain;
 }
-function CurseForm({ isOpen, handleClose, courseToEdit }: CourseFormProps) {
-  const { id: editId, ...editValues } = courseToEdit ?? {};
+function GroupForm({ isOpen, handleClose, groupToEdit }: CourseFormProps) {
+  const { id: editId, ...editValues } = groupToEdit ?? {};
 
   const isEditSession = Boolean(editId);
 
-  const { addCourse, isPending: isAdding } = useAddCourse();
-  const { updateCourse, isPending: isUpdating } = useUpdateCourse();
+  const { addGroup, isPending: isAdding } = useAddGroup();
+  const { updateGroup, isPending: isUpdating } = useUpdateGroup();
 
   const isLoading = isAdding || isUpdating;
 
-  const form = useForm<CourseFormValues>({
-    resolver: zodResolver(courseFormSchema),
-    defaultValues: isEditSession ? editValues : { name: "", description: "" },
+  const form = useForm<GroupFormValues>({
+    resolver: zodResolver(groupFormSchema),
+    defaultValues: isEditSession ? editValues : { name: "", year_of_study: 1 },
   });
 
   useEffect(
     function () {
-      if (isOpen === false) return () => form.reset();
+      return () => {
+        if (isOpen === false) form.reset();
+      };
     },
     [isOpen, form],
   );
 
   function onSubmit(data: FieldValues) {
-    const { success, data: courseData } = courseFormSchema.safeParse(data);
+    const formData = {
+      ...data,
+      year_of_study:
+        typeof data.year_of_study === "string"
+          ? parseInt(data.year_of_study, 10)
+          : data.year_of_study,
+    };
+
+    const { success, data: groupData } = groupFormSchema.safeParse(formData);
     if (!success) return;
 
     if (isEditSession && typeof editId === "number") {
-      const changedData = getChangedFields(courseData, editValues);
+      const changedData = getChangedFields(groupData, editValues);
 
       if (Object.keys(changedData).length === 0) return;
 
-      updateCourse(
-        {
-          id: editId,
-          data: changedData,
-        },
+      updateGroup(
+        { data: { ...changedData } },
         {
           onSuccess: () => {
             form.reset();
@@ -71,7 +75,7 @@ function CurseForm({ isOpen, handleClose, courseToEdit }: CourseFormProps) {
         },
       );
     } else {
-      addCourse(courseData);
+      addGroup(groupData);
       form.reset();
       handleClose?.(false);
     }
@@ -85,7 +89,7 @@ function CurseForm({ isOpen, handleClose, courseToEdit }: CourseFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="name">Назва курсу</FormLabel>
+                <FormLabel htmlFor="name">Назва Групи</FormLabel>
                 <FormControl>
                   <Input
                     type="text"
@@ -100,16 +104,23 @@ function CurseForm({ isOpen, handleClose, courseToEdit }: CourseFormProps) {
           />
 
           <FormField
-            name="description"
-            render={({ field }) => (
+            name="year_of_study"
+            render={({ field: { onChange, onBlur, name, value, ref } }) => (
               <FormItem>
-                <FormLabel htmlFor="description">Опис курсу</FormLabel>
+                <FormLabel htmlFor="year_of_study">Рік навчання</FormLabel>
                 <FormControl>
                   <Input
-                    type="text"
-                    id="description"
+                    type="number"
+                    id="year_of_study"
                     disabled={isLoading}
-                    {...field}
+                    name={name}
+                    ref={ref}
+                    value={value}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      onChange(val ? parseInt(val, 10) : undefined);
+                    }}
+                    onBlur={onBlur}
                   />
                 </FormControl>
                 <FormMessage />
@@ -122,7 +133,7 @@ function CurseForm({ isOpen, handleClose, courseToEdit }: CourseFormProps) {
           <Button variant="default" type="submit" disabled={isLoading}>
             <span>
               {isLoading ? (
-                <SpinnerMini />
+                <Spinner />
               ) : isEditSession ? (
                 "Редагувати"
               ) : (
@@ -144,4 +155,4 @@ function CurseForm({ isOpen, handleClose, courseToEdit }: CourseFormProps) {
   );
 }
 
-export default CurseForm;
+export default GroupForm;

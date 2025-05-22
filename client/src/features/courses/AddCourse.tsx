@@ -1,11 +1,11 @@
 import CurseForm from "./CurseForm";
 import AddRecourceButton from "../../ui/AddRecourceButton";
-import { useCurrentUser } from "../users/useCurrentUser";
+import { useUser } from "../../contexts/user/useUser";
 
 function AddCourse() {
-  const { user } = useCurrentUser();
+  const { user } = useUser();
 
-  if (user?.role !== "admin") return null;
+  if (!user || user?.role !== "admin") return null;
 
   return (
     <AddRecourceButton

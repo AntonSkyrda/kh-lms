@@ -9,9 +9,9 @@ import { NavLink } from "react-router-dom";
 import toast from "react-hot-toast";
 import DeleteCourse from "./DeleteCourse";
 import UpdateCourse from "./UpdateCourse";
-import AddTeacherToCourse from "./AddTeacherToCourse";
+import AddTeacherToCourse from "./teacher/AddTeacherToCourse";
 import { useEffect } from "react";
-import RemoveTeacherFromCourse from "./RemoveTeacherFromCourse";
+import RemoveTeacherFromCourse from "./teacher/RemoveTeacherFromCourse";
 import { useCurrentUser } from "../users/useCurrentUser";
 
 function CourseDetail() {

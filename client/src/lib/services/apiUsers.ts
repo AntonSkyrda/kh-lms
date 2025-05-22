@@ -19,6 +19,16 @@ class ApiUsers extends ApiBase {
       `${this.BASE_PATH}/teachers?limit=${limit}&offset=${limit * page}&search=${search}`,
       userListResponseSchema,
     );
+
+  public getStudents = async ({
+    limit = ITEMS_PER_PAGE,
+    page = 0,
+    search = "",
+  }: GetListParams) =>
+    await this.get(
+      `${this.BASE_PATH}/students?limit=${limit}&offset=${limit * page}&search=${search}`,
+      userListResponseSchema,
+    );
 }
 
 export default new ApiUsers();

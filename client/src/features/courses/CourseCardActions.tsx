@@ -2,11 +2,11 @@ import { Calendar } from "lucide-react";
 import { Button } from "../../ui/button";
 import UpdateCourse from "./UpdateCourse";
 import DeleteCourse from "./DeleteCourse";
-import { useCurrentUser } from "../users/useCurrentUser";
 import type { CoursePlain } from "../../schemas/coursesSchema";
+import { useUser } from "../../contexts/user/useUser";
 
 function CourseCardActions({ course }: { course?: CoursePlain }) {
-  const { user } = useCurrentUser();
+  const { user } = useUser();
 
   return (
     <div className="flex flex-col gap-5">

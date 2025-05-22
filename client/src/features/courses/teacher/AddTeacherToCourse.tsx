@@ -1,5 +1,10 @@
+import toast from "react-hot-toast";
+import { Plus } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { useAddTeacherToCourse } from "./useAddTeacherToCourse";
-import { buttonVariants } from "../../ui/button";
+import { buttonVariants } from "../../../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,20 +12,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../ui/dialog";
-import { useCourse } from "./useCourse";
-import toast from "react-hot-toast";
-import { Plus } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCurrentUser } from "../users/useCurrentUser";
-import TeachersSearch from "../users/TeachersSearch";
-import { useTeachers } from "../users/useTeachers";
+} from "../../../ui/dialog";
+import { useCourse } from "../useCourse";
+import TeachersSearch from "../../users/TeachersSearch";
+import { useTeachers } from "../../users/useTeachers";
+import { useUser } from "../../../contexts/user/useUser";
 
 function AddTeacherToCourse() {
   const { teachers, isLoading } = useTeachers();
   const queryClient = useQueryClient();
-  const { user } = useCurrentUser();
+  const { user } = useUser();
   const { course } = useCourse();
   const [isOpen, setIsOpen] = useState(false);
   const [searchStr, setSearchStr] = useState("");
@@ -44,7 +45,7 @@ function AddTeacherToCourse() {
 
     if (typeof teacherId !== "number") return;
 
-    addTeacherToCourse(teacherId);
+    addTeacherToCourse({ data: teacherId });
     clear();
     setIsOpen(false);
   }

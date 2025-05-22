@@ -16,7 +16,7 @@ export const coursesListResponseSchema =
 
 export type CoursesListResponse = z.infer<typeof coursesListResponseSchema>;
 
-export const courseCreateFormSchema = z.object({
+export const courseFormSchema = z.object({
   name: z
     .string()
     .trim()
@@ -29,7 +29,7 @@ export const courseCreateFormSchema = z.object({
     .max(250, "Курс має містити не більше ніж 250 символів у описі"),
 });
 
-export type CourseCreateFormValues = z.infer<typeof courseCreateFormSchema>;
+export type CourseFormValues = z.infer<typeof courseFormSchema>;
 
 export const courseProgramSchema = z.object({
   id: z.number().min(1, "ID програми не дійсний"),
@@ -68,7 +68,7 @@ export const courseDetailedSchema = coursePlainSchema.extend({
 
 export type CourseDetailed = z.infer<typeof courseDetailedSchema>;
 
-export const courseUpdateFormSchema = courseCreateFormSchema.partial();
+export const courseUpdateFormSchema = courseFormSchema.partial();
 
 export type CourseUpdateFormValues = z.infer<typeof courseUpdateFormSchema>;
 

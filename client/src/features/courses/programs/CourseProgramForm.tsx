@@ -72,9 +72,11 @@ function CourseProgramForm({
     if (isEditSession && typeof editId === "number") {
       if (topic === programToEdit?.topic && hours === programToEdit?.hours)
         return;
-      editProgram({ programs, updatedProgram: { id: editId, topic, hours } });
+      editProgram({
+        data: { programs, updatedProgram: { id: editId, topic, hours } },
+      });
     } else {
-      addProgram({ programs, newProgram: { topic, hours } });
+      addProgram({ data: { programs, newProgram: { topic, hours } } });
     }
     form.reset();
     setIsOpen(false);

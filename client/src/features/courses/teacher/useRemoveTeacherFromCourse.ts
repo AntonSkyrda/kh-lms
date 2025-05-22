@@ -1,5 +1,5 @@
-import { useRecourceRelatedMutation } from "../../hooks/useResourceRelatedMutation";
-import ApiCourses from "../../lib/services/apiCourses";
+import { useRecourceRelatedMutation } from "../../../hooks/useResourceRelatedMutation";
+import ApiCourses from "../../../lib/services/apiCourses";
 
 export function useRemoveTeacherFromCourse() {
   const {
