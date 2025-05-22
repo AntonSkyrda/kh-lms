@@ -7,6 +7,8 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { CommandLoading } from "cmdk";
+
 import {
   Command,
   CommandEmpty,
@@ -15,7 +17,6 @@ import {
   CommandItem,
   CommandList,
 } from "./command";
-import { CommandLoading } from "cmdk";
 import { Skeleton } from "./skeleton";
 import { cn } from "../lib/utils/cn";
 import { useOutsideClick } from "../hooks/useOutsideClick";

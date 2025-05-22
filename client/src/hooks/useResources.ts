@@ -37,8 +37,6 @@ export function useResources<T>({
 
   const page = getPage();
 
-  console.log(page);
-
   const search = !searchParams.get("search")
     ? searchStr
       ? searchStr
@@ -55,7 +53,7 @@ export function useResources<T>({
     },
     error,
   } = useQuery({
-    queryKey: [resourceName, page, ...Object.values(queryParams)],
+    queryKey: [resourceName, page, search, ...Object.values(queryParams)],
     queryFn: () => fetchFn({ page, search }),
     enabled:
       typeof enableCondition === "string"
@@ -65,7 +63,6 @@ export function useResources<T>({
   });
 
   const pageCount = Math.ceil(totalItems! / ITEMS_PER_PAGE);
-  console.log(pageCount);
   if (page < pageCount && page)
     queryClient.prefetchQuery({
       queryKey: [resourceName, page + 1, ...Object.values(queryParams)],

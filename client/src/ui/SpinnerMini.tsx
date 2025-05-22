@@ -21,12 +21,12 @@ function SpinnerMini({ size = "md", color = "primary" }: SpinnerMiniProps) {
 
   return (
     <div
-      className="inline-block animate-spin"
+      className="inline-flex items-center justify-center"
       role="status"
       aria-label="loading"
     >
       <svg
-        className={`${sizeClasses[size]} ${colorClasses[color]}`}
+        className={`${sizeClasses[size]} ${colorClasses[color]} animate-spin`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

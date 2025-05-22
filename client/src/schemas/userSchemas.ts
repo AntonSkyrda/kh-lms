@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createBaseResponseWithListSchema } from "./backendResponseSchema";
 
 export const userPlainSchema = z.object({
   id: z.number(),
@@ -16,3 +17,8 @@ export const userSchema = userPlainSchema.omit({ full_name: true }).extend({
 });
 
 export type User = z.infer<typeof userSchema>;
+
+export const userListResponseSchema =
+  createBaseResponseWithListSchema(userPlainSchema);
+
+export type UsersResponse = z.infer<typeof userListResponseSchema>;

@@ -1,15 +1,24 @@
-import { userSchema } from "../../schemas/userSchemas";
+import { userListResponseSchema, userSchema } from "../../schemas/userSchemas";
 import ApiBase from "./apiBase";
 import type { User } from "../../schemas/userSchemas";
+import type { GetListParams } from "../../types/paramsTypes";
+import { ITEMS_PER_PAGE } from "../consts";
 
 class ApiUsers extends ApiBase {
   private readonly BASE_PATH = "/users";
 
-  public async getCurrentUser() {
-    const res = await this.get<User>(`${this.BASE_PATH}/me/`, userSchema);
+  public getCurrentUser = async () =>
+    await this.get<User>(`${this.BASE_PATH}/me/`, userSchema);
 
-    return res;
-  }
+  public getTeachers = async ({
+    limit = ITEMS_PER_PAGE,
+    page = 0,
+    search = "",
+  }: GetListParams) =>
+    await this.get(
+      `${this.BASE_PATH}/teachers?limit=${limit}&offset=${limit * page}&search=${search}`,
+      userListResponseSchema,
+    );
 }
 
 export default new ApiUsers();

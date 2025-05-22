@@ -6,7 +6,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { NavLink } from "react-router-dom";
 import GroupsSearch from "../groups/GroupsSearch";
-import { Groups } from "../../types/dataTypes";
 
 interface CourseGroupsProps {
   groupsFromCourse: Groups;

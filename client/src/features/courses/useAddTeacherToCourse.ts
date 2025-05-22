@@ -11,7 +11,7 @@ export function useAddTeacherToCourse() {
     mutationFn: (courseId, teacherId: number) =>
       ApiCourses.addTeacher(courseId, teacherId),
     successMessage: (course) =>
-      `До курсу ${course.name} успішно додано студента`,
+      `До курсу ${course.name} успішно додано викладача ${course.teacher?.full_name}`,
   });
 
   return { addTeacherToCourse, isPending, addTeacherToCourseError };

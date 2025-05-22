@@ -32,7 +32,7 @@ function CourseDataBox({ course, user }: CourseDataBoxProps) {
         </div>
         <CourseTeacher course={course} user={user} />
       </header>
-      <section className="flex flex-col gap-12 px-16 pt-12 pb-5">
+      <section className="flex flex-col gap-12 px-16 pb-5">
         <div className="flex flex-row items-baseline gap-8">
           <Heading as="h4">Про курс:</Heading>
           <p>{course.description}</p>

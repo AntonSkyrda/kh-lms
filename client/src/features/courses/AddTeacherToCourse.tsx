@@ -14,15 +14,19 @@ import { Plus } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "../users/useCurrentUser";
-// import TeachersSearch from "../users/TeachersSearch";
+import TeachersSearch from "../users/TeachersSearch";
+import { useTeachers } from "../users/useTeachers";
 
 function AddTeacherToCourse() {
+  const { teachers, isLoading } = useTeachers();
   const queryClient = useQueryClient();
   const { user } = useCurrentUser();
   const { course } = useCourse();
   const [isOpen, setIsOpen] = useState(false);
   const [searchStr, setSearchStr] = useState("");
   const { addTeacherToCourse, isPending } = useAddTeacherToCourse();
+
+  const isWorking = isLoading || isPending;
 
   const clear = useCallback(
     function () {
@@ -69,12 +73,13 @@ function AddTeacherToCourse() {
             Додайте викладача для студентів.
           </DialogDescription>
         </DialogHeader>
-        {/* <TeachersSearch
+        <TeachersSearch
           searchStr={searchStr}
+          teachers={teachers}
           handleSearch={setSearchStr}
           handleSubmit={handleSubmit}
-          isLoading={isPending}
-        /> */}
+          isLoading={isWorking}
+        />
       </DialogContent>
     </Dialog>
   );
