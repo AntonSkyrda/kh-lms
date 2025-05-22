@@ -7,6 +7,7 @@ interface StudentsSearchProps {
   handleSearch: (value: string) => void;
   handleSubmit: (teacherId: number) => void;
   isLoading: boolean;
+  isModal: boolean;
 }
 
 export function StudentsSearch({
@@ -15,17 +16,20 @@ export function StudentsSearch({
   searchStr,
   isLoading,
   handleSubmit,
+  isModal = false,
 }: StudentsSearchProps) {
   return (
     <SearchBar
       value={searchStr}
       onValueChange={handleSearch}
-      isModal={true}
+      isModal={isModal}
       isLoading={isLoading}
     >
       <SearchBar.Input placeholder="Пошук студентів" />
       <SearchBar.Content>
-        <SearchBar.List>
+        <SearchBar.List
+          emptyMessage={`За вашим ${searchStr ? `"${searchStr}"` : ""} запитом неможливо знайти жодного студента`}
+        >
           {students.map((student) => (
             <SearchBar.Result
               key={student.id}

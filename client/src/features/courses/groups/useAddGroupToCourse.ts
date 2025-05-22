@@ -1,5 +1,10 @@
-import { useRecourceRelatedMutation } from "../../hooks/useResourceRelatedMutation";
-import { addGroupToCourse as addGroupToCourseApi } from "../../lib/services/apiCourses";
+import { useRecourceRelatedMutation } from "../../../hooks/useResourceRelatedMutation";
+import ApiCourses from "../../../lib/services/apiCourses";
+
+interface MutateParams {
+  groups: number[];
+  newGroupId: number;
+}
 
 export function useAddGroupToCourse() {
   const {
@@ -8,8 +13,8 @@ export function useAddGroupToCourse() {
     error: addGroupToCourseError,
   } = useRecourceRelatedMutation({
     paramName: "courseId",
-    mutationFn: (courseId, groupId: number) =>
-      addGroupToCourseApi(courseId, groupId),
+    mutationFn: (courseId, params: MutateParams) =>
+      ApiCourses.addGroup(courseId, params.groups, params.newGroupId),
     successMessage: (course) => `До курсу ${course.name} успішно додано групу`,
   });
 

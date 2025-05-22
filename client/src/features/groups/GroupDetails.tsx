@@ -8,11 +8,12 @@ import {
 } from "../../ui/card";
 import Heading from "../../ui/Heading";
 import SpinnerMini from "../../ui/SpinnerMini";
-import GroupStudents from "./GroupStudents";
+import GroupStudents from "./students/GroupStudents";
 import { useGroup } from "./useGroup";
 import { badgeVariants } from "../../ui/badge";
 import UpdateGroup from "./UpdateGroup";
 import DeleteGroup from "./DeleteGroup";
+import { ItemsContainer } from "../../ui/ItemsContainer";
 
 function GroupDetails() {
   const { group, isLoading } = useGroup();
@@ -37,8 +38,9 @@ function GroupDetails() {
         <div className="flex flex-row items-baseline gap-5">
           <Heading as="h4">Рік навчання:</Heading> <p>{group.year_of_study}</p>
         </div>
-
-        <GroupStudents group={group} />
+        <ItemsContainer>
+          <GroupStudents group={group} />
+        </ItemsContainer>
 
         <div className="flex flex-row items-center gap-5">
           <Heading as="h4">Курси групи:</Heading>

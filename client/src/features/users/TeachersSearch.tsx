@@ -7,6 +7,7 @@ interface TeacherSearchProps {
   handleSearch: (value: string) => void;
   handleSubmit: (teacherId: number) => void;
   isLoading: boolean;
+  isModal: boolean;
 }
 
 export function TeachersSearch({
@@ -15,12 +16,13 @@ export function TeachersSearch({
   searchStr,
   isLoading,
   handleSubmit,
+  isModal = false,
 }: TeacherSearchProps) {
   return (
     <SearchBar
       value={searchStr}
       onValueChange={handleSearch}
-      isModal={true}
+      isModal={isModal}
       isLoading={isLoading}
     >
       <SearchBar.Input placeholder="Пошук викладача" />

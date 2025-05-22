@@ -1,8 +1,9 @@
-import { useRecourceRelatedMutation } from "../../hooks/useResourceRelatedMutation";
-import ApiGroups from "../../lib/services/apiGroups";
+import { useRecourceRelatedMutation } from "../../../hooks/useResourceRelatedMutation";
+import ApiGroups from "../../../lib/services/apiGroups";
+import type { UserPlain } from "../../../schemas/userSchemas";
 
 interface MutateParams {
-  students: number[];
+  students: UserPlain[];
   newStudentId: number;
 }
 

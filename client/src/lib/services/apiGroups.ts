@@ -52,19 +52,37 @@ class ApiGroups extends ApiBase {
 
   public addStudent = async (
     groupId: number,
-    students: number[],
+    students: UserPlain[],
     newStudentId: number,
   ) => {
-    const newStudents = { students_ids: [...students, newStudentId] };
+    const newStudents = [
+      ...students.map((student) => student.id),
+      newStudentId,
+    ];
 
-    const res = await this.patch(
+    return await this.patch(
       `${this.BASE_PATH}${groupId}/`,
-      newStudents,
+      { student_ids: newStudents },
       groupDetailedSchema,
       "Не вдалось додати нового студента до групи",
     );
+  };
 
-    return res;
+  public removeStudent = async (
+    groupId: number,
+    students: UserPlain[],
+    studentToRemoveId: number,
+  ) => {
+    const updatedStudents = students
+      .map((student) => student.id)
+      .filter((id) => id !== studentToRemoveId);
+
+    return await this.patch(
+      `${this.BASE_PATH}${groupId}/`,
+      { student_ids: updatedStudents },
+      groupDetailedSchema,
+      "Не вдалось видалити студента з групи",
+    );
   };
 }
 

@@ -1,9 +1,9 @@
 import Heading from "../../ui/Heading";
-// import CourseGroups from "./CourseGroups";
-// import CourseProgramsList from "../coursePrograms/CourseProgramsList";
+import CourseGroups from "./groups/CourseGroups";
 import type { CourseDetailed } from "../../schemas/coursesSchema";
 import ProgramsList from "./programs/ProgramsList";
 import type { User } from "../../schemas/userSchemas";
+import { ItemsContainer } from "../../ui/ItemsContainer";
 
 interface CourseDataBoxProps {
   course: CourseDetailed;
@@ -38,7 +38,9 @@ function CourseDataBox({ course, user }: CourseDataBoxProps) {
           <p>{course.description}</p>
         </div>
 
-        {/* <CourseGroups groupsFromCourse={course.groups} /> */}
+        <ItemsContainer>
+          <CourseGroups groupsFromCourse={course.groups} />
+        </ItemsContainer>
 
         <ProgramsList
           courseId={course.id}

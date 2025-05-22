@@ -73,14 +73,12 @@ class ApiCourses extends ApiBase {
   ) => {
     const newPrograms = { programs: [...programs, newProgram] };
 
-    const res = await this.patch(
+    return await this.patch(
       `${this.BASE_PATH}${courseId}/`,
       newPrograms,
       courseDetailedSchema,
       "Не вдалось додати нову програму до курсу",
     );
-
-    return res;
   };
 
   public editProgram = async (
@@ -94,14 +92,12 @@ class ApiCourses extends ApiBase {
       ),
     };
 
-    const res = await this.patch(
+    return await this.patch(
       `${this.BASE_PATH}${courseId}/`,
       updatedPrograms,
       courseDetailedSchema,
       "Не вдалось оновити програму для курсу",
     );
-
-    return res;
   };
 
   public deleteProgram = async (
@@ -118,6 +114,36 @@ class ApiCourses extends ApiBase {
       updatedPrograms,
       courseDetailedSchema,
       "Не вдалось видалити програму для курсу",
+    );
+  };
+
+  public addGroup = async (
+    courseId: number,
+    groups: number[],
+    newGroupId: number,
+  ) => {
+    const newGroups = { groups: [...groups, newGroupId] };
+
+    return await this.patch(
+      `${this.BASE_PATH}${courseId}/`,
+      newGroups,
+      courseDetailedSchema,
+      "Не вдалось додати групу для курсу",
+    );
+  };
+
+  public removeGroup = async (
+    courseId: number,
+    groups: number[],
+    groupToRemoveId: number,
+  ) => {
+    const updatedGroups = groups.filter((group) => group !== groupToRemoveId);
+
+    return await this.patch(
+      `${this.BASE_PATH}${courseId}/`,
+      { groups: updatedGroups },
+      courseDetailedSchema,
+      "Не вдалось видалити групу з курсу",
     );
   };
 }

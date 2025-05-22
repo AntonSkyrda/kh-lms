@@ -6,7 +6,8 @@ interface GroupsSearchProps {
   groups: GroupPlain[];
   isLoading: boolean;
   setSearchStr: (value: string) => void;
-  handleSelect?: (id: number) => void;
+  handleSelect?: (groupId: number) => void;
+  isModal: boolean;
 }
 
 function GroupsSearch({
@@ -15,20 +16,19 @@ function GroupsSearch({
   setSearchStr,
   isLoading,
   handleSelect,
+  isModal = false,
 }: GroupsSearchProps) {
-  const isWorking = isLoading;
-
   return (
     <SearchBar
       value={searchStr}
-      isLoading={isWorking}
+      isLoading={isLoading}
       onValueChange={setSearchStr}
-      isModal={false}
+      isModal={isModal}
     >
       <SearchBar.Input placeholder="Пошук курсів" />
       <SearchBar.Content>
         <SearchBar.List
-          emptyMessage={`За запитом ${searchStr} Не знайдено жодного курсу`}
+          emptyMessage={`За запитом ${searchStr ? `"${searchStr}"` : ""} Не знайдено жодної групи`}
         >
           {groups.map((group) => (
             <SearchBar.Result

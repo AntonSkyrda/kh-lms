@@ -80,6 +80,7 @@ function AddTeacherToCourse() {
           handleSearch={setSearchStr}
           handleSubmit={handleSubmit}
           isLoading={isWorking}
+          isModal={true}
         />
       </DialogContent>
     </Dialog>

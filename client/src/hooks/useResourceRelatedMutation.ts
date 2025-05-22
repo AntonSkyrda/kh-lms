@@ -27,8 +27,6 @@ export function useRecourceRelatedMutation<T, D>({
     mutationFn: ({ id, data }: { id?: number; data: T }) => {
       const identifier = id ?? (resourceId ? +resourceId : null);
 
-      console.log(identifier);
-
       if (!identifier) {
         throw new Error(
           `No ${paramName.replace("Id", "")} ID provided. Pass it explicitly or ensure it's in the URL.`,

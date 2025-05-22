@@ -1,14 +1,16 @@
-import { ItemsContainer } from "../../ui/ItemsContainer";
-import { type GroupDetailed } from "../../schemas/groupsSchema";
-import { useAddStudentToGroup } from "./useAddStudentToGroup";
 import { useCallback, useState } from "react";
-// import { useRemoveStudentFromGroup } from "./useRemoveStudentFromGroup";
 import { NavLink } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUser } from "../../contexts/user/useUser";
-import StudentsSearch from "../users/StudentsSearch";
-import { useStudents } from "../users/useStudents";
+
+import { ItemsContainer } from "../../../ui/ItemsContainer";
+import { type GroupDetailed } from "../../../schemas/groupsSchema";
+import { useAddStudentToGroup } from "./useAddStudentToGroup";
+import { useRemoveStudentFromGroup } from "./useRemoveStudentFromGroup";
+import { useUser } from "../../../contexts/user/useUser";
+import StudentsSearch from "../../users/StudentsSearch";
+import { useStudents } from "../../users/useStudents";
+import { useItemsContainer } from "../../../contexts/ItemsContainer/ItemsContainerProvider";
 
 interface GroupStudentsProps {
   group: GroupDetailed;
@@ -17,23 +19,27 @@ interface GroupStudentsProps {
 function GroupStudents({ group }: GroupStudentsProps) {
   const { user } = useUser();
   const isActionAvailable = user?.role === "admin";
+
+  const { setIsDialogOpen } = useItemsContainer();
   const queryClient = useQueryClient();
 
-  const { addStudentToGroup, isPending } = useAddStudentToGroup();
-  // const { removeStudentFromGroup } = useRemoveStudentFromGroup();
+  const { addStudentToGroup, isPending: isAddingStudent } =
+    useAddStudentToGroup();
+  const { removeStudentFromGroup, isPending: isRemovingStudent } =
+    useRemoveStudentFromGroup();
 
   const [searchStr, setSearchStr] = useState("");
-
   const { students, isLoading } = useStudents(searchStr);
 
-  const isWorking = isLoading || isPending;
+  const isWorking = isLoading || isAddingStudent || isRemovingStudent;
 
   const clear = useCallback(
     function () {
       queryClient.removeQueries({ queryKey: ["students"] });
       setSearchStr("");
+      setIsDialogOpen(false);
     },
-    [queryClient],
+    [queryClient, setIsDialogOpen],
   );
 
   function handleAddStudent(studentId: number) {
@@ -41,20 +47,37 @@ function GroupStudents({ group }: GroupStudentsProps) {
 
     if (typeof studentId !== "number") return;
 
-    addStudentToGroup({ data: studentId });
+    addStudentToGroup({
+      data: { students: group.students, newStudentId: studentId },
+    });
     clear();
   }
 
+  const studentsToShow = students.filter(
+    (student) =>
+      !group.students.map((student) => student.id).includes(student.id),
+  );
+
   return (
-    <ItemsContainer>
-      <ItemsContainer.Header>Студенти</ItemsContainer.Header>
+    <>
+      <ItemsContainer.Header>
+        <ItemsContainer.Title>Студенти</ItemsContainer.Title>
+      </ItemsContainer.Header>
+
       <ItemsContainer.Content>
-        <ItemsContainer.ItemsList>
+        <ItemsContainer.ItemsList emptyMessage="Немає жодного студента">
           {group.students.map((student) => (
             <ItemsContainer.Item
               key={student.id}
               isActionAvailable={isActionAvailable}
-              // onAction={() => removeStudentFromGroup({ data: student.id })}
+              onAction={() =>
+                removeStudentFromGroup({
+                  data: {
+                    students: group.students,
+                    studentToRemoveId: student.id,
+                  },
+                })
+              }
             >
               <NavLink to={`/students?studentId=${student.id}`}>
                 {student.full_name}
@@ -62,6 +85,7 @@ function GroupStudents({ group }: GroupStudentsProps) {
             </ItemsContainer.Item>
           ))}
         </ItemsContainer.ItemsList>
+
         <ItemsContainer.Footer>
           {isActionAvailable && (
             <ItemsContainer.AddButton>
@@ -72,7 +96,7 @@ function GroupStudents({ group }: GroupStudentsProps) {
 
         <ItemsContainer.ItemsDialog
           title="Додавання студента"
-          description="оберіть студента, якого хочете додати"
+          description="Оберіть студента, якого хочете додати"
           handleClear={clear}
         >
           <StudentsSearch
@@ -80,11 +104,12 @@ function GroupStudents({ group }: GroupStudentsProps) {
             handleSearch={setSearchStr}
             isLoading={isWorking}
             handleSubmit={handleAddStudent}
-            students={students}
+            students={studentsToShow}
+            isModal={true}
           />
         </ItemsContainer.ItemsDialog>
       </ItemsContainer.Content>
-    </ItemsContainer>
+    </>
   );
 }
 
