@@ -1,4 +1,5 @@
 import { ZodSchema } from "zod";
+
 import {
   courseCreateFormSchema,
   courseDetailedSchema,
@@ -12,13 +13,19 @@ import {
   type CourseUpdateFormValues,
 } from "../../schemas/coursesSchema";
 import ApiBase from "./apiBase";
+import { ITEMS_PER_PAGE } from "../consts";
+import type { GetListParams } from "../../types/paramsTypes";
 
 class ApiCourses extends ApiBase {
   private readonly BASE_PATH = "/courses/";
 
-  public getCourses = async (): Promise<CoursesListResponse> =>
+  public getCourses = async ({
+    limit = ITEMS_PER_PAGE,
+    page = 0,
+    search = "",
+  }: GetListParams): Promise<CoursesListResponse> =>
     await this.get<CoursesListResponse>(
-      this.BASE_PATH,
+      `${this.BASE_PATH}?limit=${limit}&offset=${page * limit}&search=${search}`,
       coursesListResponseSchema as ZodSchema,
       "Не вдалось отримати курси",
     );
