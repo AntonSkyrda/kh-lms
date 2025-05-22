@@ -1,61 +1,56 @@
-import { ZodSchema } from "zod";
 import {
-  courseCreateFormSchema,
   courseDetailedSchema,
   coursesListResponseSchema,
-  courseUpdateFormSchema,
-  type CourseCreateFormValues,
-  type CourseDetailed,
+  type CourseFormValues,
   type CourseProgram,
   type CourseProgramFormValues,
-  type CoursesListResponse,
   type CourseUpdateFormValues,
 } from "../../schemas/coursesSchema";
 import ApiBase from "./apiBase";
+import { ITEMS_PER_PAGE } from "../consts";
+import type { GetListParams } from "../../types/paramsTypes";
 
 class ApiCourses extends ApiBase {
   private readonly BASE_PATH = "/courses/";
 
-  public getCourses = async (): Promise<CoursesListResponse> =>
-    await this.get<CoursesListResponse>(
-      this.BASE_PATH,
-      coursesListResponseSchema as ZodSchema,
+  public getCourses = async ({
+    limit = ITEMS_PER_PAGE,
+    page = 0,
+    search = "",
+  }: GetListParams) =>
+    await this.get(
+      `${this.BASE_PATH}?limit=${limit}&offset=${page * limit}&search=${search}`,
+      coursesListResponseSchema,
       "Не вдалось отримати курси",
     );
 
-  public getCourse = async (id: number): Promise<CourseDetailed> =>
-    await this.get<CourseDetailed>(
+  public getCourse = async (id: number) =>
+    await this.get(
       `${this.BASE_PATH}${id}/`,
-      courseDetailedSchema as ZodSchema,
+      courseDetailedSchema,
       "Такого курсу не існує",
     );
 
-  public add = async (data: CourseCreateFormValues): Promise<CourseDetailed> =>
-    await this.post<CourseDetailed, CourseCreateFormValues>(
+  public add = async (data: CourseFormValues) =>
+    await this.post(
       this.BASE_PATH,
       data,
-      courseCreateFormSchema as ZodSchema,
+      courseDetailedSchema,
       "Не вдалось створити курс",
     );
 
-  public update = async (
-    data: CourseUpdateFormValues,
-    id: number,
-  ): Promise<CourseDetailed> =>
-    await this.patch<CourseDetailed, CourseUpdateFormValues>(
+  public update = async (id: number, data: CourseUpdateFormValues) =>
+    await this.patch(
       `${this.BASE_PATH}${id}/`,
       data,
-      courseUpdateFormSchema as ZodSchema,
+      courseDetailedSchema,
       "Не вдалось оновити курс",
     );
 
-  public deleteCourse = async (id: number): Promise<void> =>
+  public deleteCourse = async (id: number) =>
     await this.delete(`${this.BASE_PATH}${id}/`, "Не вдалось видалити курс");
 
-  public addTeacher = async (
-    courseId: number,
-    teacherId: number,
-  ): Promise<CourseDetailed> =>
+  public addTeacher = async (courseId: number, teacherId: number) =>
     await this.patch(
       `${this.BASE_PATH}${courseId}/`,
       { teacher_id: teacherId },
@@ -63,7 +58,7 @@ class ApiCourses extends ApiBase {
       "Не вдалось додати викладача до курсу",
     );
 
-  public removeTeacher = async (courseId: number): Promise<CourseDetailed> =>
+  public removeTeacher = async (courseId: number) =>
     await this.patch(
       `${this.BASE_PATH}${courseId}/`,
       { teacher_id: null },
@@ -75,38 +70,34 @@ class ApiCourses extends ApiBase {
     courseId: number,
     programs: CourseProgram[],
     newProgram: CourseProgramFormValues,
-  ): Promise<CourseDetailed> => {
+  ) => {
     const newPrograms = { programs: [...programs, newProgram] };
 
-    const res = await this.patch(
+    return await this.patch(
       `${this.BASE_PATH}${courseId}/`,
       newPrograms,
       courseDetailedSchema,
       "Не вдалось додати нову програму до курсу",
     );
-
-    return res;
   };
 
   public editProgram = async (
     courseId: number,
     programs: CourseProgram[],
     updatedProgram: CourseProgram,
-  ): Promise<CourseDetailed> => {
+  ) => {
     const updatedPrograms = {
       programs: programs.map((program: CourseProgram) =>
         program.id === updatedProgram.id ? updatedProgram : program,
       ),
     };
 
-    const res = await this.patch(
+    return await this.patch(
       `${this.BASE_PATH}${courseId}/`,
       updatedPrograms,
       courseDetailedSchema,
       "Не вдалось оновити програму для курсу",
     );
-
-    return res;
   };
 
   public deleteProgram = async (
@@ -125,110 +116,36 @@ class ApiCourses extends ApiBase {
       "Не вдалось видалити програму для курсу",
     );
   };
+
+  public addGroup = async (
+    courseId: number,
+    groups: number[],
+    newGroupId: number,
+  ) => {
+    const newGroups = { groups: [...groups, newGroupId] };
+
+    return await this.patch(
+      `${this.BASE_PATH}${courseId}/`,
+      newGroups,
+      courseDetailedSchema,
+      "Не вдалось додати групу для курсу",
+    );
+  };
+
+  public removeGroup = async (
+    courseId: number,
+    groups: number[],
+    groupToRemoveId: number,
+  ) => {
+    const updatedGroups = groups.filter((group) => group !== groupToRemoveId);
+
+    return await this.patch(
+      `${this.BASE_PATH}${courseId}/`,
+      { groups: updatedGroups },
+      courseDetailedSchema,
+      "Не вдалось видалити групу з курсу",
+    );
+  };
 }
 
 export default new ApiCourses();
-
-// export const getCourses = (offset: number = 0) =>
-//   interactWithAPI<typeof coursesSchema, object>({
-//     url: `courses?limit=${ITEMS_PER_PAGE}&offset=${offset * ITEMS_PER_PAGE}`,
-//     method: "get",
-//     schema: coursesSchema,
-//     methodErrorMessage: "Сталася помилка при отриманні курсів.",
-//     serverErrorRecourseName: "Courses",
-//   });
-
-// export const findCourses = (searchStr: string = "") =>
-//   interactWithAPI<typeof coursesSchema, object>({
-//     url: `courses?search=${searchStr}`,
-//     method: "get",
-//     schema: coursesSchema,
-//     methodErrorMessage: "Сталася помилка при отриманні курсів.",
-//     serverErrorRecourseName: "Courses",
-//   });
-
-// export const getCourseById = (id: string) =>
-//   interactWithAPI<typeof courseDetailedSchema, object>({
-//     url: `courses/${id}/`,
-//     method: "get",
-//     schema: courseDetailedSchema,
-//     methodErrorMessage: "Такого курсу не існує!",
-//     serverErrorRecourseName: "Course",
-//   });
-
-// export const addCourse = (data: z.infer<typeof courseFormSchema>) =>
-//   interactWithAPI<typeof coursePlainSchema, z.infer<typeof courseFormSchema>>({
-//     url: "courses/",
-//     method: "post",
-//     schema: coursePlainSchema,
-//     data,
-//     methodErrorMessage: "Не вдалось додати новий курс!",
-//     serverErrorRecourseName: "Course",
-//   });
-
-// export const updateCourse = (
-//   data: z.infer<typeof courseUpdateSchemaPartial>,
-//   id: number,
-// ) =>
-//   interactWithAPI<
-//     typeof coursePlainPartialSchema,
-//     z.infer<typeof courseUpdateSchemaPartial>
-//   >({
-//     url: `courses/${id}`,
-//     method: "patch",
-//     schema: coursePlainPartialSchema,
-//     data,
-//     methodErrorMessage: "Не вдалось оновити цей курс!",
-//     serverErrorRecourseName: "Course",
-//   });
-
-// export const deleteCourse = (id: number) =>
-//   interactWithAPI<z.ZodVoid, object>({
-//     url: `courses/${id}`,
-//     method: "delete",
-//     schema: z.void(),
-//     methodErrorMessage: "Не вдалось видалити цей курс!",
-//     serverErrorRecourseName: "Course",
-//   });
-
-// export const addTeacherToCourse = (courseId: number, teacherId: number) =>
-//   interactWithAPI<typeof courseDetailedSchema, object>({
-//     url: `courses/${courseId}/add-teacher/${teacherId}`,
-//     method: "post",
-//     schema: courseDetailedSchema,
-//     methodErrorMessage: "Не вдалось додати викладача до цього курс!",
-//     serverErrorRecourseName: "Course",
-//   });
-
-// export const removeTeacherFromCourse = (courseId: number) =>
-//   interactWithAPI<typeof courseDetailedSchema, object>({
-//     url: `courses/${courseId}/teacher`,
-//     method: "delete",
-//     schema: courseDetailedSchema,
-//     methodErrorMessage: "Не вдалось видалити викладача до цього курсу!",
-//     serverErrorRecourseName: "Course",
-//   });
-
-// export const addGroupToCourse = (
-//   courseId: number | string,
-//   groupId: number | string,
-// ) =>
-//   interactWithAPI<typeof courseDetailedSchema, object>({
-//     url: `courses/${courseId}/groups/${groupId}`,
-//     method: "post",
-//     schema: courseDetailedSchema,
-//     methodErrorMessage: "Не вдалось додати групу до цього курсу!",
-//     serverErrorRecourseName: "Course",
-//   });
-
-// export const removeGroupFromCourse = (
-//   courseId: number | string,
-//   groupId: number | string,
-// ) =>
-//   interactWithAPI<typeof courseDetailedSchema, object>({
-//     url: `courses/${courseId}/groups/${groupId}`,
-//     method: "delete",
-//     schema: courseDetailedSchema,
-//     methodErrorMessage: "Не вдалось видалити групу з цього курсу!",
-//     serverErrorRecourseName: "Course",
-//   });

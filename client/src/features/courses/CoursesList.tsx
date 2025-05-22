@@ -1,12 +1,18 @@
-import Spinner from "../../ui/Spinner";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
+
 import Empty from "../../ui/Empty";
 import CourseCard from "./CourseCard";
-import toast from "react-hot-toast";
-import { useEffect } from "react";
-import { useCourses } from "./useCourses";
+import type { CoursePlain } from "../../schemas/coursesSchema";
+import SpinnerMini from "../../ui/SpinnerMini";
 
-function CoursesList() {
-  const { isLoading, courses, coursesError } = useCourses();
+interface CoursesListProps {
+  courses: CoursePlain[];
+  isLoading: boolean;
+  coursesError: Error | null;
+}
+
+function CoursesList({ courses, isLoading, coursesError }: CoursesListProps) {
   useEffect(
     function () {
       if (coursesError) {
@@ -18,7 +24,7 @@ function CoursesList() {
     [coursesError],
   );
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <SpinnerMini size="xl" />;
   if (!courses?.length) return <Empty resourceName="Курси" />;
   return (
     <ul className="grid grid-cols-2 grid-rows-3 gap-x-5 gap-y-8 md:grid-cols-3 xl:grid-cols-5">

@@ -9,14 +9,14 @@ export const createBaseResponseWithListSchema = <T extends z.ZodTypeAny>(
 ) =>
   z.object({
     count: z.number(),
-    next: z.number().nullable(),
-    previous: z.number().nullable(),
+    next: z.string().nullable(),
+    previous: z.string().nullable(),
     results: z.array(itemSchema),
   });
 
 export type BaseResponseWithList<T> = {
   count: number;
-  next: number | null;
-  previous: number | null;
+  next: string | null;
+  previous: string | null;
   results: T[];
 };

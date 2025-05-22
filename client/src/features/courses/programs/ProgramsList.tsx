@@ -112,8 +112,10 @@ function ProgramsList({ courseId, programs, user }: ProgramsListProps) {
                         variant="destructive"
                         onClick={() =>
                           deleteProgram({
-                            programs,
-                            programToDeleteId: program.id,
+                            data: {
+                              programs,
+                              programToDeleteId: program.id,
+                            },
                           })
                         }
                       >

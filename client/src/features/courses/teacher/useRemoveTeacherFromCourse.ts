@@ -1,5 +1,5 @@
-import { useRecourceRelatedMutation } from "../../hooks/useResourceRelatedMutation";
-import ApiCourses from "../../lib/services/apiCourses";
+import { useRecourceRelatedMutation } from "../../../hooks/useResourceRelatedMutation";
+import ApiCourses from "../../../lib/services/apiCourses";
 
 export function useRemoveTeacherFromCourse() {
   const {
@@ -10,7 +10,7 @@ export function useRemoveTeacherFromCourse() {
     paramName: "courseId",
     mutationFn: ApiCourses.removeTeacher,
     successMessage: (course) =>
-      `З групи ${course.name} успішно видалено викладача`,
+      `З курсу ${course.name} успішно видалено викладача`,
   });
 
   return { removeTeacherFromCourse, isPending, removeTeacherFromCourseError };

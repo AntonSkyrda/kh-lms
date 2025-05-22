@@ -1,90 +1,89 @@
-import { z } from "zod";
-import { ITEMS_PER_PAGE } from "../consts";
-import interactWithAPI from "./apiBase";
-import { groupDetailedSchema, groupsSchema } from "../../schemas/groupsSchema";
 import {
-  groupFormSchema,
-  groupUpdateSchemaPartial,
-} from "../../schemas/formsSchemas";
-import { groupPlainSchema } from "../../schemas/plainShemas";
+  groupDetailedSchema,
+  groupPlainSchema,
+  groupsResponseSchema,
+  type GroupFormValues,
+  type GroupUpdateFormValues,
+} from "../../schemas/groupsSchema";
+import type { UserPlain } from "../../schemas/userSchemas";
+import type { GetListParams } from "../../types/paramsTypes";
+import { ITEMS_PER_PAGE } from "../consts";
+import ApiBase from "./apiBase";
 
-// Отримання списку груп з пагінацією
-export const getGroups = (offset: number = 0) =>
-  interactWithAPI<typeof groupsSchema, object>({
-    url: `groups?limit=${ITEMS_PER_PAGE}&offset=${offset * ITEMS_PER_PAGE}`,
-    method: "get",
-    schema: groupsSchema,
-    methodErrorMessage: "Сталася помилка при отриманні груп.",
-    serverErrorRecourseName: "Groups",
-  });
+class ApiGroups extends ApiBase {
+  private readonly BASE_PATH = "/groups/";
 
-export const findGroups = (searchStr: string) =>
-  interactWithAPI<typeof groupsSchema, object>({
-    url: `groups?search=${searchStr}`,
-    method: "get",
-    schema: groupsSchema,
-    methodErrorMessage: "Сталася помилка при пошуку груп.",
-    serverErrorRecourseName: "Groups",
-  });
+  public getGroups = async ({
+    limit = ITEMS_PER_PAGE,
+    page = 0,
+    search = "",
+  }: GetListParams) =>
+    await this.get(
+      `${this.BASE_PATH}?limit=${limit}&offset=${limit * page}&search=${search}`,
+      groupsResponseSchema,
+      "Сталася помилка при отриманні груп",
+    );
 
-export const addGroup = (data: z.infer<typeof groupFormSchema>) =>
-  interactWithAPI<typeof groupPlainSchema, z.infer<typeof groupFormSchema>>({
-    url: "groups/",
-    method: "post",
-    schema: groupPlainSchema,
-    data,
-    methodErrorMessage: "Не вдалось створити нову групу!",
-    serverErrorRecourseName: "Group",
-  });
+  public getGroup = async (id: number) =>
+    await this.get(
+      `${this.BASE_PATH}${id}/`,
+      groupDetailedSchema,
+      "Не вдалось отримати групу",
+    );
 
-export const getGroupById = (id: string) =>
-  interactWithAPI<typeof groupDetailedSchema, object>({
-    url: `groups/${id}/`,
-    method: "get",
-    schema: groupDetailedSchema,
-    methodErrorMessage: "Такої групи не існує!",
-    serverErrorRecourseName: "Group",
-  });
+  public add = async (data: GroupFormValues) =>
+    await this.post(
+      this.BASE_PATH,
+      data,
+      groupPlainSchema,
+      "Не вдалось створити групу",
+    );
 
-export const updateGroupPatch = (
-  data: z.infer<typeof groupUpdateSchemaPartial>,
-  id: number,
-) =>
-  interactWithAPI<
-    typeof groupPlainSchema,
-    z.infer<typeof groupUpdateSchemaPartial>
-  >({
-    url: `groups/${id}`,
-    method: "patch",
-    schema: groupPlainSchema,
-    data,
-    methodErrorMessage: "Не вдалось оновити групу!",
-    serverErrorRecourseName: "Group",
-  });
+  public update = async (id: number, data: GroupUpdateFormValues) =>
+    await this.patch(
+      `${this.BASE_PATH}${id}/`,
+      data,
+      groupDetailedSchema,
+      "Не вдалось оновити групу",
+    );
 
-export const deleteGroup = (id: number) =>
-  interactWithAPI<z.ZodVoid, object>({
-    url: `groups/${id}`,
-    method: "delete",
-    schema: z.void(),
-    methodErrorMessage: "Не вдалось видалити групу!",
-    serverErrorRecourseName: "Group",
-  });
+  public deleteGroup = async (id: number) =>
+    await this.delete(`${this.BASE_PATH}${id}/`, "Не вдалось видалити групу");
 
-export const addStudentToGroup = (groupId: number, studentId: number) =>
-  interactWithAPI<typeof groupDetailedSchema, object>({
-    url: `groups/${groupId}/students/${studentId}/`,
-    method: "post",
-    schema: groupDetailedSchema,
-    methodErrorMessage: "Не вдалось додати студента до групи!",
-    serverErrorRecourseName: "Group",
-  });
+  public addStudent = async (
+    groupId: number,
+    students: UserPlain[],
+    newStudentId: number,
+  ) => {
+    const newStudents = [
+      ...students.map((student) => student.id),
+      newStudentId,
+    ];
 
-export const removeStudentFromGroup = (groupId: number, studentId: number) =>
-  interactWithAPI<typeof groupDetailedSchema, object>({
-    url: `groups/${groupId}/students/${studentId}/`,
-    method: "delete",
-    schema: groupDetailedSchema,
-    methodErrorMessage: "Не вдалось видалити студента з групи!",
-    serverErrorRecourseName: "Group",
-  });
+    return await this.patch(
+      `${this.BASE_PATH}${groupId}/`,
+      { student_ids: newStudents },
+      groupDetailedSchema,
+      "Не вдалось додати нового студента до групи",
+    );
+  };
+
+  public removeStudent = async (
+    groupId: number,
+    students: UserPlain[],
+    studentToRemoveId: number,
+  ) => {
+    const updatedStudents = students
+      .map((student) => student.id)
+      .filter((id) => id !== studentToRemoveId);
+
+    return await this.patch(
+      `${this.BASE_PATH}${groupId}/`,
+      { student_ids: updatedStudents },
+      groupDetailedSchema,
+      "Не вдалось видалити студента з групи",
+    );
+  };
+}
+
+export default new ApiGroups();

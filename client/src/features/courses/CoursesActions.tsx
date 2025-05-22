@@ -5,7 +5,6 @@ import AddCourse from "./AddCourse";
 function CoursesActions() {
   return (
     <div className="flex flex-row items-center gap-5">
-      {/* <CoursesSearch /> */}
       <Button variant="outline">Сортувати</Button>
       <AddCourse />
     </div>

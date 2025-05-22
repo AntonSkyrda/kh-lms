@@ -1,4 +1,7 @@
+import { useEffect } from "react";
 import { type FieldValues, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -7,17 +10,17 @@ import {
   FormLabel,
   FormMessage,
 } from "../../ui/form";
-import { z } from "zod";
-import { courseFormSchema } from "../../schemas/formsSchemas";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { useAddCourse } from "./useAddCourse";
 import { useUpdateCourse } from "./useUpdateCourse";
-import { useEffect } from "react";
 import { getChangedFields } from "../../lib/utils/getChangedFields";
 import SpinnerMini from "../../ui/SpinnerMini";
-import type { CoursePlain } from "../../schemas/coursesSchema";
+import {
+  courseFormSchema,
+  type CourseFormValues,
+  type CoursePlain,
+} from "../../schemas/coursesSchema";
 
 interface CourseFormProps {
   isOpen?: boolean;
@@ -34,7 +37,7 @@ function CurseForm({ isOpen, handleClose, courseToEdit }: CourseFormProps) {
 
   const isLoading = isAdding || isUpdating;
 
-  const form = useForm<z.infer<typeof courseFormSchema>>({
+  const form = useForm<CourseFormValues>({
     resolver: zodResolver(courseFormSchema),
     defaultValues: isEditSession ? editValues : { name: "", description: "" },
   });
@@ -56,7 +59,10 @@ function CurseForm({ isOpen, handleClose, courseToEdit }: CourseFormProps) {
       if (Object.keys(changedData).length === 0) return;
 
       updateCourse(
-        { data: { ...changedData }, id: editId },
+        {
+          id: editId,
+          data: changedData,
+        },
         {
           onSuccess: () => {
             form.reset();

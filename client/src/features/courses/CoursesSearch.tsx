@@ -1,12 +1,21 @@
-import { useState } from "react";
-import { useCoursesSearch } from "./useCoursesSearch";
 import SearchBar from "../../ui/SearchBar";
 import { useNavigate } from "react-router-dom";
+import type { CoursePlain } from "../../schemas/coursesSchema";
 
-function CoursesSearch() {
+interface CoursesSearchParams {
+  searchStr: string;
+  setSearchStr: (value: string) => void;
+  courses: CoursePlain[];
+  isLoading: boolean;
+}
+
+function CoursesSearch({
+  searchStr,
+  setSearchStr,
+  courses,
+  isLoading,
+}: CoursesSearchParams) {
   const navigate = useNavigate();
-  const [searchStr, setSearchStr] = useState("");
-  const { courses, isLoading } = useCoursesSearch(searchStr);
 
   return (
     <SearchBar

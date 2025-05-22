@@ -11,7 +11,7 @@ interface DeleteCourseProps {
 function DeleteCourse({ course, user }: DeleteCourseProps) {
   const { deleteCourse, isPending } = useDeleteCourse();
 
-  if (user?.role !== "admin") return null;
+  if (!user || user?.role !== "admin") return null;
 
   return (
     <DeleteRecourceButton

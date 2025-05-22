@@ -1,9 +1,9 @@
 import Heading from "../../ui/Heading";
-// import CourseGroups from "./CourseGroups";
-// import CourseProgramsList from "../coursePrograms/CourseProgramsList";
+import CourseGroups from "./groups/CourseGroups";
 import type { CourseDetailed } from "../../schemas/coursesSchema";
 import ProgramsList from "./programs/ProgramsList";
 import type { User } from "../../schemas/userSchemas";
+import { ItemsContainer } from "../../ui/ItemsContainer";
 
 interface CourseDataBoxProps {
   course: CourseDetailed;
@@ -32,13 +32,15 @@ function CourseDataBox({ course, user }: CourseDataBoxProps) {
         </div>
         <CourseTeacher course={course} user={user} />
       </header>
-      <section className="flex flex-col gap-12 px-16 pt-12 pb-5">
+      <section className="flex flex-col gap-12 px-16 pb-5">
         <div className="flex flex-row items-baseline gap-8">
           <Heading as="h4">Про курс:</Heading>
           <p>{course.description}</p>
         </div>
 
-        {/* <CourseGroups groupsFromCourse={course.groups} /> */}
+        <ItemsContainer>
+          <CourseGroups groupsFromCourse={course.groups} />
+        </ItemsContainer>
 
         <ProgramsList
           courseId={course.id}

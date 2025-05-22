@@ -73,14 +73,16 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class StudentUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email")
     full_name = serializers.SerializerMethodField()
+    id = serializers.IntegerField(source="user.id")
 
     class Meta:
         model = Student
         fields = (
-            "id",
             "email",
             "full_name",
+            "id",
         )
 
     def get_full_name(self, obj):
         return f"{obj.user.last_name} {obj.user.first_name} {obj.user.father_name}"
+    

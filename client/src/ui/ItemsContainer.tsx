@@ -307,6 +307,7 @@ function AvailableItem({
     "bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 inline-flex h-12 w-full items-center justify-between rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap shadow-xs transition-all disabled:pointer-events-none disabled:opacity-50";
 
   function hadnleAddItem() {
+    console.log("handle add item");
     onAddItem();
     setIsDialogOpen(false);
   }

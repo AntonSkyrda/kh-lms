@@ -5,9 +5,16 @@ import type { BaseResponseWithList } from "../schemas/backendResponseSchema";
 
 interface IuseResources<T> {
   resourceName: string;
-  fetchFn: () => Promise<BaseResponseWithList<T>>;
+  fetchFn: ({
+    page,
+    search,
+  }: {
+    page?: number;
+    search?: string;
+  }) => Promise<BaseResponseWithList<T>>;
   enableCondition?: boolean | string | null;
   queryParams?: Record<string, string | number | boolean>;
+  searchStr?: string;
 }
 
 export function useResources<T>({
@@ -15,26 +22,39 @@ export function useResources<T>({
   fetchFn,
   enableCondition,
   queryParams = {},
+  searchStr,
 }: IuseResources<T>) {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
 
-  const page = !searchParams.get("page")
-    ? 0
-    : Number(searchParams.get("page")) - 1;
+  function getPage() {
+    const pageParam = searchParams.get("page");
+    if (!pageParam) return 0;
+    if (Number(pageParam) <= 0) return 0;
+
+    return Number(pageParam) - 1;
+  }
+
+  const page = getPage();
+
+  const search = !searchParams.get("search")
+    ? searchStr
+      ? searchStr
+      : ""
+    : String(searchParams.get("search"));
 
   const {
     isLoading,
     data: { count: totalItems, next, previous, results } = {
       count: 0,
-      next: 0,
-      previous: 0,
+      next: null,
+      previous: null,
       results: [],
     },
     error,
   } = useQuery({
-    queryKey: [resourceName, page, ...Object.values(queryParams)],
-    queryFn: () => fetchFn(),
+    queryKey: [resourceName, page, search, ...Object.values(queryParams)],
+    queryFn: () => fetchFn({ page, search }),
     enabled:
       typeof enableCondition === "string"
         ? searchParams.get("type") === enableCondition
@@ -42,18 +62,18 @@ export function useResources<T>({
     retry: false,
   });
 
-  const pageCount = Math.ceil(totalItems! / ITEMS_PER_PAGE) - 1;
-  if (page < pageCount)
+  const pageCount = Math.ceil(totalItems! / ITEMS_PER_PAGE);
+  if (page < pageCount && page)
     queryClient.prefetchQuery({
       queryKey: [resourceName, page + 1, ...Object.values(queryParams)],
-      queryFn: () => fetchFn(),
+      queryFn: () => fetchFn({ page, search }),
     });
 
-  if (page > 1)
-    queryClient.prefetchQuery({
-      queryKey: [resourceName, page - 1, ...Object.values(queryParams)],
-      queryFn: () => fetchFn(),
-    });
+  // if (page > 0)
+  //   queryClient.prefetchQuery({
+  //     queryKey: [resourceName, page - 1, ...Object.values(queryParams)],
+  //     queryFn: () => fetchFn({ page, search }),
+  //   });
 
   return { isLoading, totalItems, next, previous, results, error };
 }

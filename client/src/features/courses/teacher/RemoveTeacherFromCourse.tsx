@@ -1,8 +1,8 @@
-import { useCourse } from "./useCourse";
+import { useCourse } from "../useCourse";
 import { useRemoveTeacherFromCourse } from "./useRemoveTeacherFromCourse";
-import DeleteRecourceButton from "../../ui/DeleteRecourceButton";
+import DeleteRecourceButton from "../../../ui/DeleteRecourceButton";
 import { Minus } from "lucide-react";
-import { useCurrentUser } from "../users/useCurrentUser";
+import { useCurrentUser } from "../../users/useCurrentUser";
 
 function RemoveTeacherFromCourse() {
   const { user } = useCurrentUser();

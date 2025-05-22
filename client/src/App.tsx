@@ -8,7 +8,7 @@ import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import Home from "./pages/Home";
 import Courses from "./pages/Courses";
-// import Groups from "./pages/Groups";
+import Groups from "./pages/Groups";
 // import Lessons from "./pages/Lessons";
 // import Tasks from "./pages/Tasks";
 // import Users from "./pages/Users";
@@ -45,7 +45,7 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route path="courses" element={<Courses />} />
             <Route path="courses/:courseId" element={<Course />} />
-            {/* <Route path="groups" element={<Groups />} /> */}
+            <Route path="groups" element={<Groups />} />
             {/* <Route path="lessons" element={<Lessons />} /> */}
             {/* <Route path="tasks" element={<Tasks />} /> */}
             {/* <Route path="account" element={<Account />} /> */}
