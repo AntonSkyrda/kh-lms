@@ -6,7 +6,7 @@ User = get_user_model()
 
 
 class Homework(models.Model):
-    lessons = models.ForeignKey(
+    lesson = models.ForeignKey(
         "lessons.Lesson",
         on_delete=models.CASCADE,
         related_name="homeworks",
@@ -16,7 +16,7 @@ class Homework(models.Model):
     due_date = models.DateField()
 
     def __str__(self):
-        return f"{self.title} ({self.lessons})"
+        return f"{self.title} ({self.lesson})"
 
 
 class HomeworkSubmission(models.Model):
