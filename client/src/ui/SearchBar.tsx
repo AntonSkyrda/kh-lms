@@ -201,6 +201,7 @@ function SearchResult({
   className,
   ...props
 }: ResultProps) {
+  const { setOpen } = useSearchBarContext();
   return (
     <CommandItem
       onClick={(e) => {
@@ -209,6 +210,7 @@ function SearchResult({
       }}
       className={cn(className)}
       onSelect={() => {
+        setOpen(false);
         handleSelect?.();
       }}
       {...props}

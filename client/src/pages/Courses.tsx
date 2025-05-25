@@ -14,7 +14,7 @@ function Courses() {
   return (
     <div className="grid h-full grid-rows-[auto_1fr_auto] gap-10 px-10 py-4">
       <PageHeader title="Курси">
-        <div className="flex flex-row gap-10">
+        <div className="flex flex-row items-center gap-10">
           <CoursesSearch
             searchStr={searchStr}
             setSearchStr={setSearchStr}

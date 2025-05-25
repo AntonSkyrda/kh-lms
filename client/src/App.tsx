@@ -11,12 +11,12 @@ import Courses from "./pages/Courses";
 import Groups from "./pages/Groups";
 // import Lessons from "./pages/Lessons";
 // import Tasks from "./pages/Tasks";
-// import Users from "./pages/Users";
+import Users from "./pages/Users";
 import Course from "./pages/Course";
 // import { AuthProvider } from "./contexts/Auth/AuthProvider";
 // import Account from "./pages/Account";
-// import ProtectedAdminRoute from "./ui/ProtectedAdminRoute";
-// import Settings from "./pages/Settings";
+import ProtectedAdminRoute from "./ui/ProtectedAdminRoute";
+import Settings from "./pages/Settings";
 
 function App() {
   const queryClient = new QueryClient({
@@ -49,10 +49,10 @@ function App() {
             {/* <Route path="lessons" element={<Lessons />} /> */}
             {/* <Route path="tasks" element={<Tasks />} /> */}
             {/* <Route path="account" element={<Account />} /> */}
-            {/* <Route path="lms-admin-route" element={<ProtectedAdminRoute />}> */}
-            {/* <Route path="users" element={<Users />} /> */}
-            {/* <Route path="settings" element={<Settings />} /> */}
-            {/* </Route> */}
+            <Route path="lms-admin-route" element={<ProtectedAdminRoute />}>
+              <Route path="users" element={<Users />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
           </Route>
 
           <Route path="login" element={<Login />} />

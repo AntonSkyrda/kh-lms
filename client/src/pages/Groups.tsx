@@ -34,11 +34,12 @@ function Groups() {
   return (
     <article className="grid h-full grid-cols-1 grid-rows-[auto_1fr] gap-10 px-10 py-4">
       <PageHeader title="Групи">
-        <div className="flex flex-row gap-10">
+        <div className="flex flex-row items-center gap-10">
           <GroupsSearch
             searchStr={searchStr}
             setSearchStr={handleSearch}
             groups={groups}
+            isModal={false}
             isLoading={isLoading}
             handleSelect={(id: number) => navigate(`/groups?groupId=${id}`)}
           />
