@@ -19,6 +19,12 @@ class CourseProgramWriteSerializer(serializers.ModelSerializer):
         fields = ("id", "topic", "hours")
 
 
+class GroupShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ("id", "name")
+
+
 class CourseProgramReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseProgram
@@ -61,7 +67,10 @@ class CourseSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True,
     )
-    programs = CourseProgramWriteSerializer(many=True, required=False)
+    programs = CourseProgramWriteSerializer(
+        many=True,
+        required=False,
+    )
 
     class Meta:
         model = Course
@@ -113,13 +122,15 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
 
-    groups = serializers.PrimaryKeyRelatedField(
+    group_ids = serializers.PrimaryKeyRelatedField(
+        source="groups",
         queryset=Group.objects.all(),
         many=True,
-        # allow_null=True,
+        write_only=True,
         required=False,
     )
     programs = CourseProgramWriteSerializer(many=True, required=False)
+    groups = GroupShortSerializer(many=True, read_only=True)
 
     class Meta:
         model = Course
@@ -131,6 +142,7 @@ class CourseDetailSerializer(serializers.ModelSerializer):
             "teacher_id",
             "groups",
             "programs",
+            "group_ids",
         )
 
     def validate(self, data):
@@ -174,7 +186,6 @@ class CourseDetailSerializer(serializers.ModelSerializer):
                         program_instance.save()
                         existing_ids.append(program_id)
                     except CourseProgram.DoesNotExist:
-                        # Якщо раптом не знайшли — створити
                         new_program = CourseProgram.objects.create(
                             course=instance, **program
                         )
