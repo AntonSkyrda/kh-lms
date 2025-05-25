@@ -2,9 +2,9 @@ import {
   userDetailedSchema,
   userListResponseSchema,
   userSchema,
-} from "../../schemas/userSchemas";
+} from "../../schemas/usersSchema";
 import ApiBase from "./apiBase";
-import type { User, UserAddFormValues } from "../../schemas/userSchemas";
+import type { User, UserAddFormValues } from "../../schemas/usersSchema";
 import type { GetListParams } from "../../types/paramsTypes";
 import { ITEMS_PER_PAGE } from "../consts";
 

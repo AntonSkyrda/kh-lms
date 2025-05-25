@@ -1,6 +1,6 @@
 import { useRecourceRelatedMutation } from "../../../hooks/useResourceRelatedMutation";
 import ApiGroups from "../../../lib/services/apiGroups";
-import type { UserPlain } from "../../../schemas/userSchemas";
+import type { UserPlain } from "../../../schemas/usersSchema";
 
 interface MutateParams {
   students: UserPlain[];

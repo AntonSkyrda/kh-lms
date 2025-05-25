@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { User } from "../../schemas/userSchemas";
+import type { User } from "../../schemas/usersSchema";
 
 interface UserContextType {
   user: User | undefined;

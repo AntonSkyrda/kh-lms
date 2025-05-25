@@ -1,6 +1,6 @@
 import { useResources } from "../../hooks/useResources";
 import ApiUsers from "../../lib/services/apiUsers";
-import type { UserPlain } from "../../schemas/userSchemas";
+import type { UserPlain } from "../../schemas/usersSchema";
 
 export function useTeachers(searchStr: string = "") {
   const {

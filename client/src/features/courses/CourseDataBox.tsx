@@ -2,7 +2,7 @@ import Heading from "../../ui/Heading";
 import CourseGroups from "./groups/CourseGroups";
 import type { CourseDetailed } from "../../schemas/coursesSchema";
 import ProgramsList from "./programs/ProgramsList";
-import type { User } from "../../schemas/userSchemas";
+import type { User } from "../../schemas/usersSchema";
 import { ItemsContainer } from "../../ui/ItemsContainer";
 
 interface CourseDataBoxProps {

@@ -16,7 +16,7 @@ import { Input } from "../../../ui/input";
 import SpinnerMini from "../../../ui/SpinnerMini";
 import { cn } from "../../../lib/utils/cn";
 import { TableCell, TableRow } from "../../../ui/table";
-import type { User } from "../../../schemas/userSchemas";
+import type { User } from "../../../schemas/usersSchema";
 import { useOutsideClick } from "../../../hooks/useOutsideClick";
 
 interface AddProgramToCourseProps {

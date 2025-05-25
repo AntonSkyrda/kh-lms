@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { Pencil, Plus, Trash } from "lucide-react";
 
 import type { CourseProgram } from "../../../schemas/coursesSchema";
-import type { User } from "../../../schemas/userSchemas";
+import type { User } from "../../../schemas/usersSchema";
 import Empty from "../../../ui/Empty";
 import Heading from "../../../ui/Heading";
 import {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createBaseResponseWithListSchema } from "./backendResponseSchema";
-import { userPlainSchema } from "./userSchemas";
+import { userPlainSchema } from "./usersSchema";
 import { groupPlainSchema } from "./groupsSchema";
 
 export const coursePlainSchema = z.object({
