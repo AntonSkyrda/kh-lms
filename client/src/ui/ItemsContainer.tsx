@@ -208,12 +208,14 @@ function AddButton({ children = "Додати елемент", ...props }: AddBu
   return (
     <Button
       onClick={() => setIsDialogOpen(true)}
-      variant="default"
+      variant="secondary"
       data-slot="items-add-button"
       {...props}
     >
-      <Plus size={16} />
-      <span>{children}</span>
+      <span>
+        <Plus />
+      </span>
+      {children}
     </Button>
   );
 }

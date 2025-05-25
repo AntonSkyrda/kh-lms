@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createBaseResponseWithListSchema } from "./backendResponseSchema";
 import { userPlainSchema } from "./userSchemas";
+import { groupPlainSchema } from "./groupsSchema";
 
 export const coursePlainSchema = z.object({
   id: z.number(),
@@ -62,7 +63,7 @@ export type CourseProgramFormValues = z.infer<typeof courseProgramFormSchema>;
 
 export const courseDetailedSchema = coursePlainSchema.extend({
   teacher: z.union([userPlainSchema, z.null()]),
-  groups: z.union([z.array(z.number()), z.tuple([])]),
+  groups: z.union([z.array(groupPlainSchema), z.tuple([])]),
   programs: z.union([z.array(courseProgramSchema), z.tuple([])]),
 });
 

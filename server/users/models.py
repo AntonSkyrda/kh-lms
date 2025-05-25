@@ -40,7 +40,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return f"{self.first_name} {self.father_name} {self.last_name}"
 
 
 class Student(models.Model):

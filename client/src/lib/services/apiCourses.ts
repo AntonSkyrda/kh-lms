@@ -122,11 +122,11 @@ class ApiCourses extends ApiBase {
     groups: number[],
     newGroupId: number,
   ) => {
-    const newGroups = { groups: [...groups, newGroupId] };
+    const newGroups = [...groups, newGroupId];
 
     return await this.patch(
       `${this.BASE_PATH}${courseId}/`,
-      newGroups,
+      { group_ids: newGroups },
       courseDetailedSchema,
       "Не вдалось додати групу для курсу",
     );
@@ -141,7 +141,7 @@ class ApiCourses extends ApiBase {
 
     return await this.patch(
       `${this.BASE_PATH}${courseId}/`,
-      { groups: updatedGroups },
+      { groups_ids: updatedGroups },
       courseDetailedSchema,
       "Не вдалось видалити групу з курсу",
     );
