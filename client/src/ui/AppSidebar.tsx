@@ -25,6 +25,7 @@ import {
 } from "./Sidebar";
 import { useCurrentUser } from "../features/users/useCurrentUser";
 import ShortUser from "../features/users/ShortUser";
+import ToggleTheme from "./ToggleTheme";
 
 const items = [
   {
@@ -123,7 +124,10 @@ export default function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarRail />
-      <SidebarFooter>{user && <ShortUser user={user} />}</SidebarFooter>
+      <SidebarFooter>
+        <ToggleTheme />
+        {user && <ShortUser user={user} />}
+      </SidebarFooter>
     </Sidebar>
   );
 }

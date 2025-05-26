@@ -8,6 +8,10 @@ class LessonSerializer(serializers.ModelSerializer):
         source="program.topic",
         read_only=True,
     )
+    duration = serializers.IntegerField(
+        source="program.hours",
+        read_only=True,
+    )
     group_name = serializers.CharField(
         source="group.name",
         read_only=True,
@@ -27,6 +31,7 @@ class LessonSerializer(serializers.ModelSerializer):
             "id",
             "program",
             "program_topic",
+            "duration",
             "group",
             "group_name",
             "course_name",
