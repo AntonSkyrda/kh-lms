@@ -1,5 +1,5 @@
 import type { CourseDetailed, CoursePlain } from "../../schemas/coursesSchema";
-import type { User } from "../../schemas/userSchemas";
+import type { User } from "../../schemas/usersSchema";
 import DeleteRecourceButton from "../../ui/DeleteRecourceButton";
 import { useDeleteCourse } from "./useDeleteCourse";
 

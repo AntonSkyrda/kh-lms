@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from "../../ui/Sidebar";
 import { NavLink } from "react-router-dom";
-import type { User } from "../../schemas/userSchemas";
+import type { User } from "../../schemas/usersSchema";
 import { useLogout } from "./useLogout";
 
 interface ShortUserProps {

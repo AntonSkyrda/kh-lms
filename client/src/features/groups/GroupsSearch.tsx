@@ -25,7 +25,7 @@ function GroupsSearch({
       onValueChange={setSearchStr}
       isModal={isModal}
     >
-      <SearchBar.Input placeholder="Пошук курсів" />
+      <SearchBar.Input placeholder="Пошук Груп" />
       <SearchBar.Content>
         <SearchBar.List
           emptyMessage={`За запитом ${searchStr ? `"${searchStr}"` : ""} Не знайдено жодної групи`}

@@ -9,7 +9,6 @@ import PageNotFound from "./pages/PageNotFound";
 import Home from "./pages/Home";
 import Courses from "./pages/Courses";
 import Groups from "./pages/Groups";
-// import Lessons from "./pages/Lessons";
 // import Tasks from "./pages/Tasks";
 import Users from "./pages/Users";
 import Course from "./pages/Course";
@@ -17,6 +16,7 @@ import Course from "./pages/Course";
 // import Account from "./pages/Account";
 import ProtectedAdminRoute from "./ui/ProtectedAdminRoute";
 import Settings from "./pages/Settings";
+import Schedule from "./pages/Schedule";
 
 function App() {
   const queryClient = new QueryClient({
@@ -31,7 +31,6 @@ function App() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        {/* <AuthProvider> */}
         <ReactQueryDevtools />
         <Routes>
           <Route
@@ -46,7 +45,7 @@ function App() {
             <Route path="courses" element={<Courses />} />
             <Route path="courses/:courseId" element={<Course />} />
             <Route path="groups" element={<Groups />} />
-            {/* <Route path="lessons" element={<Lessons />} /> */}
+            <Route path="schedule" element={<Schedule />} />
             {/* <Route path="tasks" element={<Tasks />} /> */}
             {/* <Route path="account" element={<Account />} /> */}
             <Route path="lms-admin-route" element={<ProtectedAdminRoute />}>
@@ -58,7 +57,6 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
-        {/* </AuthProvider> */}
       </QueryClientProvider>
     </BrowserRouter>
   );

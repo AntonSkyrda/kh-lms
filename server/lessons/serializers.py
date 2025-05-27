@@ -16,6 +16,10 @@ class LessonSerializer(serializers.ModelSerializer):
         source="program.course.name",
         read_only=True,
     )
+    teacher_name = serializers.CharField(
+        source="program.course.teacher",
+        read_only=True,
+    )
 
     class Meta:
         model = Lesson
@@ -26,6 +30,7 @@ class LessonSerializer(serializers.ModelSerializer):
             "group",
             "group_name",
             "course_name",
+            "teacher_name",
             "date",
             "time",
         )

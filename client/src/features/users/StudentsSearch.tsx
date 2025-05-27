@@ -1,5 +1,5 @@
 import SearchBar from "../../ui/SearchBar";
-import type { UserPlain } from "../../schemas/userSchemas";
+import type { UserPlain } from "../../schemas/usersSchema";
 
 interface StudentsSearchProps {
   searchStr: string;

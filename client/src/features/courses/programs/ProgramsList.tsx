@@ -1,8 +1,8 @@
 import { useState, useCallback } from "react";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 
 import type { CourseProgram } from "../../../schemas/coursesSchema";
-import type { User } from "../../../schemas/userSchemas";
+import type { User } from "../../../schemas/usersSchema";
 import Empty from "../../../ui/Empty";
 import Heading from "../../../ui/Heading";
 import {
@@ -64,6 +64,9 @@ function ProgramsList({ courseId, programs, user }: ProgramsListProps) {
           )}
           onClick={() => setIsAdding(true)}
         >
+          <span>
+            <Plus />{" "}
+          </span>
           Додати Тему
         </span>
       </TableCell>
@@ -98,28 +101,33 @@ function ProgramsList({ courseId, programs, user }: ProgramsListProps) {
                   <TableCell className="w-4/6">{program.topic}</TableCell>
                   <TableCell className="w-1/6">{program.hours}</TableCell>
                   <TableCell className="w-1/6 text-center">
-                    <div className="flex h-full items-center justify-center gap-5">
-                      <Button
-                        variant="secondary"
-                        onClick={() => {
-                          setIsAdding(false);
-                          setEditingId(program.id);
-                        }}
-                      >
-                        <Pencil className="stroke-norway-50" />
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        onClick={() =>
-                          deleteProgram({
-                            data: {
-                              programs,
-                              programToDeleteId: program.id,
-                            },
-                          })
-                        }
-                      >
-                        <Trash />
+                    <div className="flex h-full items-center justify-center gap-5 divide-x-2 divide-black">
+                      <div className="flex flex-row gap-5 px-5">
+                        <Button
+                          variant="secondary"
+                          onClick={() => {
+                            setIsAdding(false);
+                            setEditingId(program.id);
+                          }}
+                        >
+                          <Pencil className="stroke-norway-50" />
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          onClick={() =>
+                            deleteProgram({
+                              data: {
+                                programs,
+                                programToDeleteId: program.id,
+                              },
+                            })
+                          }
+                        >
+                          <Trash />
+                        </Button>
+                      </div>
+                      <Button>
+                        <Plus />
                       </Button>
                     </div>
                   </TableCell>

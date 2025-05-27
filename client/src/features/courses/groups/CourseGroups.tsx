@@ -10,9 +10,10 @@ import GroupsSearch from "../../groups/GroupsSearch";
 import { useUser } from "../../../contexts/user/useUser";
 import { useItemsContainer } from "../../../contexts/ItemsContainer/ItemsContainerProvider";
 import { useGroups } from "../../groups/useGroups";
+import type { GroupPlain } from "../../../schemas/groupsSchema";
 
 interface CourseGroupsProps {
-  groupsFromCourse: number[];
+  groupsFromCourse: GroupPlain[];
 }
 
 function CourseGroups({ groupsFromCourse }: CourseGroupsProps) {
@@ -46,13 +47,16 @@ function CourseGroups({ groupsFromCourse }: CourseGroupsProps) {
     if (typeof groupId !== "number") return;
 
     addGroupToCourse({
-      data: { groups: groupsFromCourse, newGroupId: groupId },
+      data: {
+        groups: groupsFromCourse.map((group) => group.id),
+        newGroupId: groupId,
+      },
     });
     clear();
   }
 
   const groupsToShow = groups.filter(
-    (group) => !groupsFromCourse.includes(group.id),
+    (group) => !groupsFromCourse.map((group) => group.id).includes(group.id),
   );
 
   return (
@@ -65,22 +69,25 @@ function CourseGroups({ groupsFromCourse }: CourseGroupsProps) {
         <ItemsContainer.ItemsList emptyMessage="Жодна група не додана до курсу">
           {groupsFromCourse.map((group) => (
             <ItemsContainer.Item
-              key={group}
+              key={group.id}
               isActionAvailable={isActionAvailable}
               onAction={() =>
                 removeGroupFromCourse({
-                  data: { groups: groupsFromCourse, groupToRemoveId: group },
+                  data: {
+                    groups: groupsFromCourse.map((group) => group.id),
+                    groupToRemoveId: group.id,
+                  },
                 })
               }
             >
-              <NavLink to={`/groups?groupId=${group}`}>{group}</NavLink>
+              <NavLink to={`/groups?groupId=${group}`}>{group.name}</NavLink>
             </ItemsContainer.Item>
           ))}
         </ItemsContainer.ItemsList>
 
         <ItemsContainer.Footer>
           {isActionAvailable && (
-            <ItemsContainer.AddButton>Додати групу</ItemsContainer.AddButton>
+            <ItemsContainer.AddButton>Додати Групу</ItemsContainer.AddButton>
           )}
         </ItemsContainer.Footer>
 

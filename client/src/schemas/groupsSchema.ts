@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { createBaseResponseWithListSchema } from "./backendResponseSchema";
-import { userPlainSchema } from "./userSchemas";
+import { userPlainSchema } from "./usersSchema";
 
 export const groupPlainSchema = z.object({
   id: z.number(),
   name: z.string(),
-  year_of_study: z.number(),
+  year_of_study: z.number().optional(),
 });
 
 export type GroupPlain = z.infer<typeof groupPlainSchema>;

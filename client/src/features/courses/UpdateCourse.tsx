@@ -12,7 +12,7 @@ import {
 } from "../../ui/dialog";
 import CurseForm from "./CurseForm";
 import type { CourseDetailed, CoursePlain } from "../../schemas/coursesSchema";
-import type { User } from "../../schemas/userSchemas";
+import type { User } from "../../schemas/usersSchema";
 
 interface UpdateCourseProps {
   course: CourseDetailed | CoursePlain;

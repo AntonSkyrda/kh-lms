@@ -7,6 +7,7 @@ import {
   Settings,
   SquareUser,
 } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 import {
   Sidebar,
@@ -22,16 +23,20 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from "./Sidebar";
-import { NavLink } from "react-router-dom";
 import { useCurrentUser } from "../features/users/useCurrentUser";
 import ShortUser from "../features/users/ShortUser";
-// import ShortUser from "../features/account/ShortUser";
+import ToggleTheme from "./ToggleTheme";
 
 const items = [
   {
     title: "Головна",
     url: "/home",
     icon: Home,
+  },
+  {
+    title: "Розклад занять",
+    url: "/schedule",
+    icon: Sheet,
   },
   {
     title: "Курси",
@@ -42,11 +47,6 @@ const items = [
     title: "Групи",
     url: "/groups",
     icon: Users,
-  },
-  {
-    title: "Заняття",
-    url: "/lessons",
-    icon: Sheet,
   },
   {
     title: "Завдання",
@@ -124,7 +124,10 @@ export default function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarRail />
-      <SidebarFooter>{user && <ShortUser user={user} />}</SidebarFooter>
+      <SidebarFooter>
+        <ToggleTheme />
+        {user && <ShortUser user={user} />}
+      </SidebarFooter>
     </Sidebar>
   );
 }

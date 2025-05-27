@@ -5,7 +5,7 @@ import {
   type GroupFormValues,
   type GroupUpdateFormValues,
 } from "../../schemas/groupsSchema";
-import type { UserPlain } from "../../schemas/userSchemas";
+import type { UserPlain } from "../../schemas/usersSchema";
 import type { GetListParams } from "../../types/paramsTypes";
 import { ITEMS_PER_PAGE } from "../consts";
 import ApiBase from "./apiBase";
