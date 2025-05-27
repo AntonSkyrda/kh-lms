@@ -16,12 +16,15 @@ import type {
 } from "../../types/eventTypes";
 import { PAIRS } from "../../lib/consts";
 import EventContent from "./EventContent";
+import { useRef } from "react";
 
 interface ScheduleCalendarProps {
   lessons: Lesson[];
 }
 
 function ScheduleCalendar({ lessons }: ScheduleCalendarProps) {
+  const calendarRef = useRef(null);
+  console.log(calendarRef.current);
   const events = lessons.map((lesson) => {
     const pair = PAIRS.find((pair) => lesson.time.startsWith(pair.start));
 
@@ -87,6 +90,7 @@ function ScheduleCalendar({ lessons }: ScheduleCalendarProps) {
 
   return (
     <FullCalendar
+      ref={calendarRef}
       plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
       initialView="timeGridWeek"
       headerToolbar={{
@@ -101,6 +105,8 @@ function ScheduleCalendar({ lessons }: ScheduleCalendarProps) {
         week: "Тиждень",
         day: "День",
         list: "Список",
+        // next: "Наступний",
+        // prev: "Попередній",
       }}
       eventOverlap={false}
       height="100vh"

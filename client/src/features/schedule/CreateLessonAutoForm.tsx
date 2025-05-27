@@ -100,7 +100,6 @@ function CreateLessonsAutoForm({
 
       return formatedLesson;
     });
-    // console.log(...lessonsToSend);
     addLessons(lessonsToSend);
     handleClose?.();
   };

@@ -9,7 +9,7 @@ class ApiLessons extends ApiBase {
   private readonly BASE_PATH = "/lessons/";
 
   public getLessons = async () =>
-    await this.get(this.BASE_PATH, lessonsResponseSchema);
+    await this.get(`${this.BASE_PATH}?limit=1000`, lessonsResponseSchema);
 
   public createLesson = async (
     lesson: Omit<GeneratedLesson, "extendedValues">,

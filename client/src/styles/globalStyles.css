@@ -292,7 +292,6 @@
   color: var(--primary-foreground) !important;
 }
 
-/* Стилі для тижневого та денного перегляду */
 .fc .fc-timegrid-slot {
   border-color: var(--border) !important;
 }
@@ -313,7 +312,6 @@
   background-color: rgba(26, 45, 32, 0.5) !important;
 }
 
-/* Стилі для заголовків стовпців часу */
 .fc .fc-timegrid-col-frame {
   border-color: var(--border) !important;
 }

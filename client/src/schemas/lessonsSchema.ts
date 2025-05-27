@@ -5,7 +5,6 @@ export const lessonSchema = z.object({
   id: z.number(),
   program: z.number(),
   program_topic: z.string(),
-  duration: z.number(),
   group: z.number(),
   group_name: z.string(),
   course_name: z.string(),

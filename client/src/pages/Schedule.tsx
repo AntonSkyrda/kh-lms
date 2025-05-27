@@ -6,8 +6,6 @@ import Spinner from "../ui/Spinner";
 function Schedule() {
   const { lessons, isLoading } = useLessons();
 
-  console.log(isLoading);
-
   return (
     <article>
       <PageHeader title="Розклад"></PageHeader>
