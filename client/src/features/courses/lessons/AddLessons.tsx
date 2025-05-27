@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "../../../ui/dialog";
 import { buttonVariants } from "../../../ui/button";
-import CreateLessonsForm from "../../schedule/CreateLessonForm";
+import CreateLessonsAutoForm from "../../schedule/CreateLessonAutoForm";
 import type { CourseDetailed } from "../../../schemas/coursesSchema";
 
 interface AddLessonsProps {
@@ -28,7 +28,7 @@ function AddLessons({ course }: AddLessonsProps) {
         </span>
         Створити Розклад
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Додавання Розкладу</DialogTitle>
           <DialogDescription className="mb-6">
@@ -36,7 +36,10 @@ function AddLessons({ course }: AddLessonsProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <CreateLessonsForm course={course} />
+        <CreateLessonsAutoForm
+          course={course}
+          handleClose={() => setIsOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );

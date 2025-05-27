@@ -5,12 +5,13 @@ import Spinner from "../ui/Spinner";
 
 function Schedule() {
   const { lessons, isLoading } = useLessons();
-  if (isLoading) return <Spinner />;
+
+  console.log(isLoading);
 
   return (
     <article>
       <PageHeader title="Розклад"></PageHeader>
-      <ScheduleCalendar lessons={lessons} />
+      {isLoading ? <Spinner /> : <ScheduleCalendar lessons={lessons} />}
     </article>
   );
 }

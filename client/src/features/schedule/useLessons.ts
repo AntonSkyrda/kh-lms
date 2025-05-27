@@ -10,7 +10,7 @@ export function useLessons(searchStr: string = "") {
     error: lessonsError,
   } = useResources<Lesson>({
     searchStr,
-    resourceName: "courses",
+    resourceName: "lessons",
     fetchFn: ApiLessons.getLessons,
   });
 

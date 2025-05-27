@@ -77,10 +77,12 @@ export default class ApiBase {
         throw new Error(errorMessage);
       });
 
-    const { success, data } = await schema.safeParseAsync(response.data);
+    const { success, data, error } = await schema.safeParseAsync(response.data);
 
-    if (!success || !data || typeof data === "undefined")
+    if (!success || !data || typeof data === "undefined") {
+      console.log(error);
       throw new Error(errorMessage);
+    }
 
     return data;
   }

@@ -1,4 +1,8 @@
-import { lessonsResponseSchema } from "../../schemas/lessonsSchema";
+import {
+  lessonSchema,
+  lessonsResponseSchema,
+} from "../../schemas/lessonsSchema";
+import type { GeneratedLesson } from "../../types/schedule";
 import ApiBase from "./apiBase";
 
 class ApiLessons extends ApiBase {
@@ -6,6 +10,10 @@ class ApiLessons extends ApiBase {
 
   public getLessons = async () =>
     await this.get(this.BASE_PATH, lessonsResponseSchema);
+
+  public createLesson = async (
+    lesson: Omit<GeneratedLesson, "extendedValues">,
+  ) => await this.post(this.BASE_PATH, lesson, lessonSchema);
 }
 
 export default new ApiLessons();

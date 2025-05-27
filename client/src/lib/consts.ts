@@ -10,3 +10,14 @@ export const PAIRS = [
   { start: "15:10", end: "16:35", label: "5 пара" },
   { start: "16:40", end: "18:05", label: "6 пара" },
 ];
+
+export const DAYS_OF_WEEK = [
+  { value: 1, label: "Понеділок" },
+  { value: 2, label: "Вівторок" },
+  { value: 3, label: "Середа" },
+  { value: 4, label: "Четвер" },
+  { value: 5, label: "П'ятниця" },
+  { value: 6, label: "Субота" },
+];
+
+export const HOURS_PER_LESSON = 2;

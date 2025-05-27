@@ -1,0 +1,145 @@
+import { useState, useEffect, useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Form } from "../../ui/form";
+import { Button } from "../../ui/button";
+import { lessonCreateFormSchema } from "../../schemas/lessonsSchema";
+import type { CourseDetailed } from "../../schemas/coursesSchema";
+import BasicParametersCard from "./lessons/BasicParametersCard";
+import WeeklyScheduleCard from "./lessons/WeeklySheduleCard";
+import SchedulePreviewCard from "./lessons/SchedulePreviewCard";
+import { useScheduleGenerator } from "./lessons/useScheduleGenerator";
+import type { GeneratedLesson, WeeklyPair } from "../../types/schedule";
+import { useCreateLessons } from "./lessons/useCreateLessons";
+
+interface CreateLessonsFormProps {
+  course: CourseDetailed;
+  handleClose: () => void;
+}
+
+function CreateLessonsAutoForm({
+  course,
+  handleClose,
+}: CreateLessonsFormProps) {
+  const [weeklyPairs, setWeeklyPairs] = useState<WeeklyPair[]>([]);
+  const [generatedLessons, setGeneratedLessons] = useState<GeneratedLesson[]>(
+    [],
+  );
+
+  const { addLessons, isPending } = useCreateLessons();
+
+  const form = useForm({
+    resolver: zodResolver(lessonCreateFormSchema),
+    defaultValues: {
+      date: undefined,
+      group: undefined,
+      endDate: undefined,
+    },
+  });
+
+  const watchedValues = form.watch();
+
+  const { generateLessons } = useScheduleGenerator({
+    course,
+    weeklyPairs,
+    group: watchedValues.group,
+  });
+
+  const addWeeklyPair = useCallback(() => {
+    const newPair: WeeklyPair = {
+      id: Date.now().toString(),
+      dayOfWeek: 1,
+      dayName: "Понеділок",
+      pair: {
+        start: "08:30",
+        end: "10:05",
+        label: "1 пара",
+      },
+    };
+    setWeeklyPairs((prev) => [...prev, newPair]);
+  }, []);
+
+  const removeWeeklyPair = useCallback((id: string) => {
+    setWeeklyPairs((prev) => prev.filter((pair) => pair.id !== id));
+  }, []);
+
+  const updateWeeklyPair = useCallback(
+    (id: string, updates: Partial<WeeklyPair>) => {
+      setWeeklyPairs((prev) =>
+        prev.map((pair) => (pair.id === id ? { ...pair, ...updates } : pair)),
+      );
+    },
+    [],
+  );
+
+  const handleGenerateLessons = useCallback(() => {
+    if (!watchedValues.date) return;
+
+    const lessons = generateLessons(
+      new Date(watchedValues.date),
+      watchedValues.endDate ? new Date(watchedValues.endDate) : undefined,
+    );
+    setGeneratedLessons(lessons);
+  }, [watchedValues.date, watchedValues.endDate, generateLessons]);
+
+  useEffect(() => {
+    if (watchedValues.date && weeklyPairs.length > 0) {
+      handleGenerateLessons();
+    }
+  }, [
+    watchedValues.date,
+    watchedValues.endDate,
+    weeklyPairs,
+    handleGenerateLessons,
+  ]);
+
+  const onSubmit = () => {
+    const lessonsToSend = generatedLessons.map((lesson) => {
+      const { extendedValues, ...formatedLesson } = lesson;
+
+      return formatedLesson;
+    });
+    // console.log(...lessonsToSend);
+    addLessons(lessonsToSend);
+    handleClose?.();
+  };
+
+  return (
+    <div className="space-y-8">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+          <BasicParametersCard control={form.control} groups={course.groups} />
+
+          <WeeklyScheduleCard
+            weeklyPairs={weeklyPairs}
+            onAddPair={addWeeklyPair}
+            onRemovePair={removeWeeklyPair}
+            onUpdatePair={updateWeeklyPair}
+          />
+
+          <SchedulePreviewCard generatedLessons={generatedLessons} />
+
+          <div className="flex justify-end gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleGenerateLessons}
+              disabled={isPending}
+            >
+              Оновити розклад
+            </Button>
+            <Button
+              type="submit"
+              disabled={!generatedLessons.length || isPending}
+            >
+              Створити розклад
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+}
+
+export default CreateLessonsAutoForm;
