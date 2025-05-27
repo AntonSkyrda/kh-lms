@@ -50,7 +50,7 @@ const items = [
   },
   {
     title: "Завдання",
-    url: "/tasks",
+    url: "/homeworks",
     icon: ClipboardList,
   },
 ];
