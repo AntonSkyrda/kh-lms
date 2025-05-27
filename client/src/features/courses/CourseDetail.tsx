@@ -13,6 +13,7 @@ import AddTeacherToCourse from "./teacher/AddTeacherToCourse";
 import { useEffect } from "react";
 import RemoveTeacherFromCourse from "./teacher/RemoveTeacherFromCourse";
 import { useCurrentUser } from "../users/useCurrentUser";
+import AddLessons from "./lessons/AddLessons";
 
 function CourseDetail() {
   const { user } = useCurrentUser();
@@ -43,6 +44,7 @@ function CourseDetail() {
             <AddTeacherToCourse />
             <RemoveTeacherFromCourse />
             <UpdateCourse course={course} user={user} />
+            <AddLessons course={course} />
           </div>
         </div>
       </header>

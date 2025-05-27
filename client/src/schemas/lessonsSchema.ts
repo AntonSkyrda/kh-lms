@@ -20,3 +20,12 @@ export const lessonsResponseSchema =
   createBaseResponseWithListSchema(lessonSchema);
 
 export type LessonsResponse = z.infer<typeof lessonsResponseSchema>;
+
+export const lessonCreateFormSchema = z.object({
+  // program: z.number({ message: "Це поле обовʼязкове!" }),
+  group: z.number({ message: "Це поле обовʼязкове!" }),
+  date: z.string({ message: "Це поле обовʼязкове!" }),
+  time: z.string({ message: "Це поле обовʼязкове!" }),
+});
+
+export type LessonCreateFormValues = z.infer<typeof lessonCreateFormSchema>;

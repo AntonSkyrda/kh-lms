@@ -24,7 +24,7 @@ function CourseTeacher({ course, user }: CourseDataBoxProps) {
 
 function CourseDataBox({ course, user }: CourseDataBoxProps) {
   return (
-    <article className="border-goldenrod-200 text-goldenrod-950 space-y-16 overflow-hidden rounded-md border-2 text-base shadow-md">
+    <article className="border-accent text-accent-foreground space-y-16 overflow-hidden rounded-md border-2 text-base shadow-md">
       <header className="flex items-center justify-between px-16 py-8 font-medium">
         <div className="flex flex-row items-baseline gap-8">
           <Heading as="h4">Курс:</Heading>
@@ -48,7 +48,7 @@ function CourseDataBox({ course, user }: CourseDataBoxProps) {
           user={user}
         />
       </section>
-      <footer className="bg-goldenrod-200 gap-5 px-16 py-7 text-right"></footer>
+      <footer className="bg-accent gap-5 px-16 py-7 text-right"></footer>
     </article>
   );
 }
