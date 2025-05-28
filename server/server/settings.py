@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # installed django libs
     "rest_framework",
+    "django_filters",
     "corsheaders",
     # custom apps
     "courses",
@@ -168,6 +169,7 @@ REST_FRAMEWORK = {
         "authentication.backends.CookieJWTAuthentication"
     ],
     "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
