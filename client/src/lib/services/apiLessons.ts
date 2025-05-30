@@ -8,8 +8,16 @@ import ApiBase from "./apiBase";
 class ApiLessons extends ApiBase {
   private readonly BASE_PATH = "/lessons/";
 
-  public getLessons = async () =>
-    await this.get(`${this.BASE_PATH}?limit=1000`, lessonsResponseSchema);
+  public getLessons = async (
+    dateFrom: string,
+    dateTo: string,
+    filterByCourseId: number | string = "",
+    filterByGroupId: number | string = "",
+  ) =>
+    await this.get(
+      `${this.BASE_PATH}?date_from=${dateFrom}&date_to=${dateTo}&course_id=${filterByCourseId}&group_id=${filterByGroupId}`,
+      lessonsResponseSchema,
+    );
 
   public createLesson = async (
     lesson: Omit<GeneratedLesson, "extendedValues">,
