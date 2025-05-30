@@ -48,7 +48,7 @@ function ScheduleCalendar({
       },
     };
   });
-
+  
   const handleEventMouseEnter = (info: EventHoveringArg) => {
     const props = info.event.extendedProps as CustomExtendedProps;
     const startTime =
