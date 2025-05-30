@@ -4,6 +4,8 @@ import type { CourseDetailed } from "../../schemas/coursesSchema";
 import ProgramsList from "./programs/ProgramsList";
 import type { User } from "../../schemas/usersSchema";
 import { ItemsContainer } from "../../ui/ItemsContainer";
+import RemoveTeacherFromCourse from "./teacher/RemoveTeacherFromCourse";
+import AddTeacherToCourse from "./teacher/AddTeacherToCourse";
 
 interface CourseDataBoxProps {
   course: CourseDetailed;
@@ -11,13 +13,15 @@ interface CourseDataBoxProps {
 }
 
 function CourseTeacher({ course, user }: CourseDataBoxProps) {
-  if (typeof course.teacher === "object" && !course.teacher?.id)
-    return <span>У курса ще немає викладача...</span>;
+  if (!course.teacher?.id) return <AddTeacherToCourse />;
   if (user?.id === course.teacher?.id) return <p>Ваш курс</p>;
   return (
     <div className="flex flex-row items-baseline gap-8">
       <Heading as="h4">Викладач:</Heading>
       <span>{course.teacher.full_name}</span>
+      <span>
+        <RemoveTeacherFromCourse />
+      </span>
     </div>
   );
 }

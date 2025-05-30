@@ -1,7 +1,8 @@
+import { Minus } from "lucide-react";
+
 import { useCourse } from "../useCourse";
 import { useRemoveTeacherFromCourse } from "./useRemoveTeacherFromCourse";
 import DeleteRecourceButton from "../../../ui/DeleteRecourceButton";
-import { Minus } from "lucide-react";
 import { useCurrentUser } from "../../users/useCurrentUser";
 
 function RemoveTeacherFromCourse() {
@@ -17,9 +18,9 @@ function RemoveTeacherFromCourse() {
 
   return (
     <DeleteRecourceButton
-      tiggerTitle="Видалити викладача"
-      title={`Ви точно хочете вилалити викладача ${course.teacher?.first_name} ${course.teacher?.last_name} з курсу ${course.name}?`}
-      onDelete={() => removeTeacherFromCourse({})}
+      tiggerTitle=""
+      title={`Ви точно хочете вилалити викладача ${course.teacher?.full_name} з курсу ${course.name}?`}
+      onDelete={() => removeTeacherFromCourse({ id: course.id, data: {} })}
       isLoading={isPending}
       Icon={<Minus />}
     />
