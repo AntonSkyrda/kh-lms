@@ -1,12 +1,13 @@
 import { useCallback, useState } from "react";
-import ScheduleCalendar from "../features/schedule/ScheduleCalendar";
-import { useLessons } from "../features/schedule/useLessons";
-import PageHeader from "../ui/PageHeader";
 import { format, startOfWeek, endOfWeek } from "date-fns";
 import type { DatesSetArg } from "@fullcalendar/core/index.js";
 
+import ScheduleCalendar from "../features/schedule/ScheduleCalendar";
+import { useLessons } from "../features/schedule/useLessons";
+import PageHeader from "../ui/PageHeader";
+import ScheduleFilters from "../features/schedule/ScheduleFilters";
+
 function Schedule() {
-  // Початковий стан для першого рендеру
   const [dateRange, setDateRange] = useState(() => {
     const now = new Date();
     return {
@@ -15,15 +16,19 @@ function Schedule() {
     };
   });
 
+  const [selectedCourse, setSelectedCourse] = useState<number | undefined>();
+  const [selectedGroup, setSelectedGroup] = useState<number | undefined>();
+
   const dateFromFormatted = format(dateRange.start, "yyyy-MM-dd");
   const dateToFormatted = format(dateRange.end, "yyyy-MM-dd");
 
   const { lessons, isLoading, lessonsError } = useLessons(
     dateFromFormatted,
     dateToFormatted,
+    selectedCourse,
+    selectedGroup,
   );
 
-  // Оновлюємо дати коли календар змінюється
   const handleDatesSet = useCallback((dateInfo: DatesSetArg) => {
     setDateRange({
       start: dateInfo.start,
@@ -43,8 +48,13 @@ function Schedule() {
   }
 
   return (
-    <article>
-      <PageHeader title="Розклад"></PageHeader>
+    <article className="flex flex-col gap-10">
+      <PageHeader title="Розклад">
+        <ScheduleFilters
+          onCourseChange={setSelectedCourse}
+          onGroupChange={setSelectedGroup}
+        />
+      </PageHeader>
       <ScheduleCalendar
         lessons={lessons || []}
         isLoading={isLoading}
