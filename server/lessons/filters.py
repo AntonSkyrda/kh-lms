@@ -5,13 +5,11 @@ from .models import Lesson
 class LessonFilter(django_filters.FilterSet):
     date_from = django_filters.DateFilter(field_name="date", lookup_expr="gte")
     date_to = django_filters.DateFilter(field_name="date", lookup_expr="lte")
-    course_name = django_filters.CharFilter(
-        field_name="program__course__name",
-        lookup_expr="icontains",
+    course_id = django_filters.NumberFilter(
+        field_name="program__course__id",
     )
-    group_name = django_filters.CharFilter(
-        field_name="group__name",
-        lookup_expr="icontains",
+    group_id = django_filters.NumberFilter(
+        field_name="group__id",
     )
 
     class Meta:
@@ -19,6 +17,6 @@ class LessonFilter(django_filters.FilterSet):
         fields = [
             "date_from",
             "date_to",
-            "course_name",
-            "group_name",
+            "course_id",
+            "group_id",
         ]

@@ -10,26 +10,26 @@ function EventContent({ eventInfo }: EventContentProps) {
   const extendedProps = event.extendedProps as CustomExtendedProps;
 
   return (
-    <div className="h-full overflow-hidden p-1">
-      <div className="text-primary-foreground/90 mb-1 text-xs font-bold">
+    <div className="flex flex-col items-start justify-start gap-1 overflow-auto p-1">
+      <p className="text-primary-foreground/90 mb-1 text-xs font-bold">
         {extendedProps.pairLabel}
-      </div>
+      </p>
 
-      <div className="text-primary-foreground mb-1 truncate text-xs font-semibold">
+      <p className="text-primary-foreground mb-1 truncate text-xs font-semibold">
         {event.title}
-      </div>
+      </p>
 
-      <div className="text-primary-foreground/80 mb-1 truncate text-xs">
+      <p className="text-primary-foreground/80 mb-1 truncate text-xs">
         {extendedProps.course}
-      </div>
+      </p>
 
-      <div className="text-primary-foreground/70 mb-1 truncate text-xs">
+      <p className="text-primary-foreground/70 mb-1 truncate text-xs">
         {extendedProps.teacher}
-      </div>
+      </p>
 
-      <div className="text-primary-foreground/70 truncate text-xs">
+      <p className="text-primary-foreground/70 truncate text-xs">
         Група: {extendedProps.group}
-      </div>
+      </p>
     </div>
   );
 }

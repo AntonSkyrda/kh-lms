@@ -16,6 +16,7 @@ class LessonViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
     filterset_class = LessonFilter
+    pagination_class = None
 
     def get_queryset(self):
         user = self.request.user

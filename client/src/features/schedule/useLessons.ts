@@ -1,18 +1,21 @@
-import { useResources } from "../../hooks/useResources";
+import { useQuery } from "@tanstack/react-query";
 import ApiLessons from "../../lib/services/apiLessons";
 import type { Lesson } from "../../schemas/lessonsSchema";
 
-export function useLessons(searchStr: string = "") {
+export function useLessons(
+  dateFrom: string,
+  dateTo: string,
+  courseId?: number,
+  groupId?: number,
+) {
   const {
     isLoading,
-    totalItems: totalLessons,
-    results: lessons,
+    data: lessons,
     error: lessonsError,
-  } = useResources<Lesson>({
-    searchStr,
-    resourceName: "lessons",
-    fetchFn: ApiLessons.getLessons,
+  } = useQuery<Lesson[]>({
+    queryKey: ["lessons", dateFrom, dateTo, courseId, groupId],
+    queryFn: () => ApiLessons.getLessons(dateFrom, dateTo, courseId, groupId),
   });
 
-  return { isLoading, totalLessons, lessons, lessonsError };
+  return { isLoading, lessons, lessonsError };
 }

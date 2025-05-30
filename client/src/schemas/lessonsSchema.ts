@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { createBaseResponseWithListSchema } from "./backendResponseSchema";
 
 export const lessonSchema = z.object({
   id: z.number(),
@@ -15,8 +14,7 @@ export const lessonSchema = z.object({
 
 export type Lesson = z.infer<typeof lessonSchema>;
 
-export const lessonsResponseSchema =
-  createBaseResponseWithListSchema(lessonSchema);
+export const lessonsResponseSchema = z.array(lessonSchema);
 
 export type LessonsResponse = z.infer<typeof lessonsResponseSchema>;
 
