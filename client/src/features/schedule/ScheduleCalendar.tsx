@@ -24,7 +24,7 @@ interface ScheduleCalendarProps {
 
 function ScheduleCalendar({ lessons }: ScheduleCalendarProps) {
   const calendarRef = useRef(null);
-  console.log(calendarRef.current);
+
   const events = lessons.map((lesson) => {
     const pair = PAIRS.find((pair) => lesson.time.startsWith(pair.start));
 
@@ -43,8 +43,6 @@ function ScheduleCalendar({ lessons }: ScheduleCalendarProps) {
       },
     };
   });
-
-  console.log(events);
 
   const handleSlotLabelContent = (arg: SlotLabelInfo) => {
     const time = arg.date;

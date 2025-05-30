@@ -39,6 +39,11 @@ const items = [
     icon: Sheet,
   },
   {
+    title: "Завдання",
+    url: "/homeworks",
+    icon: ClipboardList,
+  },
+  {
     title: "Курси",
     url: "/courses",
     icon: Folders,
@@ -47,11 +52,6 @@ const items = [
     title: "Групи",
     url: "/groups",
     icon: Users,
-  },
-  {
-    title: "Завдання",
-    url: "/homeworks",
-    icon: ClipboardList,
   },
 ];
 
