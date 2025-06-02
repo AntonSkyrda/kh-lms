@@ -10,7 +10,6 @@ import DeleteCourse from "./DeleteCourse";
 import UpdateCourse from "./UpdateCourse";
 import { useEffect } from "react";
 import { useCurrentUser } from "../users/useCurrentUser";
-import AddLessons from "./lessons/AddLessons";
 
 function CourseDetail() {
   const { user } = useCurrentUser();
@@ -38,7 +37,6 @@ function CourseDetail() {
             &larr; Назад
           </NavLink>
           <div className="flex flex-row items-center gap-5">
-            <AddLessons course={course} />
             <UpdateCourse course={course} user={user} />
             <DeleteCourse course={course} user={user} />
           </div>

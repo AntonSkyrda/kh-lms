@@ -1,5 +1,5 @@
 import SearchBar from "../../ui/SearchBar";
-import type { CoursePlain } from "../../schemas/coursesSchema";
+import type { CourseDetailed, CoursePlain } from "../../schemas/coursesSchema";
 import { Button } from "../../ui/button";
 import { X } from "lucide-react";
 
@@ -9,8 +9,9 @@ interface CoursesSearchParams {
   handleSelect?: (value: number) => void;
   courses: CoursePlain[];
   isLoading: boolean;
-  selectedItem?: CoursePlain;
+  selectedItem?: CoursePlain | CourseDetailed;
   handleClear?: () => void;
+  isModal?: boolean;
 }
 
 function CoursesSearch({
@@ -21,12 +22,14 @@ function CoursesSearch({
   isLoading,
   selectedItem,
   handleClear,
+  isModal = false,
 }: CoursesSearchParams) {
   return (
     <SearchBar
       value={searchStr}
       isLoading={isLoading}
       onValueChange={setSearchStr}
+      isModal={isModal}
     >
       <div className="relative">
         <SearchBar.Input

@@ -1,13 +1,16 @@
 import { useCallback, useState } from "react";
 import { format, startOfWeek, endOfWeek } from "date-fns";
 import type { DatesSetArg } from "@fullcalendar/core/index.js";
+import { useSearchParams } from "react-router-dom";
 
 import ScheduleCalendar from "../features/schedule/ScheduleCalendar";
 import { useLessons } from "../features/schedule/lessons/useLessons";
 import PageHeader from "../ui/PageHeader";
 import ScheduleFilters from "../features/schedule/ScheduleFilters";
+import AddLesson from "../features/schedule/lessons/AddLesson";
 
 function Schedule() {
+  const [searchParams] = useSearchParams();
   const [dateRange, setDateRange] = useState(() => {
     const now = new Date();
     return {
@@ -16,8 +19,12 @@ function Schedule() {
     };
   });
 
-  const [selectedCourse, setSelectedCourse] = useState<number | undefined>();
-  const [selectedGroup, setSelectedGroup] = useState<number | undefined>();
+  const [selectedCourse, setSelectedCourse] = useState<number | undefined>(
+    Number(searchParams.get("course")) || undefined,
+  );
+  const [selectedGroup, setSelectedGroup] = useState<number | undefined>(
+    Number(searchParams.get("group")) || undefined,
+  );
 
   const dateFromFormatted = format(dateRange.start, "yyyy-MM-dd");
   const dateToFormatted = format(dateRange.end, "yyyy-MM-dd");
@@ -51,10 +58,13 @@ function Schedule() {
   return (
     <article className="flex flex-col gap-10">
       <PageHeader title="Розклад">
-        <ScheduleFilters
-          onCourseChange={setSelectedCourse}
-          onGroupChange={setSelectedGroup}
-        />
+        <div className="flex flex-col gap-2">
+          <AddLesson />
+          <ScheduleFilters
+            onCourseChange={setSelectedCourse}
+            onGroupChange={setSelectedGroup}
+          />
+        </div>
       </PageHeader>
       <ScheduleCalendar
         lessons={lessons || []}

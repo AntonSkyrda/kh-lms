@@ -5,16 +5,20 @@ interface IuseResource<T> {
   resourceName: string;
   fetchFn: (id: number) => Promise<T>;
   paramName?: string;
+  id?: number | string | null;
 }
 
 export function useResource<T>({
   resourceName,
   fetchFn,
   paramName = "id",
+  id,
 }: IuseResource<T>) {
   const params = useParams();
   const [searchParams] = useSearchParams();
-  const resourceId = params[paramName] || searchParams.get(paramName) || 0;
+
+  const resourceId =
+    id ?? params[paramName] ?? searchParams.get(paramName) ?? 0;
 
   const {
     isLoading,

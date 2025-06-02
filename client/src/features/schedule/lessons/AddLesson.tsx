@@ -10,15 +10,11 @@ import {
   DialogTrigger,
 } from "../../../ui/dialog";
 import { buttonVariants } from "../../../ui/button";
-import CreateLessonsAutoForm from "../../schedule/lessons/CreateLessonAutoForm";
-import type { CourseDetailed } from "../../../schemas/coursesSchema";
+import CreateLessonsAutoForm from "./CreateLessonAutoForm";
 import { useUser } from "../../../contexts/user/useUser";
+import { cn } from "../../../lib/utils/cn";
 
-interface AddLessonsProps {
-  course: CourseDetailed;
-}
-
-function AddLessons({ course }: AddLessonsProps) {
+function AddLesson() {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,22 +22,15 @@ function AddLessons({ course }: AddLessonsProps) {
 
   if (!user || !allowedUsers.includes(user?.role)) return null;
 
-  function handleOpenChange(value: boolean) {
-    if (!course.teacher?.id) return;
-
-    setIsOpen(value);
-  }
-
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={(value) => setIsOpen(value)}>
       <DialogTrigger
-        className={buttonVariants({ variant: "outline" })}
-        disabled={!course.teacher?.id}
+        className={cn(buttonVariants({ variant: "default" }), "ml-auto")}
       >
         <span>
           <Plus />
         </span>
-        Створити Розклад
+        Додати урок
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
@@ -51,13 +40,10 @@ function AddLessons({ course }: AddLessonsProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <CreateLessonsAutoForm
-          course={course}
-          handleClose={() => setIsOpen(false)}
-        />
+        <CreateLessonsAutoForm handleClose={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>
   );
 }
 
-export default AddLessons;
+export default AddLesson;

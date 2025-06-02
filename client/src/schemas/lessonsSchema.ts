@@ -20,6 +20,7 @@ export type LessonsResponse = z.infer<typeof lessonsResponseSchema>;
 
 export const lessonCreateFormSchema = z.object({
   group: z.number({ required_error: "Це поле обовʼязкове!" }),
+  course: z.number({ required_error: "Це поле обовʼязкове!" }),
   date: z.date({ required_error: "Це поле обовʼязкове!" }),
   endDate: z.date().optional(),
 });

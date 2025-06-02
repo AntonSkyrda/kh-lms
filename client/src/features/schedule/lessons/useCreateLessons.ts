@@ -15,8 +15,9 @@ export function useCreateLessons() {
       Promise.all([data.map((lesson) => ApiLessons.createLesson(lesson))]),
     onSuccess: () => {
       toast.success(`Розклад успішно створено!`);
-      queryClient.refetchQueries({ queryKey: ["courses"] });
-      queryClient.refetchQueries({ queryKey: ["lessons"] });
+      queryClient.refetchQueries({
+        predicate: (query) => query.queryKey.includes("lessons"),
+      });
     },
     onError: (error) => {
       toast.error(error.message);

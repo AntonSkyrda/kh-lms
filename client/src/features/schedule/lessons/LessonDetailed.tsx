@@ -9,7 +9,15 @@ import { useLesson } from "./useLesson";
 import type { CustomExtendedProps } from "../../../types/eventTypes";
 import { Link } from "react-router-dom";
 import { Button } from "../../../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../../ui/card";
+import CreateHomeworkForm from "../../homeworks/CreateHomeworkForm";
+import Empty from "../../../ui/Empty";
 
 interface LessonDetailedProps {
   lessonId: number;
@@ -19,6 +27,13 @@ interface LessonDetailedProps {
 function LessonDetailed({ lessonId, eventProps }: LessonDetailedProps) {
   const { lesson, isLoading } = useLesson(lessonId);
 
+  if (!lesson)
+    return (
+      <DialogContent>
+        <Empty resourceName="Заняття" />
+      </DialogContent>
+    );
+
   return (
     <DialogContent>
       {isLoading ? (
@@ -26,13 +41,14 @@ function LessonDetailed({ lessonId, eventProps }: LessonDetailedProps) {
       ) : (
         <>
           <DialogHeader>
-            <DialogTitle>Урок {lesson?.program_topic}</DialogTitle>
+            <DialogTitle>Урок за темою {lesson?.program_topic}</DialogTitle>
             <DialogDescription>
               {eventProps.pairLabel}{" "}
               {lesson?.teacher_name ? (
-                <p className="inline">
-                  у викладача<em>{lesson.teacher_name}</em>
-                </p>
+                <>
+                  з курсу <em>{lesson.course_name}</em>, у викладача{" "}
+                  <em>{lesson.teacher_name}</em>{" "}
+                </>
               ) : (
                 ""
               )}
@@ -60,7 +76,17 @@ function LessonDetailed({ lessonId, eventProps }: LessonDetailedProps) {
               </CardContent>
             </Card>
             <div>Присутність:</div>
-            <div>Домашнє завдання:</div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Домашнє завдання</CardTitle>
+                <CardDescription>
+                  Додайте домашнє завдання для студентів до цього заняття
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CreateHomeworkForm lessonId={lesson?.id} />
+              </CardContent>
+            </Card>
           </div>
         </>
       )}

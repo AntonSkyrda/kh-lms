@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../../ui/accordion";
+import HomeworkContent from "./HomeworkContent";
 
 interface HomeworkItemProps {
   homework: HomeworkPlain;
@@ -22,7 +23,9 @@ function HomeworkItem({ homework }: HomeworkItemProps) {
           {homework.due_date}
         </span>
       </AccordionTrigger>
-      <AccordionContent>Content</AccordionContent>
+      <AccordionContent>
+        <HomeworkContent homeworkId={homework.id} />
+      </AccordionContent>
     </AccordionItem>
   );
 }

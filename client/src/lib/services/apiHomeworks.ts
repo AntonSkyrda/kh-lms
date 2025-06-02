@@ -1,6 +1,7 @@
 import {
   homeworkDetailedSchema,
   homeworksResponseSchema,
+  type CreateHomeworkFormValues,
 } from "../../schemas/homeworksSchema";
 import type { GetListParams } from "../../types/paramsTypes";
 import { ITEMS_PER_PAGE } from "../consts";
@@ -25,6 +26,14 @@ class ApiHomeworks extends ApiBase {
       `${this.BASE_PATH}${id}`,
       homeworkDetailedSchema,
       "Не вдалось отримати завдання",
+    );
+
+  public add = async (lessonId: number, data: CreateHomeworkFormValues) =>
+    await this.post(
+      this.BASE_PATH,
+      { lesson_id: lessonId, ...data },
+      homeworkDetailedSchema,
+      "Не вдалось створити завдання",
     );
 }
 
