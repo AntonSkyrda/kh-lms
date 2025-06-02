@@ -1,9 +1,10 @@
 import { Calendar } from "lucide-react";
-import { Button } from "../../ui/button";
+import { Button, buttonVariants } from "../../ui/button";
 import UpdateCourse from "./UpdateCourse";
 import DeleteCourse from "./DeleteCourse";
 import type { CoursePlain } from "../../schemas/coursesSchema";
 import { useUser } from "../../contexts/user/useUser";
+import { Link } from "react-router-dom";
 
 function CourseCardActions({ course }: { course?: CoursePlain }) {
   const { user } = useUser();
@@ -16,12 +17,15 @@ function CourseCardActions({ course }: { course?: CoursePlain }) {
           <DeleteCourse course={course} user={user} />
         </>
       )}
-      <Button variant="outline">
+      <Link
+        className={buttonVariants({ variant: "outline" })}
+        to={`/schedule?course=${course?.id}`}
+      >
         <span>
           <Calendar />
         </span>
         Розклад
-      </Button>
+      </Link>
     </div>
   );
 }
