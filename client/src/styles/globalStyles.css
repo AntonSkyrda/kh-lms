@@ -311,3 +311,7 @@
 .dark .fc .fc-day-today {
   background-color: rgba(26, 45, 32, 0.5) !important;
 }
+
+.fc .fc-popover {
+  z-index: 49;
+}

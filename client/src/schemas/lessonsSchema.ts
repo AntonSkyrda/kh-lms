@@ -7,7 +7,7 @@ export const lessonSchema = z.object({
   group: z.number(),
   group_name: z.string(),
   course_name: z.string(),
-  teacher_name: z.string(),
+  teacher_name: z.string().nullable(),
   date: z.string(),
   time: z.string(),
 });

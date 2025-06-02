@@ -1,4 +1,4 @@
-import { useRef } from "react";
+// import { useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -15,7 +15,8 @@ import type {
 import type { Lesson } from "../../schemas/lessonsSchema";
 import type { CustomExtendedProps } from "../../types/eventTypes";
 import { PAIRS } from "../../lib/consts";
-import EventContent from "./EventContent";
+import EventContent from "./lessons/LessonEventContent";
+import { Dialog } from "../../ui/dialog";
 
 interface ScheduleCalendarProps {
   lessons: Lesson[];
@@ -28,8 +29,6 @@ function ScheduleCalendar({
   isLoading,
   onDatesSet,
 }: ScheduleCalendarProps) {
-  const calendarRef = useRef<FullCalendar>(null);
-
   const events = lessons.map((lesson) => {
     const pair = PAIRS.find((pair) => lesson.time.startsWith(pair.start));
 
@@ -71,46 +70,47 @@ function ScheduleCalendar({
   };
 
   return (
-    <FullCalendar
-      ref={calendarRef}
-      plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
-      initialView="timeGridWeek"
-      headerToolbar={{
-        start: "today",
-        center: "prev title next",
-        right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
-      }}
-      locale={ukLocale}
-      firstDay={1}
-      eventOverlap={false}
-      events={events}
-      eventClick={handleEventClick}
-      eventContent={(eventInfo: EventContentArg) => (
-        <EventContent eventInfo={eventInfo} />
-      )}
-      slotMinTime="08:00:00"
-      slotMaxTime="19:00:00"
-      slotDuration="01:00:00"
-      slotLabelInterval="00:05:00"
-      slotLabelFormat={{
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      }}
-      scrollTime="08:00:00"
-      nowIndicator={true}
-      eventMouseEnter={handleEventMouseEnter}
-      expandRows={true}
-      stickyHeaderDates={true}
-      dayMaxEvents={3}
-      moreLinkClick="popover"
-      dayMaxEventRows={3}
-      eventDisplay="block"
-      allDaySlot={false}
-      datesSet={onDatesSet}
-      height="100vh"
-      loading={() => isLoading}
-    />
+    <Dialog>
+      <FullCalendar
+        plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
+        initialView="timeGridWeek"
+        headerToolbar={{
+          start: "today",
+          center: "prev title next",
+          right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+        }}
+        locale={ukLocale}
+        firstDay={1}
+        eventOverlap={false}
+        events={events}
+        eventClick={handleEventClick}
+        eventContent={(eventInfo: EventContentArg) => (
+          <EventContent eventInfo={eventInfo} />
+        )}
+        slotMinTime="08:00:00"
+        slotMaxTime="19:00:00"
+        slotDuration="01:00:00"
+        slotLabelInterval="00:05:00"
+        slotLabelFormat={{
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }}
+        scrollTime="08:00:00"
+        nowIndicator={true}
+        eventMouseEnter={handleEventMouseEnter}
+        expandRows={true}
+        stickyHeaderDates={true}
+        dayMaxEvents={2}
+        moreLinkClick="popover"
+        dayMaxEventRows={3}
+        eventDisplay="block"
+        allDaySlot={false}
+        datesSet={onDatesSet}
+        height="100vh"
+        loading={() => isLoading}
+      />
+    </Dialog>
   );
 }
 

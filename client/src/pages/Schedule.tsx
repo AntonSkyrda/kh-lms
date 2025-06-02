@@ -3,7 +3,7 @@ import { format, startOfWeek, endOfWeek } from "date-fns";
 import type { DatesSetArg } from "@fullcalendar/core/index.js";
 
 import ScheduleCalendar from "../features/schedule/ScheduleCalendar";
-import { useLessons } from "../features/schedule/useLessons";
+import { useLessons } from "../features/schedule/lessons/useLessons";
 import PageHeader from "../ui/PageHeader";
 import ScheduleFilters from "../features/schedule/ScheduleFilters";
 
@@ -30,6 +30,7 @@ function Schedule() {
   );
 
   const handleDatesSet = useCallback((dateInfo: DatesSetArg) => {
+    console.log(dateInfo);
     setDateRange({
       start: dateInfo.start,
       end: dateInfo.end,

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import ApiLessons from "../../lib/services/apiLessons";
-import type { Lesson } from "../../schemas/lessonsSchema";
+import ApiLessons from "../../../lib/services/apiLessons";
+import type { Lesson } from "../../../schemas/lessonsSchema";
 
 export function useLessons(
   dateFrom: string,

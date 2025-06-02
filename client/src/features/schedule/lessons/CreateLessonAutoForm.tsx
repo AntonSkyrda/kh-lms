@@ -2,16 +2,16 @@ import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Form } from "../../ui/form";
-import { Button } from "../../ui/button";
-import { lessonCreateFormSchema } from "../../schemas/lessonsSchema";
-import type { CourseDetailed } from "../../schemas/coursesSchema";
-import BasicParametersCard from "./lessons/BasicParametersCard";
-import WeeklyScheduleCard from "./lessons/WeeklySheduleCard";
-import SchedulePreviewCard from "./lessons/SchedulePreviewCard";
-import { useScheduleGenerator } from "./lessons/useScheduleGenerator";
-import type { GeneratedLesson, WeeklyPair } from "../../types/schedule";
-import { useCreateLessons } from "./lessons/useCreateLessons";
+import { Form } from "../../../ui/form";
+import { Button } from "../../../ui/button";
+import { lessonCreateFormSchema } from "../../../schemas/lessonsSchema";
+import type { CourseDetailed } from "../../../schemas/coursesSchema";
+import BasicParametersCard from "./BasicParametersCard";
+import WeeklyScheduleCard from "./WeeklySheduleCard";
+import SchedulePreviewCard from "./SchedulePreviewCard";
+import { useScheduleGenerator } from "./useScheduleGenerator";
+import type { GeneratedLesson, WeeklyPair } from "../../../types/schedule";
+import { useCreateLessons } from "./useCreateLessons";
 
 interface CreateLessonsFormProps {
   course: CourseDetailed;

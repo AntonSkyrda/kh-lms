@@ -28,7 +28,7 @@ function CourseTeacher({ course, user }: CourseDataBoxProps) {
 
 function CourseDataBox({ course, user }: CourseDataBoxProps) {
   return (
-    <article className="border-accent text-accent-foreground space-y-16 overflow-hidden rounded-md border-2 text-base shadow-md">
+    <article className="border-accent text-accent-foreground space-y-8 overflow-hidden rounded-md border-2 text-base shadow-md">
       <header className="flex items-center justify-between px-16 py-8 font-medium">
         <div className="flex flex-row items-baseline gap-8">
           <Heading as="h4">Курс:</Heading>

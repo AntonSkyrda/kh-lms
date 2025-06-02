@@ -19,6 +19,9 @@ class ApiLessons extends ApiBase {
       lessonsResponseSchema,
     );
 
+  public getLesson = async (id: number) =>
+    await this.get(`${this.BASE_PATH}${id}`, lessonSchema);
+
   public createLesson = async (
     lesson: Omit<GeneratedLesson, "extendedValues">,
   ) => await this.post(this.BASE_PATH, lesson, lessonSchema);

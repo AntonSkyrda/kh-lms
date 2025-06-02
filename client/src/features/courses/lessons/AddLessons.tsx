@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "../../../ui/dialog";
 import { buttonVariants } from "../../../ui/button";
-import CreateLessonsAutoForm from "../../schedule/CreateLessonAutoForm";
+import CreateLessonsAutoForm from "../../schedule/lessons/CreateLessonAutoForm";
 import type { CourseDetailed } from "../../../schemas/coursesSchema";
 import { useUser } from "../../../contexts/user/useUser";
 
