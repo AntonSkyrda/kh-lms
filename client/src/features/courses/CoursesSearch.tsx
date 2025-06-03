@@ -12,6 +12,7 @@ interface CoursesSearchParams {
   selectedItem?: CoursePlain | CourseDetailed;
   handleClear?: () => void;
   isModal?: boolean;
+  id?: string;
 }
 
 function CoursesSearch({
@@ -23,6 +24,7 @@ function CoursesSearch({
   selectedItem,
   handleClear,
   isModal = false,
+  id,
 }: CoursesSearchParams) {
   return (
     <SearchBar
@@ -30,6 +32,7 @@ function CoursesSearch({
       isLoading={isLoading}
       onValueChange={setSearchStr}
       isModal={isModal}
+      id={id}
     >
       <div className="relative">
         <SearchBar.Input

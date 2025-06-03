@@ -8,14 +8,19 @@ export function useLessons(
   courseId?: number,
   groupId?: number,
 ) {
+  const queryKey = ["lessons", dateFrom, dateTo, courseId, groupId];
+
   const {
     isLoading,
     data: lessons,
     error: lessonsError,
+    refetch,
   } = useQuery<Lesson[]>({
-    queryKey: ["lessons", dateFrom, dateTo, courseId, groupId],
+    queryKey,
     queryFn: () => ApiLessons.getLessons(dateFrom, dateTo, courseId, groupId),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
-  return { isLoading, lessons, lessonsError };
+  return { isLoading, lessons, lessonsError, refetch };
 }

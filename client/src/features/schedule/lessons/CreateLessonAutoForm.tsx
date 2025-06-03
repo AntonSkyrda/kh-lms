@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "../../../ui/form";
 import { Button } from "../../../ui/button";
-import { lessonCreateFormSchema } from "../../../schemas/lessonsSchema";
+import { lessonsCreateFormSchema } from "../../../schemas/lessonsSchema";
 import BasicParametersCard from "./BasicParametersCard";
 import WeeklyScheduleCard from "./WeeklySheduleCard";
 import SchedulePreviewCard from "./SchedulePreviewCard";
@@ -30,7 +30,7 @@ function CreateLessonsAutoForm({ handleClose }: CreateLessonsFormProps) {
   const { addLessons, isPending } = useCreateLessons();
 
   const form = useForm({
-    resolver: zodResolver(lessonCreateFormSchema),
+    resolver: zodResolver(lessonsCreateFormSchema),
     defaultValues: {
       course: undefined,
       date: undefined,
@@ -116,7 +116,7 @@ function CreateLessonsAutoForm({ handleClose }: CreateLessonsFormProps) {
 
   const handleCourseSelect = (courseId: number) => {
     setSelectedCourseId(courseId);
-    form.setValue("group", undefined);
+    form.resetField("group");
     setGeneratedLessons([]);
   };
 

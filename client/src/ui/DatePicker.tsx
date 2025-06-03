@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { uk } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
+import { uk as ua } from "react-day-picker/locale";
 
 import { cn } from "../lib/utils/cn";
 import { Button } from "./button";
@@ -12,9 +13,10 @@ interface DatePickerProps {
   date: Date | undefined;
   setDate: (value: Date | undefined) => void;
   disabled?: boolean;
+  id?: string;
 }
 
-export function DatePicker({ date, setDate, disabled }: DatePickerProps) {
+export function DatePicker({ date, setDate, disabled, id }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   function handleSelect(date: Date) {
     if (!date) {
@@ -29,6 +31,7 @@ export function DatePicker({ date, setDate, disabled }: DatePickerProps) {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           variant={"outline"}
           className={cn(
             "w-[280px] justify-start text-left font-normal",
@@ -50,6 +53,8 @@ export function DatePicker({ date, setDate, disabled }: DatePickerProps) {
           onSelect={handleSelect}
           disabled={disabled}
           required
+          locale={ua}
+          weekStartsOn={1}
         />
       </PopoverContent>
     </Popover>

@@ -50,15 +50,18 @@ export default class ApiBase {
   ): Promise<T> {
     const response = await this.axiosInstance
       .get(`${this.baseUrl}${url}`)
-      .catch(() => {
+      .catch((error) => {
+        if (error.response.status === 401) return;
         throw new Error(errorMessage);
       });
 
-    console.log(response);
+    // console.log(response);
 
-    const { success, data, error } = await schema.safeParseAsync(response.data);
+    if (!response) throw new Error(errorMessage);
 
-    console.log(success, error);
+    const { success, data } = await schema.safeParseAsync(response.data);
+
+    // console.log(success, error);
 
     if (!success) throw new Error(errorMessage);
 

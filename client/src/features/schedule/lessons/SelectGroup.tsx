@@ -22,11 +22,11 @@ function SelectGroup({
 }: SelectGroupProps) {
   return (
     <Select
-      value={value?.toString()}
+      value={value && value !== 0 ? value.toString() : ""}
       onValueChange={(val) => onValueChange(Number(val))}
       disabled={disabled}
     >
-      <SelectTrigger>
+      <SelectTrigger id="select-group">
         <SelectValue placeholder="Виберіть групу" />
       </SelectTrigger>
       <SelectContent>

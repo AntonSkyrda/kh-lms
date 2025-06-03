@@ -16,17 +16,20 @@ type PairObject = {
 interface SelectPairProps {
   onValueChange: (pair: PairObject | undefined) => void;
   value?: PairObject;
+  id?: string;
 }
 
-function SelectPair({ onValueChange, value }: SelectPairProps) {
+function SelectPair({ onValueChange, value, id }: SelectPairProps) {
   const handleValueChange = (selectedLabel: string) => {
-    const selectedPair = PAIRS.find((pair) => pair.label === selectedLabel);
-    onValueChange(selectedPair);
+    if (selectedLabel) {
+      const selectedPair = PAIRS.find((pair) => pair.label === selectedLabel);
+      onValueChange(selectedPair);
+    }
   };
 
   return (
-    <Select onValueChange={handleValueChange} value={value?.label}>
-      <SelectTrigger>
+    <Select onValueChange={handleValueChange} value={value?.label || ""}>
+      <SelectTrigger id={id}>
         <SelectValue placeholder="Оберіть пару" />
       </SelectTrigger>
       <SelectContent>

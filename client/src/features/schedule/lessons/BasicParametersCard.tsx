@@ -51,7 +51,7 @@ function BasicParametersCard({
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
-          <FormLabel>Курс</FormLabel>
+          <FormLabel htmlFor="select-course">Курс</FormLabel>
           <CoursesSearch
             searchStr={searchStr}
             setSearchStr={setSearchStr}
@@ -60,6 +60,7 @@ function BasicParametersCard({
             isModal={true}
             handleSelect={onCourseSelect}
             selectedItem={selectedCourse!}
+            id="select-course"
           />
           <FormDescription className="mt-2">
             Виберіть курс для створення розкладу
@@ -74,9 +75,15 @@ function BasicParametersCard({
                 name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Дата початку курсу</FormLabel>
+                    <FormLabel htmlFor="select-start-date">
+                      Дата початку курсу
+                    </FormLabel>
                     <FormControl>
-                      <DatePicker date={field.value} setDate={field.onChange} />
+                      <DatePicker
+                        id="select-start-date"
+                        date={field.value}
+                        setDate={field.onChange}
+                      />
                     </FormControl>
                     <FormDescription>Дата першого заняття</FormDescription>
                     <FormMessage />
@@ -89,9 +96,15 @@ function BasicParametersCard({
                 name="endDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Дата закінчення (необов'язково)</FormLabel>
+                    <FormLabel htmlFor="select-end-date">
+                      Дата закінчення (необов'язково)
+                    </FormLabel>
                     <FormControl>
-                      <DatePicker date={field.value} setDate={field.onChange} />
+                      <DatePicker
+                        id="select-end-date"
+                        date={field.value}
+                        setDate={field.onChange}
+                      />
                     </FormControl>
                     <FormDescription>
                       Максимальна дата проведення занять
@@ -107,7 +120,7 @@ function BasicParametersCard({
               name="group"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Група</FormLabel>
+                  <FormLabel htmlFor="select-group">Група</FormLabel>
                   <FormControl>
                     <SelectGroup
                       value={field.value}

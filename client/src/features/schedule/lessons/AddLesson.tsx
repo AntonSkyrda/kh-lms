@@ -13,6 +13,8 @@ import { buttonVariants } from "../../../ui/button";
 import CreateLessonsAutoForm from "./CreateLessonAutoForm";
 import { useUser } from "../../../contexts/user/useUser";
 import { cn } from "../../../lib/utils/cn";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../ui/tabs";
+import CreateSingleLessonForm from "./CreateSingleLessonForm";
 
 function AddLesson() {
   const { user } = useUser();
@@ -39,8 +41,18 @@ function AddLesson() {
             Створіть розклад для цього курсу
           </DialogDescription>
         </DialogHeader>
-
-        <CreateLessonsAutoForm handleClose={() => setIsOpen(false)} />
+        <Tabs defaultValue="auto">
+          <TabsList>
+            <TabsTrigger value="single">В ручну</TabsTrigger>
+            <TabsTrigger value="auto">Автоматично</TabsTrigger>
+          </TabsList>
+          <TabsContent value="single">
+            <CreateSingleLessonForm handleClose={() => setIsOpen(false)} />
+          </TabsContent>
+          <TabsContent value="auto">
+            <CreateLessonsAutoForm handleClose={() => setIsOpen(false)} />
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );

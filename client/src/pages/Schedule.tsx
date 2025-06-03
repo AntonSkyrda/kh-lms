@@ -37,7 +37,6 @@ function Schedule() {
   );
 
   const handleDatesSet = useCallback((dateInfo: DatesSetArg) => {
-    console.log(dateInfo);
     setDateRange({
       start: dateInfo.start,
       end: dateInfo.end,
