@@ -66,15 +66,20 @@ export const userAddFormSchema = baseUserFormSchema.refine(roleRefinement, {
 
 export type UserAddFormValues = z.infer<typeof userAddFormSchema>;
 
-export const userUpdateFormSchema = baseUserFormSchema.partial().refine(
-  (data) => {
-    if (data.is_teacher !== undefined && data.is_student !== undefined) {
-      return roleRefinement(data);
-    }
-    return true;
-  },
-  {
-    message: "Ви повинні обрати одну роль: або вчитель, або студент",
-    path: ["role"],
-  },
-);
+export const userUpdateFormSchema = baseUserFormSchema
+  .omit({ password: true })
+  .partial()
+  .refine(
+    (data) => {
+      if (data.is_teacher !== undefined && data.is_student !== undefined) {
+        return roleRefinement(data);
+      }
+      return true;
+    },
+    {
+      message: "Ви повинні обрати одну роль: або вчитель, або студент",
+      path: ["role"],
+    },
+  );
+
+export type UserUpdateFormValues = z.infer<typeof userUpdateFormSchema>;

@@ -24,7 +24,7 @@ import {
   SidebarSeparator,
 } from "./Sidebar";
 import { useCurrentUser } from "../features/users/useCurrentUser";
-import ShortUser from "../features/users/ShortUser";
+import ShortUser from "../features/profile/ShortUser";
 import ToggleTheme from "./ToggleTheme";
 
 const items = [

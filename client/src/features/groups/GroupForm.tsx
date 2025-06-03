@@ -10,14 +10,17 @@ import {
   FormLabel,
   FormMessage,
 } from "../../ui/form";
-import { groupFormSchema } from "../../schemas/formsSchemas";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { useAddGroup } from "./useAddGroup";
 import Spinner from "../../ui/Spinner";
 import { useUpdateGroup } from "./useUpdateGroup";
 import { getChangedFields } from "../../lib/utils/getChangedFields";
-import type { GroupFormValues, GroupPlain } from "../../schemas/groupsSchema";
+import {
+  groupFormSchema,
+  type GroupFormValues,
+  type GroupPlain,
+} from "../../schemas/groupsSchema";
 
 interface CourseFormProps {
   isOpen?: boolean;

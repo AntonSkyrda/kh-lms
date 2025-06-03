@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
-import ApiUsers from "../../lib/services/apiUsers";
 import toast from "react-hot-toast";
-import { userAddFormSchema } from "../../schemas/formsSchemas";
+
+import ApiUsers from "../../lib/services/apiUsers";
+import type { UserAddFormValues } from "../../schemas/usersSchema";
 
 const userTypes = {
   is_student: "Студента",
@@ -20,7 +20,6 @@ function whoIsUser(
   if (is_superuser) return userTypes["is_superuser"];
 }
 
-type UpdateData = z.infer<typeof userAddFormSchema>;
 export function useAddUser() {
   const queryClient = useQueryClient();
   const {
@@ -28,7 +27,7 @@ export function useAddUser() {
     isPending,
     error: addUserError,
   } = useMutation({
-    mutationFn: (data: UpdateData) => ApiUsers.add(data),
+    mutationFn: (data: UserAddFormValues) => ApiUsers.add(data),
     onSuccess: (user) => {
       toast.success(
         `${whoIsUser(user.is_student, user.is_teacher)} ${user.first_name} успішно створено`,

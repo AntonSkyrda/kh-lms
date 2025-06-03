@@ -12,7 +12,7 @@ import {
 } from "../../ui/Sidebar";
 import { NavLink } from "react-router-dom";
 import type { User } from "../../schemas/usersSchema";
-import { useLogout } from "./useLogout";
+import { useLogout } from "../auth/useLogout";
 
 interface ShortUserProps {
   user: User;
@@ -35,7 +35,7 @@ function ShortUser({ user }: ShortUserProps) {
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent side="right" className="w-32">
-            <NavLink to="/account">
+            <NavLink to="/profile">
               <DropdownMenuItem className="cursor-pointer">
                 Профіль
               </DropdownMenuItem>

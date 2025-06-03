@@ -1,4 +1,4 @@
-import AccountForm from "../features/account/AccountForm";
+import AccountForm from "../features/profile/AccountForm";
 import Heading from "../ui/Heading";
 
 function Account() {
