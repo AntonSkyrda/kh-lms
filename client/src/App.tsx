@@ -10,11 +10,9 @@ import Home from "./pages/Home";
 import Courses from "./pages/Courses";
 import Groups from "./pages/Groups";
 import Homeworks from "./pages/Homeworks";
-// import Tasks from "./pages/Tasks";
 import Users from "./pages/Users";
 import Course from "./pages/Course";
-// import { AuthProvider } from "./contexts/Auth/AuthProvider";
-// import Account from "./pages/Account";
+import Profile from "./pages/Profile";
 import ProtectedAdminRoute from "./ui/ProtectedAdminRoute";
 import Settings from "./pages/Settings";
 import Schedule from "./pages/Schedule";
@@ -48,7 +46,7 @@ function App() {
             <Route path="groups" element={<Groups />} />
             <Route path="schedule" element={<Schedule />} />
             <Route path="homeworks" element={<Homeworks />} />
-            {/* <Route path="account" element={<Account />} /> */}
+            <Route path="profile" element={<Profile />} />
             <Route path="lms-admin-route" element={<ProtectedAdminRoute />}>
               <Route path="users" element={<Users />} />
               <Route path="settings" element={<Settings />} />

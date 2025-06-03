@@ -10,19 +10,21 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../../ui/input";
 
-import { z } from "zod";
 import { Checkbox } from "../../ui/checkbox";
 import { Button } from "../../ui/button";
 import { useAddUser } from "./useAddUser";
 import Spinner from "../../ui/Spinner";
-import { userAddFormSchema } from "../../schemas/formsSchemas";
+import {
+  userAddFormSchema,
+  type UserAddFormValues,
+} from "../../schemas/usersSchema";
 
 function AddUserForm({
   handleClose,
 }: {
   handleClose: (isOpen: boolean) => void;
 }) {
-  const form = useForm<z.infer<typeof userAddFormSchema>>({
+  const form = useForm<UserAddFormValues>({
     resolver: zodResolver(userAddFormSchema),
     defaultValues: {
       email: "",

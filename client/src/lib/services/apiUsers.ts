@@ -4,7 +4,11 @@ import {
   userSchema,
 } from "../../schemas/usersSchema";
 import ApiBase from "./apiBase";
-import type { User, UserAddFormValues } from "../../schemas/usersSchema";
+import type {
+  User,
+  UserAddFormValues,
+  UserUpdateFormValues,
+} from "../../schemas/usersSchema";
 import type { GetListParams } from "../../types/paramsTypes";
 import { ITEMS_PER_PAGE } from "../consts";
 
@@ -40,6 +44,16 @@ class ApiUsers extends ApiBase {
       userData,
       userDetailedSchema,
       "Не вдалось створити користувача..",
+    );
+
+  public updateCurrentUser = async (
+    userId: number,
+    userData: UserUpdateFormValues,
+  ) =>
+    await this.patch(
+      `${this.BASE_PATH}${userId}`,
+      userData,
+      userDetailedSchema,
     );
 }
 
