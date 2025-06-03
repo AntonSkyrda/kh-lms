@@ -9,6 +9,7 @@ import PageNotFound from "./pages/PageNotFound";
 import Home from "./pages/Home";
 import Courses from "./pages/Courses";
 import Groups from "./pages/Groups";
+import Homeworks from "./pages/Homeworks";
 // import Tasks from "./pages/Tasks";
 import Users from "./pages/Users";
 import Course from "./pages/Course";
@@ -46,7 +47,7 @@ function App() {
             <Route path="courses/:courseId" element={<Course />} />
             <Route path="groups" element={<Groups />} />
             <Route path="schedule" element={<Schedule />} />
-            {/* <Route path="tasks" element={<Tasks />} /> */}
+            <Route path="homeworks" element={<Homeworks />} />
             {/* <Route path="account" element={<Account />} /> */}
             <Route path="lms-admin-route" element={<ProtectedAdminRoute />}>
               <Route path="users" element={<Users />} />

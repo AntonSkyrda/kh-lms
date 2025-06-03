@@ -26,7 +26,12 @@ export function useScheduleGenerator({
 }: UseScheduleGeneratorProps) {
   const generateLessons = useCallback(
     (startDate: Date, endDate?: Date): GeneratedLesson[] => {
-      if (!startDate || !weeklyPairs.length || !course.programs.length) {
+      if (
+        !startDate ||
+        !weeklyPairs.length ||
+        !course ||
+        !course.programs.length
+      ) {
         return [];
       }
 
@@ -125,7 +130,7 @@ export function useScheduleGenerator({
 
       return lessons;
     },
-    [course.programs, weeklyPairs, group],
+    [course, weeklyPairs, group],
   );
 
   return { generateLessons };

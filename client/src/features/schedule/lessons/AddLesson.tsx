@@ -10,15 +10,13 @@ import {
   DialogTrigger,
 } from "../../../ui/dialog";
 import { buttonVariants } from "../../../ui/button";
-import CreateLessonsAutoForm from "../../schedule/CreateLessonAutoForm";
-import type { CourseDetailed } from "../../../schemas/coursesSchema";
+import CreateLessonsAutoForm from "./CreateLessonAutoForm";
 import { useUser } from "../../../contexts/user/useUser";
+import { cn } from "../../../lib/utils/cn";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../ui/tabs";
+import CreateSingleLessonForm from "./CreateSingleLessonForm";
 
-interface AddLessonsProps {
-  course: CourseDetailed;
-}
-
-function AddLessons({ course }: AddLessonsProps) {
+function AddLesson() {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,22 +24,15 @@ function AddLessons({ course }: AddLessonsProps) {
 
   if (!user || !allowedUsers.includes(user?.role)) return null;
 
-  function handleOpenChange(value: boolean) {
-    if (!course.teacher?.id) return;
-
-    setIsOpen(value);
-  }
-
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={(value) => setIsOpen(value)}>
       <DialogTrigger
-        className={buttonVariants({ variant: "outline" })}
-        disabled={!course.teacher?.id}
+        className={cn(buttonVariants({ variant: "default" }), "ml-auto")}
       >
         <span>
           <Plus />
         </span>
-        Створити Розклад
+        Додати урок
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
@@ -50,14 +41,21 @@ function AddLessons({ course }: AddLessonsProps) {
             Створіть розклад для цього курсу
           </DialogDescription>
         </DialogHeader>
-
-        <CreateLessonsAutoForm
-          course={course}
-          handleClose={() => setIsOpen(false)}
-        />
+        <Tabs defaultValue="auto">
+          <TabsList>
+            <TabsTrigger value="single">В ручну</TabsTrigger>
+            <TabsTrigger value="auto">Автоматично</TabsTrigger>
+          </TabsList>
+          <TabsContent value="single">
+            <CreateSingleLessonForm handleClose={() => setIsOpen(false)} />
+          </TabsContent>
+          <TabsContent value="auto">
+            <CreateLessonsAutoForm handleClose={() => setIsOpen(false)} />
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
 }
 
-export default AddLessons;
+export default AddLesson;

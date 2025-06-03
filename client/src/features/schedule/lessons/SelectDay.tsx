@@ -19,14 +19,19 @@ interface SelectDayProps {
 
 function SelectDay({ onValueChange, value }: SelectDayProps) {
   const handleValueChange = (selectedValue: string) => {
-    const dayValue = parseInt(selectedValue);
-    const selectedDay = DAYS_OF_WEEK.find((day) => day.value === dayValue);
-    onValueChange(selectedDay);
+    if (selectedValue) {
+      const dayValue = parseInt(selectedValue);
+      const selectedDay = DAYS_OF_WEEK.find((day) => day.value === dayValue);
+      onValueChange(selectedDay);
+    }
   };
 
   return (
-    <Select onValueChange={handleValueChange} value={value?.value.toString()}>
-      <SelectTrigger>
+    <Select
+      onValueChange={handleValueChange}
+      value={value?.value.toString() || ""}
+    >
+      <SelectTrigger id="select-pair">
         <SelectValue placeholder="Оберіть день" />
       </SelectTrigger>
       <SelectContent>

@@ -12,11 +12,12 @@ export function useCreateLessons() {
     error: addLessonsError,
   } = useMutation({
     mutationFn: (data: Omit<GeneratedLesson, "extendedValues">[]) =>
-      Promise.all([data.map((lesson) => ApiLessons.createLesson(lesson))]),
+      Promise.all(data.map((lesson) => ApiLessons.createLesson(lesson))),
     onSuccess: () => {
       toast.success(`Розклад успішно створено!`);
-      queryClient.refetchQueries({ queryKey: ["courses"] });
-      queryClient.refetchQueries({ queryKey: ["lessons"] });
+      queryClient.refetchQueries({
+        predicate: (query) => query.queryKey[0] === "lessons",
+      });
     },
     onError: (error) => {
       toast.error(error.message);

@@ -1,4 +1,3 @@
-import type { GroupPlain } from "../../../schemas/groupsSchema";
 import {
   Select,
   SelectContent,
@@ -6,25 +5,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../ui/select";
+import type { GroupPlain } from "../../../schemas/groupsSchema";
 
 interface SelectGroupProps {
-  onValueChange: (id: number | undefined) => void;
-  groups: GroupPlain[];
   value?: number;
+  onValueChange: (value: number) => void;
+  groups: GroupPlain[];
+  disabled?: boolean;
 }
 
-function SelectGroup({ onValueChange, groups }: SelectGroupProps) {
+function SelectGroup({
+  value,
+  onValueChange,
+  groups,
+  disabled,
+}: SelectGroupProps) {
   return (
     <Select
-      onValueChange={(value) => onValueChange(+value)}
-      // value={String(value && "")}
+      value={value && value !== 0 ? value.toString() : ""}
+      onValueChange={(val) => onValueChange(Number(val))}
+      disabled={disabled}
     >
-      <SelectTrigger>
-        <SelectValue placeholder="Оберіть групу" />
+      <SelectTrigger id="select-group">
+        <SelectValue placeholder="Виберіть групу" />
       </SelectTrigger>
       <SelectContent>
         {groups.map((group) => (
-          <SelectItem key={group.id} value={String(group.id)}>
+          <SelectItem key={group.id} value={group.id.toString()}>
             {group.name}
           </SelectItem>
         ))}

@@ -2,36 +2,37 @@ import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Form } from "../../ui/form";
-import { Button } from "../../ui/button";
-import { lessonCreateFormSchema } from "../../schemas/lessonsSchema";
-import type { CourseDetailed } from "../../schemas/coursesSchema";
-import BasicParametersCard from "./lessons/BasicParametersCard";
-import WeeklyScheduleCard from "./lessons/WeeklySheduleCard";
-import SchedulePreviewCard from "./lessons/SchedulePreviewCard";
-import { useScheduleGenerator } from "./lessons/useScheduleGenerator";
-import type { GeneratedLesson, WeeklyPair } from "../../types/schedule";
-import { useCreateLessons } from "./lessons/useCreateLessons";
+import { Form } from "../../../ui/form";
+import { Button } from "../../../ui/button";
+import { lessonsCreateFormSchema } from "../../../schemas/lessonsSchema";
+import BasicParametersCard from "./BasicParametersCard";
+import WeeklyScheduleCard from "./WeeklySheduleCard";
+import SchedulePreviewCard from "./SchedulePreviewCard";
+import { useScheduleGenerator } from "./useScheduleGenerator";
+import type { GeneratedLesson, WeeklyPair } from "../../../types/schedule";
+import { useCreateLessons } from "./useCreateLessons";
+import { useCourse } from "../../courses/useCourse";
+import type { CourseDetailed } from "../../../schemas/coursesSchema";
 
 interface CreateLessonsFormProps {
-  course: CourseDetailed;
   handleClose: () => void;
 }
 
-function CreateLessonsAutoForm({
-  course,
-  handleClose,
-}: CreateLessonsFormProps) {
+function CreateLessonsAutoForm({ handleClose }: CreateLessonsFormProps) {
   const [weeklyPairs, setWeeklyPairs] = useState<WeeklyPair[]>([]);
   const [generatedLessons, setGeneratedLessons] = useState<GeneratedLesson[]>(
     [],
   );
+  const [selectedCourseId, setSelectedCourseId] = useState<
+    number | undefined
+  >();
 
   const { addLessons, isPending } = useCreateLessons();
 
   const form = useForm({
-    resolver: zodResolver(lessonCreateFormSchema),
+    resolver: zodResolver(lessonsCreateFormSchema),
     defaultValues: {
+      course: undefined,
       date: undefined,
       group: undefined,
       endDate: undefined,
@@ -40,11 +41,20 @@ function CreateLessonsAutoForm({
 
   const watchedValues = form.watch();
 
+  const { course: selectedCourse, isLoading: isLoadingCourse } =
+    useCourse(selectedCourseId);
+
   const { generateLessons } = useScheduleGenerator({
-    course,
+    course: selectedCourse as CourseDetailed,
     weeklyPairs,
     group: watchedValues.group,
   });
+
+  useEffect(() => {
+    if (selectedCourse && selectedCourseId) {
+      form.setValue("course", selectedCourseId);
+    }
+  }, [selectedCourse, selectedCourseId, form]);
 
   const addWeeklyPair = useCallback(() => {
     const newPair: WeeklyPair = {
@@ -96,7 +106,7 @@ function CreateLessonsAutoForm({
 
   const onSubmit = () => {
     const lessonsToSend = generatedLessons.map((lesson) => {
-      const { extendedValues, ...formatedLesson } = lesson;
+      const { extendedValues: _, ...formatedLesson } = lesson;
 
       return formatedLesson;
     });
@@ -104,20 +114,36 @@ function CreateLessonsAutoForm({
     handleClose?.();
   };
 
+  const handleCourseSelect = (courseId: number) => {
+    setSelectedCourseId(courseId);
+    form.resetField("group");
+    setGeneratedLessons([]);
+  };
+
   return (
     <div className="space-y-8">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
-          <BasicParametersCard control={form.control} groups={course.groups} />
-
-          <WeeklyScheduleCard
-            weeklyPairs={weeklyPairs}
-            onAddPair={addWeeklyPair}
-            onRemovePair={removeWeeklyPair}
-            onUpdatePair={updateWeeklyPair}
+          <BasicParametersCard
+            control={form.control}
+            groups={selectedCourse?.groups || []}
+            selectedCourse={selectedCourse}
+            onCourseSelect={handleCourseSelect}
+            isLoadingCourse={isLoadingCourse}
           />
 
-          <SchedulePreviewCard generatedLessons={generatedLessons} />
+          {selectedCourse && (
+            <>
+              <WeeklyScheduleCard
+                weeklyPairs={weeklyPairs}
+                onAddPair={addWeeklyPair}
+                onRemovePair={removeWeeklyPair}
+                onUpdatePair={updateWeeklyPair}
+              />
+
+              <SchedulePreviewCard generatedLessons={generatedLessons} />
+            </>
+          )}
 
           <div className="flex justify-end gap-4">
             <Button

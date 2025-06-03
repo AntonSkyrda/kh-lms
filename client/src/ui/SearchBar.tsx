@@ -30,6 +30,7 @@ interface SearchBarContextProps {
   isLoading?: boolean;
   isModal: boolean;
   onValueChange: (value: string) => void;
+  id?: string;
 }
 
 const SearchBarContext = createContext<SearchBarContextProps | undefined>(
@@ -52,6 +53,7 @@ interface SearchBarProps {
   isLoading?: boolean;
   children: ReactNode;
   isModal?: boolean;
+  id?: string;
 }
 
 function SearchBar({
@@ -60,6 +62,7 @@ function SearchBar({
   isLoading,
   children,
   isModal = false,
+  id,
 }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setOpen] = useState(false);
@@ -96,6 +99,7 @@ function SearchBar({
     isLoading,
     onValueChange,
     isModal,
+    id,
   };
 
   return (
@@ -118,7 +122,7 @@ interface SearchBarInputProps {
 }
 
 function SearchInput({ placeholder = "Пошук..." }: SearchBarInputProps) {
-  const { inputRef, value, onValueChange, setOpen } = useSearchBarContext();
+  const { inputRef, value, onValueChange, setOpen, id } = useSearchBarContext();
 
   return (
     <div>
@@ -129,6 +133,7 @@ function SearchInput({ placeholder = "Пошук..." }: SearchBarInputProps) {
         onFocus={() => setOpen(true)}
         placeholder={placeholder}
         className="text-base"
+        id={id}
       />
     </div>
   );
