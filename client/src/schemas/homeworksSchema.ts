@@ -29,7 +29,7 @@ export const createHomeworkFormSchema = z.object({
   description: z
     .string()
     .trim()
-    .min(10, "Опис має містити мінімум 5 символів")
+    .min(10, "Опис має містити мінімум 10 символів")
     .max(500, "Опис не може перевищувати 100 символів"),
   due_date: z.date({ required_error: "Це поле обовʼязкове!" }),
 });
