@@ -25,6 +25,12 @@ class ApiLessons extends ApiBase {
   public createLesson = async (
     lesson: Omit<GeneratedLesson, "extendedValues">,
   ) => await this.post(this.BASE_PATH, lesson, lessonSchema);
+
+  public deleteLesson = async (lessonId: number) =>
+    await this.delete(
+      `${this.BASE_PATH}${lessonId}/`,
+      "Не вдалось видалити урок",
+    );
 }
 
 export default new ApiLessons();

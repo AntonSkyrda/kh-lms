@@ -6,7 +6,6 @@ import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import ukLocale from "@fullcalendar/core/locales/uk";
 import type {
-  EventClickArg,
   EventHoveringArg,
   EventContentArg,
   DatesSetArg,
@@ -47,7 +46,7 @@ function ScheduleCalendar({
       },
     };
   });
-  
+
   const handleEventMouseEnter = (info: EventHoveringArg) => {
     const props = info.event.extendedProps as CustomExtendedProps;
     const startTime =
@@ -64,11 +63,6 @@ function ScheduleCalendar({
     info.el.title = `${props.pairLabel} (${startTime} - ${endTime})\n${info.event.title}\n${props.course}\n${props.teacher}\nГрупа: ${props.group}`;
   };
 
-  const handleEventClick = (info: EventClickArg) => {
-    const props = info.event.extendedProps as CustomExtendedProps;
-    console.log("Clicked lesson:", props.lesson);
-  };
-
   return (
     <Dialog>
       <FullCalendar
@@ -83,7 +77,6 @@ function ScheduleCalendar({
         firstDay={1}
         eventOverlap={false}
         events={events}
-        eventClick={handleEventClick}
         eventContent={(eventInfo: EventContentArg) => (
           <EventContent eventInfo={eventInfo} />
         )}
@@ -101,7 +94,7 @@ function ScheduleCalendar({
         eventMouseEnter={handleEventMouseEnter}
         expandRows={true}
         stickyHeaderDates={true}
-        dayMaxEvents={2}
+        dayMaxEvents={3}
         moreLinkClick="popover"
         dayMaxEventRows={3}
         eventDisplay="block"

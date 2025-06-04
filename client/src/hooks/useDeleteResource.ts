@@ -6,15 +6,20 @@ interface IuseDeleteResource<T> {
   mutationFn: (id: number) => Promise<T>;
   successMessage: string;
   paramName: string;
+  navigateTo?: string;
+  onDelete?: () => void;
 }
 
 export function useDeleteResource<T>({
   mutationFn,
   successMessage,
   paramName,
+  navigateTo,
+  onDelete,
 }: IuseDeleteResource<T>) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const navigateToUrl = navigateTo || paramName;
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: (id: number) => {
@@ -27,8 +32,10 @@ export function useDeleteResource<T>({
     },
     onSuccess: () => {
       toast.success(successMessage);
-      queryClient.invalidateQueries({ queryKey: [paramName] });
-      navigate(`/${paramName}`);
+      queryClient.refetchQueries({
+        predicate: (query) => query.queryKey[0] === paramName,
+      });
+      onDelete ? onDelete?.() : navigate(`/${navigateToUrl}`);
     },
     onError: (error) => {
       toast.error(error.message);
