@@ -1,4 +1,7 @@
 import { type FieldValues, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import generator from "generate-password-browser";
+
 import {
   Form,
   FormControl,
@@ -7,9 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../../ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../../ui/input";
-
 import { Checkbox } from "../../ui/checkbox";
 import { Button } from "../../ui/button";
 import { useAddUser } from "./useAddUser";
@@ -37,13 +38,6 @@ function AddUserForm({
     },
   });
 
-  // useEffect(
-  //   function () {
-  //     if (form.formState.errors) console.log(form.formState.errors);
-  //   },
-  //   [form.formState.errors],
-  // );
-
   const { addUser, isPending: isLoading } = useAddUser();
 
   function onSubmit(data: FieldValues) {
@@ -51,6 +45,15 @@ function AddUserForm({
     if (!success) return;
     addUser(userData);
     handleClose(false);
+  }
+
+  function handleGeneratePassword() {
+    const password = generator.generate({
+      length: 10,
+      numbers: true,
+    });
+
+    form.setValue("password", password);
   }
 
   return (
@@ -84,13 +87,22 @@ function AddUserForm({
               <FormItem>
                 <FormLabel htmlFor="email">Пароль</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    id="password"
-                    autoComplete="password"
-                    disabled={isLoading}
-                    {...field}
-                  />
+                  <div className="flex flex-row items-center gap-5">
+                    <Input
+                      type="password"
+                      id="password"
+                      autoComplete="password"
+                      disabled={isLoading}
+                      {...field}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleGeneratePassword}
+                    >
+                      Створити пароль
+                    </Button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -187,36 +199,6 @@ function AddUserForm({
               </FormItem>
             )}
           />
-          {/* <FormField
-            name="is_superuser"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center gap-2">
-                <FormControl>
-                  <Checkbox
-                    id="is_superuser"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <FormLabel htmlFor="is_superuser">Адміністратор</FormLabel>
-              </FormItem>
-            )}
-          /> */}
-          {/* <FormField
-            name="is_active"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center gap-2">
-                <FormControl>
-                  <Checkbox
-                    id="is_active"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <FormLabel htmlFor="is_active">Активний</FormLabel>
-              </FormItem>
-            )}
-          /> */}
         </fieldset>
         <div className="row-span-2 space-y-3">
           <FormField
