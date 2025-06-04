@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import {
   DialogContent,
   DialogDescription,
@@ -7,24 +9,23 @@ import {
 import SpinnerMini from "../../../ui/SpinnerMini";
 import { useLesson } from "./useLesson";
 import type { CustomExtendedProps } from "../../../types/eventTypes";
-import { Link } from "react-router-dom";
-import { Button } from "../../../ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../../ui/card";
-import CreateHomeworkForm from "../../homeworks/CreateHomeworkForm";
 import Empty from "../../../ui/Empty";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../ui/tabs";
+import LessonOverview from "./LessonOverview";
+import LessonAttendance from "./LessonAttendance";
+import LessonHomework from "./LessonHomework";
 
 interface LessonDetailedProps {
   lessonId: number;
   eventProps: CustomExtendedProps;
+  handleClose: () => void;
 }
 
-function LessonDetailed({ lessonId, eventProps }: LessonDetailedProps) {
+function LessonDetailed({
+  lessonId,
+  eventProps,
+  handleClose,
+}: LessonDetailedProps) {
   const { lesson, isLoading } = useLesson(lessonId);
 
   if (!lesson)
@@ -59,35 +60,22 @@ function LessonDetailed({ lessonId, eventProps }: LessonDetailedProps) {
               </Link>
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col gap-5">
-            <Card>
-              <CardHeader>
-                <CardTitle>Опис</CardTitle>
-              </CardHeader>
-            </Card>
-            <div>Посилання:</div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Почати пару</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-row gap-8">
-                <Button>Онлайн</Button>
-                <Button variant="outline">Офлайн</Button>
-              </CardContent>
-            </Card>
-            <div>Присутність:</div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Домашнє завдання</CardTitle>
-                <CardDescription>
-                  Додайте домашнє завдання для студентів до цього заняття
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <CreateHomeworkForm lessonId={lesson?.id} />
-              </CardContent>
-            </Card>
-          </div>
+          <Tabs defaultValue="overview" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="overview">Огляд</TabsTrigger>
+              <TabsTrigger value="attendance">Присутність</TabsTrigger>
+              <TabsTrigger value="homework">Завдання</TabsTrigger>
+            </TabsList>
+            <TabsContent value="overview">
+              <LessonOverview lesson={lesson} handleClose={handleClose} />
+            </TabsContent>
+            <TabsContent value="attendance">
+              <LessonAttendance />
+            </TabsContent>
+            <TabsContent value="homework">
+              <LessonHomework lesson={lesson} />
+            </TabsContent>
+          </Tabs>
         </>
       )}
     </DialogContent>
