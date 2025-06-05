@@ -141,7 +141,7 @@ class ApiCourses extends ApiBase {
 
     return await this.patch(
       `${this.BASE_PATH}${courseId}/`,
-      { groups_ids: updatedGroups },
+      { group_ids: updatedGroups },
       courseDetailedSchema,
       "Не вдалось видалити групу з курсу",
     );
