@@ -29,11 +29,6 @@ class HomeworkSerializer(serializers.ModelSerializer):
 
 
 class HomeworkSubmissionSerializer(serializers.ModelSerializer):
-    student_id = serializers.PrimaryKeyRelatedField(
-        source="student",
-        queryset=User.objects.filter(is_student=True),
-        write_only=True,
-    )
     student = serializers.StringRelatedField(read_only=True)
     homework = serializers.StringRelatedField(read_only=True)
     homework_id = serializers.PrimaryKeyRelatedField(
