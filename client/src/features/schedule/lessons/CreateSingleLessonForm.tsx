@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
+import { CalendarPlus } from "lucide-react";
 
 import {
   Form,
@@ -23,7 +24,6 @@ import { useCourses } from "../../courses/useCourses";
 import { useCourse } from "../../courses/useCourse";
 import CoursesSearch from "../../courses/CoursesSearch";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
-import { CalendarPlus } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -54,7 +54,7 @@ function CreateSingleLessonForm({ handleClose }: CreateSingleLessonFormProps) {
     defaultValues: {
       group: undefined,
       program: undefined,
-      date: undefined,
+      date: new Date(),
       time: undefined,
     },
   });

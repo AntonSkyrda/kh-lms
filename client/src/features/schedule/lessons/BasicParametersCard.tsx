@@ -1,5 +1,6 @@
 import type { Control } from "react-hook-form";
 import { Calendar } from "lucide-react";
+import { useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
 import {
@@ -15,7 +16,6 @@ import SelectGroup from "./SelectGroup";
 import type { GroupPlain } from "../../../schemas/groupsSchema";
 import type { LessonsCreateFormValues } from "../../../schemas/lessonsSchema";
 import type { CourseDetailed } from "../../../schemas/coursesSchema";
-import { useState } from "react";
 import { useCourses } from "../../courses/useCourses";
 import CoursesSearch from "../../courses/CoursesSearch";
 
