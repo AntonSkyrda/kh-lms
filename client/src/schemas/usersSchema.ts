@@ -49,7 +49,7 @@ export const baseUserFormSchema = z.object({
   father_name: z
     .string()
     .trim()
-    .min(5, { message: "По-батькові має містити щонайменше 3 символи" }),
+    .min(5, { message: "По-батькові має містити щонайменше 5 символи" }),
   is_teacher: z.boolean(),
   is_student: z.boolean(),
   role: z.string().optional(),

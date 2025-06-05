@@ -33,7 +33,7 @@ function CreateLessonsAutoForm({ handleClose }: CreateLessonsFormProps) {
     resolver: zodResolver(lessonsCreateFormSchema),
     defaultValues: {
       course: undefined,
-      date: undefined,
+      date: new Date(),
       group: undefined,
       endDate: undefined,
     },

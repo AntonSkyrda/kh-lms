@@ -1,10 +1,10 @@
 import type { EventContentArg } from "@fullcalendar/core";
 import { Info } from "lucide-react";
+import { useState } from "react";
 
 import type { CustomExtendedProps } from "../../../types/eventTypes";
 import { Dialog, DialogTrigger } from "../../../ui/dialog";
 import LessonDetailed from "./LessonDetailed";
-import { useState } from "react";
 
 function getContentByViewType(
   viewType: string,
