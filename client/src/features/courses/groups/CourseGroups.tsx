@@ -34,7 +34,7 @@ function CourseGroups({ groupsFromCourse }: CourseGroupsProps) {
 
   const clear = useCallback(
     function () {
-      queryClient.removeQueries({ queryKey: ["groups"] });
+      queryClient.removeQueries({ queryKey: ["courses"] });
       setSearchStr("");
       setIsDialogOpen(false);
     },
