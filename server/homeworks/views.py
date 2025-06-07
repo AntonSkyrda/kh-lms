@@ -52,6 +52,25 @@ class HomeworkViewSet(ModelViewSet):
 class HomeworkSubmitView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request, homework_id):
+        user = self.request.user
+
+        if not hasattr(user, "student_profile"):
+            raise PermissionDenied("Only students can view their submission.")
+
+        try:
+            homework = Homework.objects.get(id=homework_id)
+        except Homework.DoesNotExist:
+            raise NotFound("Homework not found.")
+
+        try:
+            submission = HomeworkSubmission.objects.get(homework=homework, student=user)
+        except HomeworkSubmission.DoesNotExist:
+            raise NotFound("You have not submitted this homework yet.")
+
+        serializer = HomeworkSubmissionSerializer(submission)
+        return Response(serializer.data)
+
     def post(self, request, homework_id):
         user = request.user
 
@@ -113,6 +132,30 @@ class HomeworkSubmissionsListView(APIView):
 
 class HomeworkGradeView(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get(self, request, submission_id):
+        user = request.user
+
+        if not hasattr(user, "teacher_profile") and not user.is_superuser:
+            raise PermissionDenied("Only teachers or admins can view submission")
+
+        try:
+            submission = HomeworkSubmission.objects.select_related(
+                "homework__lessons__program__course", "student"
+            ).get(id=submission_id)
+        except HomeworkSubmission.DoesNotExist:
+            raise NotFound("Submission not found.")
+
+        if (
+            not user.is_superuser
+            and submission.homework.lessons.program.course.teacher != user
+        ):
+            raise PermissionDenied(
+                "You can only view submissions for your own courses."
+            )
+
+        serializer = HomeworkSubmissionSerializer(submission)
+        return Response(serializer.data)
 
     def patch(self, request, submission_id):
         user = request.user
