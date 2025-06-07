@@ -90,7 +90,7 @@ class HomeworkSubmitView(APIView):
 
         serializer = HomeworkSubmissionSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(homework=homework, student=user)
+            serializer.save(homework=homework, student=user, homework_id=homework_id)
             return Response(
                 serializer.data,
                 status=status.HTTP_201_CREATED,
@@ -141,14 +141,14 @@ class HomeworkGradeView(APIView):
 
         try:
             submission = HomeworkSubmission.objects.select_related(
-                "homework__lessons__program__course", "student"
+                "homework__lesson__program__course", "student"
             ).get(id=submission_id)
         except HomeworkSubmission.DoesNotExist:
             raise NotFound("Submission not found.")
 
         if (
             not user.is_superuser
-            and submission.homework.lessons.program.course.teacher != user
+            and submission.homework.lesson.program.course.teacher != user
         ):
             raise PermissionDenied(
                 "You can only view submissions for your own courses."

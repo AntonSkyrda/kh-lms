@@ -1,6 +1,8 @@
 import {
   homeworkDetailedSchema,
   homeworksResponseSchema,
+  homeworkSubmitStatusByStudentResponseSchema,
+  homeworkSubmitStatusByStudentSchema,
   type CreateHomeworkFormValues,
 } from "../../schemas/homeworksSchema";
 import type { GetListParams } from "../../types/paramsTypes";
@@ -34,6 +36,21 @@ class ApiHomeworks extends ApiBase {
       { lesson_id: lessonId, ...data },
       homeworkDetailedSchema,
       "Не вдалось створити завдання",
+    );
+
+  public getSubmitStatusByStudent = async (homeworkId: number) =>
+    await this.get(
+      `${this.BASE_PATH}${homeworkId}/submit/`,
+      homeworkSubmitStatusByStudentResponseSchema,
+      "Не вдалось отримати статус виконання домашнього завдання.",
+    );
+
+  public submitHomework = async (homeworkId: number, answer: string) =>
+    await this.post(
+      `${this.BASE_PATH}${homeworkId}/submit/`,
+      { answer },
+      homeworkSubmitStatusByStudentSchema,
+      "Не вдалось надати відповідь на домашнє завдання.",
     );
 }
 

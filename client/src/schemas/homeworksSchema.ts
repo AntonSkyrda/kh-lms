@@ -35,3 +35,37 @@ export const createHomeworkFormSchema = z.object({
 });
 
 export type CreateHomeworkFormValues = z.infer<typeof createHomeworkFormSchema>;
+
+export const homeworkSubmitStatusByStudentSchema = z.object({
+  id: z.number(),
+  homework: z.string(),
+  student_id: z.number(),
+  student: z.string(),
+  answer: z.string(),
+  submission_at: z.string(),
+  grade: z.number().min(1).nullable(),
+  feedback: z.string(),
+});
+
+export type HomeworkSubmitStatusByStudent = z.infer<
+  typeof homeworkSubmitStatusByStudentSchema
+>;
+
+export const homeworkSubmitStatusByStudentResponseSchema =
+  homeworkSubmitStatusByStudentSchema.optional();
+
+export type HomeworkSubmitStatusByStudentResponse = z.infer<
+  typeof homeworkSubmitStatusByStudentResponseSchema
+>;
+
+export const submitHomeworkFormForStudentSchema = z.object({
+  answer: z
+    .string()
+    .trim()
+    .min(1, "Ви мусите дати відповідь")
+    .max(500, "Відповідь не мусить перевищути 500 символів."),
+});
+
+export type SubmitFormForStudentValues = z.infer<
+  typeof submitHomeworkFormForStudentSchema
+>;
