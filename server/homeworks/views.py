@@ -6,7 +6,12 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.exceptions import PermissionDenied, NotFound
 
 from .models import Homework, HomeworkSubmission
-from .serializers import HomeworkSerializer, HomeworkSubmissionSerializer
+from .serializers import (
+    HomeworkSerializer,
+    HomeworkSubmissionSerializer,
+    HomeworkDetailStudentSerializer,
+    HomeworkDetailTeacherSerializer,
+)
 
 
 class HomeworkViewSet(ModelViewSet):
@@ -45,6 +50,22 @@ class HomeworkViewSet(ModelViewSet):
 
         serializer.save()
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if hasattr(request.user, "teacher_profile") or request.user.is_superuser:
+            serializer = HomeworkDetailTeacherSerializer(
+                instance, context={"request": request}
+            )
+        elif hasattr(request.user, "student_profile"):
+            serializer = HomeworkDetailStudentSerializer(
+                instance, context={"request": request}
+            )
+        else:
+            raise PermissionDenied("You do not have permission to view this homework.")
+
+        return Response(serializer.data)
+
     def perform_update(self, serializer):
         self.perform_create(serializer)
 
@@ -66,7 +87,7 @@ class HomeworkSubmitView(APIView):
         try:
             submission = HomeworkSubmission.objects.get(homework=homework, student=user)
         except HomeworkSubmission.DoesNotExist:
-            raise NotFound("You have not submitted this homework yet.")
+            return NotFound("You have not submitted this homework yet.")
 
         serializer = HomeworkSubmissionSerializer(submission)
         return Response(serializer.data)
@@ -90,7 +111,11 @@ class HomeworkSubmitView(APIView):
 
         serializer = HomeworkSubmissionSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(homework=homework, student=user, homework_id=homework_id)
+            serializer.save(
+                homework=homework,
+                student=user,
+                homework_id=homework_id,
+            )
             return Response(
                 serializer.data,
                 status=status.HTTP_201_CREATED,

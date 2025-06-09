@@ -1,4 +1,3 @@
-import { compareAsc } from "date-fns";
 import type { HomeworkPlain } from "../../schemas/homeworksSchema";
 import {
   AccordionContent,
@@ -6,20 +5,22 @@ import {
   AccordionTrigger,
 } from "../../ui/accordion";
 import HomeworkContent from "./HomeworkContent";
+import { isExpired } from "../../lib/utils/utils";
 
 interface HomeworkItemProps {
   homework: HomeworkPlain;
 }
 
 function HomeworkItem({ homework }: HomeworkItemProps) {
-  const isExpired =
-    compareAsc(new Date(), new Date(homework.due_date)) < 0 ? false : true;
-
   return (
     <AccordionItem value={String(homework.id)}>
-      <AccordionTrigger className="flex flex-row justify-between">
-        <p>{homework.lesson}</p> | <p>{homework.title}</p> |{" "}
-        <span className={isExpired ? "text-destructive" : "text-primary"}>
+      <AccordionTrigger>
+        <p>{homework.title}</p> |
+        <span
+          className={
+            isExpired(homework.due_date) ? "text-destructive" : "text-primary"
+          }
+        >
           {homework.due_date}
         </span>
       </AccordionTrigger>
