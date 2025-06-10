@@ -1,5 +1,5 @@
-import { useResource } from "../../hooks/useResource";
-import ApiHomeworks from "../../lib/services/apiHomeworks";
+import { useResource } from "../../../hooks/useResource";
+import ApiHomeworks from "../../../lib/services/apiHomeworks";
 
 export function useHomework(homeworkId: number) {
   const {

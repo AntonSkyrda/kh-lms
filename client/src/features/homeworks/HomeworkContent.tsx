@@ -5,7 +5,7 @@ import Empty from "../../ui/Empty";
 import SpinnerMini from "../../ui/SpinnerMini";
 import HomeworkSubmissionsList from "./HomeworkSubmissionsList";
 import HomeworkSubmitStatus from "./HomeworkSubmitStatus";
-import { useHomework } from "./useHomework";
+import { useHomework } from "./hooks/useHomework";
 
 interface HomeworkContentProps {
   homeworkId: number;
@@ -28,7 +28,7 @@ function HomeworkContent({ homeworkId }: HomeworkContentProps) {
       if (role === "teacher" || role === "admin") {
         const { groups } = homework ?? [];
         if (!groups || groups.length === 0) return null;
-        return <HomeworkSubmissionsList groups={groups} />;
+        return <HomeworkSubmissionsList homework={homework} />;
       }
       return null;
     }

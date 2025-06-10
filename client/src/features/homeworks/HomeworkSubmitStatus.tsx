@@ -12,7 +12,7 @@ import {
 } from "../../ui/dialog";
 import SpinnerMini from "../../ui/SpinnerMini";
 import SubmitHomework from "./SubmitHomework";
-import { useHomeworkStatus } from "./useHomeworkStatus";
+import { useHomeworkStatus } from "./hooks/useHomeworkStatus";
 
 interface HomeworkSubmitStatusProps {
   homework: HomeworkDetailed;

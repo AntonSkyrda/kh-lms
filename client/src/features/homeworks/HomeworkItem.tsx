@@ -15,14 +15,16 @@ function HomeworkItem({ homework }: HomeworkItemProps) {
   return (
     <AccordionItem value={String(homework.id)}>
       <AccordionTrigger>
-        <p>{homework.title}</p> |
-        <span
-          className={
-            isExpired(homework.due_date) ? "text-destructive" : "text-primary"
-          }
-        >
-          {homework.due_date}
-        </span>
+        <div className="flex flex-col items-start gap-3">
+          <p>{homework.title}</p>
+          <span
+            className={
+              isExpired(homework.due_date) ? "text-destructive" : "text-primary"
+            }
+          >
+            {homework.due_date}
+          </span>
+        </div>
       </AccordionTrigger>
       <AccordionContent>
         <HomeworkContent homeworkId={homework.id} />

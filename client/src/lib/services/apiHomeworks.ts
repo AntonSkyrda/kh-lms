@@ -2,8 +2,9 @@ import {
   homeworkDetailedSchema,
   homeworksResponseSchema,
   homeworkSubmitStatusByStudentResponseSchema,
-  homeworkSubmitStatusByStudentSchema,
+  homeworkSubmitStatus,
   type CreateHomeworkFormValues,
+  homeworkSubmissionsSchema,
 } from "../../schemas/homeworksSchema";
 import type { GetListParams } from "../../types/paramsTypes";
 import { ITEMS_PER_PAGE } from "../consts";
@@ -49,8 +50,15 @@ class ApiHomeworks extends ApiBase {
     await this.post(
       `${this.BASE_PATH}${homeworkId}/submit/`,
       { answer },
-      homeworkSubmitStatusByStudentSchema,
+      homeworkSubmitStatus,
       "Не вдалось надати відповідь на домашнє завдання.",
+    );
+
+  public getSubmission = async (homeworkId: number) =>
+    await this.get(
+      `${this.BASE_PATH}${homeworkId}/submissions/`,
+      homeworkSubmissionsSchema,
+      "Не вдалось отримати статуси домашнього завдання.",
     );
 }
 

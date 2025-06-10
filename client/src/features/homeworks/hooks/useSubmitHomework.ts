@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { SubmitFormForStudentValues } from "../../schemas/homeworksSchema";
-import ApiHomeworks from "../../lib/services/apiHomeworks";
+import type { SubmitFormForStudentValues } from "../../../schemas/homeworksSchema";
+import ApiHomeworks from "../../../lib/services/apiHomeworks";
 import toast from "react-hot-toast";
 
 interface SubmitData {

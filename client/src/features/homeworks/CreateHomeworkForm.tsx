@@ -14,7 +14,7 @@ import { Button } from "../../ui/button";
 import { createHomeworkFormSchema } from "../../schemas/homeworksSchema";
 import { DatePicker } from "../../ui/DatePicker";
 import { Input } from "../../ui/input";
-import { useAddHomework } from "./useAddHomework";
+import { useAddHomework } from "./hooks/useAddHomework";
 
 interface CreateHomeworkFormProps {
   lessonId: number;

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import ApiHomeworks from "../../lib/services/apiHomeworks";
+import ApiHomeworks from "../../../lib/services/apiHomeworks";
 
 export function useHomeworkStatus(homeworkId: number) {
   const {
