@@ -3,7 +3,6 @@ from rest_framework import serializers
 
 from lessons.models import Lesson
 from .models import Homework, HomeworkSubmission
-from groups.models import Group
 
 
 User = get_user_model()
@@ -56,7 +55,7 @@ class HomeworkDetailTeacherSerializer(serializers.ModelSerializer):
         for student in students:
             student_data.append(
                 {
-                    "id": student.id,
+                    "id": student.user.id,
                     "full_name": f"{student.user.first_name} {student.user.last_name} "
                     f"{student.user.father_name} {student.user.email}",
                     "submitted": HomeworkSubmission.objects.filter(
