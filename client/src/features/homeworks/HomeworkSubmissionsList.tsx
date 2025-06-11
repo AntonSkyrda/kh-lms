@@ -1,4 +1,3 @@
-import { EllipsisIcon, EllipsisVerticalIcon, Minus } from "lucide-react";
 import type { HomeworkDetailed } from "../../schemas/homeworksSchema";
 import SpinnerMini from "../../ui/SpinnerMini";
 import {
@@ -58,16 +57,10 @@ function HomeworkSubmissionsList({ homework }: HomeworkSubmissionsList) {
                   submission={homeworkSubmissions?.find(
                     (el) => el.student_id === student.id,
                   )}
-                  honework={homework}
+                  homework={homework}
+                  submissions={homeworkSubmissions}
                   student={student}
                 />
-                <>
-                  {console.log(
-                    homeworkSubmissions?.find(
-                      (el) => el.student_id === student.id,
-                    ),
-                  )}
-                </>
               </TableCell>
             </TableRow>
           )),

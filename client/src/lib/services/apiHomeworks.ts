@@ -5,6 +5,7 @@ import {
   homeworkSubmitStatus,
   type CreateHomeworkFormValues,
   homeworkSubmissionsSchema,
+  type HomeworkSubmissions,
 } from "../../schemas/homeworksSchema";
 import type { GetListParams } from "../../types/paramsTypes";
 import { ITEMS_PER_PAGE } from "../consts";
@@ -60,6 +61,28 @@ class ApiHomeworks extends ApiBase {
       homeworkSubmissionsSchema,
       "Не вдалось отримати статуси домашнього завдання.",
     );
+
+  public giveGrade = async (
+    homeworkId: number,
+    submissionId: number,
+    grade: number,
+    feedback: string,
+    submissions: HomeworkSubmissions,
+  ) => {
+    const updatedSubmissions = submissions.map((submission) => {
+      if (submission.id === submissionId) {
+        return { ...submission, grade: grade, feedback: feedback };
+      }
+      return submission;
+    });
+
+    return await this.patch(
+      `${this.BASE_PATH}${homeworkId}/submissions/`,
+      { updatedSubmissions },
+      homeworkSubmissionsSchema,
+      "Не вдалось поставити оцінку домашнього завданню студента.",
+    );
+  };
 }
 
 export default new ApiHomeworks();
