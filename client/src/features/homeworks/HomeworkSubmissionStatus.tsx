@@ -27,9 +27,8 @@ function HomeworkSubmissionStatus({
   submission,
   homework,
   student,
-  submissions,
 }: HomeworkSubmissionStatusProps) {
-  if (!submission || !submissions) return null;
+  if (!submission) return null;
 
   return (
     <Dialog>
@@ -57,11 +56,7 @@ function HomeworkSubmissionStatus({
                   <p>Здано:</p>
                   <span>{submission.submission_at}</span>
                 </div>
-                <SubmissionForm
-                  homeworkId={homework.id}
-                  submission={submission}
-                  submissions={submissions}
-                />
+                <SubmissionForm submission={submission} />
               </div>
             ) : (
               <p>

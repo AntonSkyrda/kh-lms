@@ -2,10 +2,9 @@ import {
   homeworkDetailedSchema,
   homeworksResponseSchema,
   homeworkSubmitStatusByStudentResponseSchema,
-  homeworkSubmitStatus,
   type CreateHomeworkFormValues,
   homeworkSubmissionsSchema,
-  type HomeworkSubmissions,
+  homeworkSubmitStatusSchema,
 } from "../../schemas/homeworksSchema";
 import type { GetListParams } from "../../types/paramsTypes";
 import { ITEMS_PER_PAGE } from "../consts";
@@ -51,7 +50,7 @@ class ApiHomeworks extends ApiBase {
     await this.post(
       `${this.BASE_PATH}${homeworkId}/submit/`,
       { answer },
-      homeworkSubmitStatus,
+      homeworkSubmitStatusSchema,
       "Не вдалось надати відповідь на домашнє завдання.",
     );
 
@@ -63,23 +62,14 @@ class ApiHomeworks extends ApiBase {
     );
 
   public giveGrade = async (
-    homeworkId: number,
     submissionId: number,
     grade: number,
     feedback: string,
-    submissions: HomeworkSubmissions,
   ) => {
-    const updatedSubmissions = submissions.map((submission) => {
-      if (submission.id === submissionId) {
-        return { ...submission, grade: grade, feedback: feedback };
-      }
-      return submission;
-    });
-
     return await this.patch(
-      `${this.BASE_PATH}${homeworkId}/submissions/`,
-      { updatedSubmissions },
-      homeworkSubmissionsSchema,
+      `${this.BASE_PATH}submissions/${submissionId}/grade/`,
+      { grade, feedback },
+      homeworkSubmitStatusSchema,
       "Не вдалось поставити оцінку домашнього завданню студента.",
     );
   };

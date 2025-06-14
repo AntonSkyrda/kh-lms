@@ -12,24 +12,13 @@ import { Textarea } from "../../ui/textarea";
 import { Button } from "../../ui/button";
 import SpinnerMini from "../../ui/SpinnerMini";
 import { useGiveGrade } from "./hooks/useGiveGrade";
-import type {
-  HomeworkSubmissions,
-  HomeworkSubmitStatus,
-} from "../../schemas/homeworksSchema";
+import type { HomeworkSubmitStatus } from "../../schemas/homeworksSchema";
 
 interface SubmissionFormProps {
-  submissions: HomeworkSubmissions;
   submission: HomeworkSubmitStatus;
-  homeworkId: number;
 }
 
-function SubmissionForm({
-  submission,
-  submissions,
-  homeworkId,
-}: SubmissionFormProps) {
-  const editSession = !!submission.id;
-
+function SubmissionForm({ submission }: SubmissionFormProps) {
   const form = useForm({
     defaultValues: {
       grade: submission.grade ?? "",
@@ -42,11 +31,9 @@ function SubmissionForm({
   function handleSubmit(data: FieldValues) {
     const { grade, feedback } = data;
     giveGrade({
-      homeworkId,
       submissionId: submission.id,
       feedback,
       grade,
-      submissions,
     });
   }
 

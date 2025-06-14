@@ -48,7 +48,7 @@ export const createHomeworkFormSchema = z.object({
 });
 export type CreateHomeworkFormValues = z.infer<typeof createHomeworkFormSchema>;
 
-export const homeworkSubmitStatus = z.object({
+export const homeworkSubmitStatusSchema = z.object({
   id: z.number(),
   homework: z.string(),
   student_id: z.number(),
@@ -58,15 +58,15 @@ export const homeworkSubmitStatus = z.object({
   grade: z.number().min(1).nullable(),
   feedback: z.string(),
 });
-export type HomeworkSubmitStatus = z.infer<typeof homeworkSubmitStatus>;
+export type HomeworkSubmitStatus = z.infer<typeof homeworkSubmitStatusSchema>;
 
 export const homeworkSubmitStatusByStudentResponseSchema =
-  homeworkSubmitStatus.optional();
+  homeworkSubmitStatusSchema.optional();
 export type HomeworkSubmitStatusByStudentResponse = z.infer<
   typeof homeworkSubmitStatusByStudentResponseSchema
 >;
 
-export const homeworkSubmissionsSchema = z.array(homeworkSubmitStatus);
+export const homeworkSubmissionsSchema = z.array(homeworkSubmitStatusSchema);
 export type HomeworkSubmissions = z.infer<typeof homeworkSubmissionsSchema>;
 
 export const submitHomeworkFormForStudentSchema = z.object({

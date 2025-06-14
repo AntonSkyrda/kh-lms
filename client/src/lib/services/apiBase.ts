@@ -110,9 +110,6 @@ export default class ApiBase {
     return data;
   }
 
-  /**
-   * PATCH запит
-   */
   protected async patch<T extends BaseResponse, D extends object>(
     url: string,
     body: D,
