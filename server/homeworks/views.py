@@ -173,7 +173,7 @@ class HomeworkGradeView(APIView):
 
         if (
             not user.is_superuser
-            and submission.homework.lessons.program.course.teacher != user
+            and submission.homework.lesson.program.course.teacher != user
         ):
             raise PermissionDenied(
                 "You can only view submissions for your own courses."

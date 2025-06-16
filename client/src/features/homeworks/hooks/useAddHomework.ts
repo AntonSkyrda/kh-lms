@@ -1,10 +1,10 @@
 import { format } from "date-fns";
-import { useRecourceRelatedMutation } from "../../hooks/useResourceRelatedMutation";
-import ApiHomeworks from "../../lib/services/apiHomeworks";
+import { useRecourceRelatedMutation } from "../../../hooks/useResourceRelatedMutation";
+import ApiHomeworks from "../../../lib/services/apiHomeworks";
 import type {
   CreateHomeworkFormValues,
   HomeworkDetailed,
-} from "../../schemas/homeworksSchema";
+} from "../../../schemas/homeworksSchema";
 
 export function useAddHomework() {
   const {

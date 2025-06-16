@@ -1,6 +1,6 @@
-import { useResources } from "../../hooks/useResources";
-import ApiHomeworks from "../../lib/services/apiHomeworks";
-import type { HomeworkPlain } from "../../schemas/homeworksSchema";
+import { useResources } from "../../../hooks/useResources";
+import ApiHomeworks from "../../../lib/services/apiHomeworks";
+import type { HomeworkPlain } from "../../../schemas/homeworksSchema";
 
 export function useHomeworks(searchStr: string = "") {
   const {

@@ -1,5 +1,5 @@
 import HomeworkItem from "../features/homeworks/HomeworkItem";
-import { useHomeworks } from "../features/homeworks/useHomeworks";
+import { useHomeworks } from "../features/homeworks/hooks/useHomeworks";
 import { Accordion } from "../ui/accordion";
 import Empty from "../ui/Empty";
 import PageHeader from "../ui/PageHeader";
@@ -12,7 +12,7 @@ function Homeworks() {
   return (
     <article className="flex flex-col gap-10">
       <PageHeader title="Домашні завдання"></PageHeader>
-      <section className="grid grid-cols-[auto_1fr]">
+      <section className="w-full">
         <PaginationComponent total={totalHomeworks} />
         {isLoading ? (
           <SpinnerMini size="lg" />
@@ -26,7 +26,7 @@ function Homeworks() {
               </Accordion>
             ) : (
               <Empty resourceName="Завдань" />
-            )}{" "}
+            )}
           </div>
         )}
       </section>

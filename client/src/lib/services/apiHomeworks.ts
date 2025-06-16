@@ -1,7 +1,10 @@
 import {
   homeworkDetailedSchema,
   homeworksResponseSchema,
+  homeworkSubmitStatusByStudentResponseSchema,
   type CreateHomeworkFormValues,
+  homeworkSubmissionsSchema,
+  homeworkSubmitStatusSchema,
 } from "../../schemas/homeworksSchema";
 import type { GetListParams } from "../../types/paramsTypes";
 import { ITEMS_PER_PAGE } from "../consts";
@@ -35,6 +38,41 @@ class ApiHomeworks extends ApiBase {
       homeworkDetailedSchema,
       "Не вдалось створити завдання",
     );
+
+  public getSubmitStatusByStudent = async (homeworkId: number) =>
+    await this.get(
+      `${this.BASE_PATH}${homeworkId}/submit/`,
+      homeworkSubmitStatusByStudentResponseSchema,
+      "Не вдалось отримати статус виконання домашнього завдання.",
+    );
+
+  public submitHomework = async (homeworkId: number, answer: string) =>
+    await this.post(
+      `${this.BASE_PATH}${homeworkId}/submit/`,
+      { answer },
+      homeworkSubmitStatusSchema,
+      "Не вдалось надати відповідь на домашнє завдання.",
+    );
+
+  public getSubmission = async (homeworkId: number) =>
+    await this.get(
+      `${this.BASE_PATH}${homeworkId}/submissions/`,
+      homeworkSubmissionsSchema,
+      "Не вдалось отримати статуси домашнього завдання.",
+    );
+
+  public giveGrade = async (
+    submissionId: number,
+    grade: number,
+    feedback: string,
+  ) => {
+    return await this.patch(
+      `${this.BASE_PATH}submissions/${submissionId}/grade/`,
+      { grade, feedback },
+      homeworkSubmitStatusSchema,
+      "Не вдалось поставити оцінку домашнього завданню студента.",
+    );
+  };
 }
 
 export default new ApiHomeworks();
