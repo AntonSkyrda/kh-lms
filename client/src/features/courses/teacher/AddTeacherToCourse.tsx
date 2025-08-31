@@ -1,0 +1,90 @@
+import toast from "react-hot-toast";
+import { Plus } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
+import { useAddTeacherToCourse } from "./useAddTeacherToCourse";
+import { buttonVariants } from "../../../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../../ui/dialog";
+import { useCourse } from "../useCourse";
+import TeachersSearch from "../../users/TeachersSearch";
+import { useTeachers } from "../../users/useTeachers";
+import { useUser } from "../../../contexts/user/useUser";
+
+function AddTeacherToCourse() {
+  const { teachers, isLoading } = useTeachers();
+  const queryClient = useQueryClient();
+  const { user } = useUser();
+  const { course } = useCourse();
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchStr, setSearchStr] = useState("");
+  const { addTeacherToCourse, isPending } = useAddTeacherToCourse();
+
+  const isWorking = isLoading || isPending;
+
+  const clear = useCallback(
+    function () {
+      queryClient.removeQueries({ queryKey: ["teachers"] });
+      setSearchStr("");
+    },
+    [queryClient],
+  );
+
+  function handleSubmit(teacherId: number) {
+    if (!course?.id) {
+      toast.error("Неможливо отримати дані про курс");
+      return setIsOpen(false);
+    }
+
+    if (typeof teacherId !== "number") return;
+
+    addTeacherToCourse({ data: teacherId });
+    clear();
+    setIsOpen(false);
+  }
+
+  useEffect(
+    function () {
+      if (!isOpen) clear();
+    },
+    [clear, isOpen],
+  );
+
+  if (user?.role !== "admin" || course?.teacher?.id) return null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger className={buttonVariants({ variant: "outline" })}>
+        <span>
+          <Plus />
+        </span>
+        Додати викладача
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Додавання викладача до курсу {course?.name}</DialogTitle>
+          <DialogDescription className="mb-6">
+            Додайте викладача для студентів.
+          </DialogDescription>
+        </DialogHeader>
+        <TeachersSearch
+          searchStr={searchStr}
+          teachers={teachers}
+          handleSearch={setSearchStr}
+          handleSubmit={handleSubmit}
+          isLoading={isWorking}
+          isModal={true}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export default AddTeacherToCourse;
